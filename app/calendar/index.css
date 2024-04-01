@@ -1,0 +1,86 @@
+.day-button {
+  border: 1px solid transparent;
+
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.today {
+  border-color: #00ff88;
+  background-color: #00ff88;
+}
+
+.selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.month-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.month-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.current-month {
+  background-color: lightblue;
+}
+
+.month-button:hover {
+  background-color: #f0f0f0;
+}
+
+.month-button:focus {
+  outline: none;
+}
+
+.events {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 50px;
+}
+
+.event {
+  background-color: lightblue;
+  border: 1px solid #333;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.day-button.has-event {
+  background-color: #fed7d7;
+}
+
+.room-event-start,
+.room-event-end {
+  padding: 4px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.room-event-start {
+  background-color: #48bb78;
+}
+
+.room-event-end {
+  background-color: #f56565;
+}
+
+.event-start-date {
+  color: white;
+}
+.event-end-date {
+  background-color: red;
+  color: white;
+}
