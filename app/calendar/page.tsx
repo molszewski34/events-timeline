@@ -7,6 +7,7 @@ import { RenderRows } from '../components/RenderRows/RenderRows';
 import { RenderMonths } from '../components/TopPanel/RenderMonths/RenderMonths';
 import { RenderYears } from '../components/TopPanel/RenderYears/RenderYears';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import LeftPanel from '../components/LeftPanel/LeftPanel';
 const Calendar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
@@ -38,8 +39,11 @@ const Calendar: React.FC = () => {
       <div className="flex">
         <RenderDays />
       </div>
-      <div className="flex flex-col">
-        <RenderRows />
+      <div className="relative flex">
+        <LeftPanel />
+        <div className="flex flex-col">
+          <RenderRows />
+        </div>
       </div>
     </div>
   );
