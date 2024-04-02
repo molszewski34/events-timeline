@@ -2,7 +2,10 @@ import { Room } from './types';
 
 export const rooms: Room[] = [
   {
-    name: 'Pokój 1',
+    roomName: 'Pokój 1',
+    roomGuests: 2,
+    roomType: 'Pokój',
+    roomTypeIcon: 'bed',
     events: [
       {
         title: 'Spotkanie',
@@ -22,7 +25,10 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 2',
+    roomName: 'Pokój 2',
+    roomGuests: 7,
+    roomType: 'Apartament',
+    roomTypeIcon: 'apartment',
     events: [
       {
         title: 'Wywiad',
@@ -37,7 +43,10 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 3',
+    roomName: 'Pokój 3',
+    roomGuests: 2,
+    roomType: 'Namiot',
+    roomTypeIcon: 'apartment',
     events: [
       {
         title: 'Spotkanie z klientem',
@@ -52,7 +61,11 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 4',
+    roomName: 'Pokój 4',
+    roomGuests: 6,
+    roomType: 'Studio',
+    roomTypeIcon: 'weekend',
+
     events: [
       {
         title: 'Spotkanie',
@@ -72,7 +85,11 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 5',
+    roomName: 'Pokój 5',
+    roomGuests: 3,
+    roomType: 'Kamper',
+    roomTypeIcon: 'local_shipping',
+
     events: [
       {
         title: 'Spotkanie',
@@ -92,7 +109,10 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 6',
+    roomName: 'Pokój 6',
+    roomGuests: 10,
+    roomType: 'Willa',
+    roomTypeIcon: 'local_shipping',
     events: [
       {
         title: 'Spotkanie',
@@ -112,7 +132,10 @@ export const rooms: Room[] = [
     ],
   },
   {
-    name: 'Pokój 7',
+    roomName: 'Pokój 7',
+    roomGuests: 5,
+    roomType: 'Domek',
+    roomTypeIcon: 'cottage',
     events: [
       {
         title: 'Spotkanie',

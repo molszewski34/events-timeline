@@ -1,5 +1,8 @@
 export interface Room {
-  name: string;
+  roomName: string;
+  roomGuests: number;
+  roomType: string;
+  roomTypeIcon: string;
   events: Event[];
 }
 interface Event {
