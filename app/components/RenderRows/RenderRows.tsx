@@ -50,7 +50,7 @@ export const RenderRows = () => {
       days.push(
         <button
           key={startDate.toString()}
-          className={`day-button flex flex-col flex-wrap relative w-[50px] h-[50px] bg-slate-100 border border-slate-200${
+          className={` flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white ${
             isToday(startDate) ? 'today' : ''
           } ${isSameDay(startDate, currentDate) ? 'selected' : ''} ${
             roomEventStartDates.includes(currentDateTimestamp)
@@ -75,7 +75,7 @@ export const RenderRows = () => {
     }
 
     return (
-      <div key={room.name} className="room-row flex">
+      <div key={room.roomName} className="room-row flex">
         {days}
       </div>
     );
