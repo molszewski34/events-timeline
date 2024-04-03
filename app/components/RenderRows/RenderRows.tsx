@@ -1,4 +1,4 @@
-'use client';
+import React, { useState } from 'react';
 import {
   format,
   addDays,
@@ -11,13 +11,24 @@ import {
   differenceInDays,
 } from 'date-fns';
 import { pl } from 'date-fns/locale';
-
+import { Room } from './types';
 import { rooms } from '@/app/data/roomsData';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+
 export const RenderRows = () => {
   const { currentDate, setCurrentDate } = useCalendarContext();
   const dateFormat = 'EEEEEE dd';
-  const rows = rooms.map((room) => {
+
+  const [selectedButton, setSelectedButton] = useState<{
+    room: Room | null;
+    timestamp: number | null;
+  }>({ room: null, timestamp: null });
+
+  const handleButtonClick = (room: Room, timestamp: number) => {
+    setSelectedButton({ room, timestamp });
+  };
+
+  const rows = rooms.map((room: Room) => {
     const days: JSX.Element[] = [];
     let startDate = startOfWeek(startOfMonth(currentDate), { locale: pl });
     let endDate = endOfWeek(endOfMonth(currentDate), { locale: pl });
@@ -49,7 +60,7 @@ export const RenderRows = () => {
 
       days.push(
         <button
-          key={startDate.toString()}
+          key={`${room.id}-${startDate.toString()}`}
           className={` flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white ${
             isToday(startDate) ? 'today' : ''
           } ${isSameDay(startDate, currentDate) ? 'selected' : ''} ${
@@ -58,7 +69,16 @@ export const RenderRows = () => {
               : ''
           }`}
           style={{ overflow: 'visible' }}
+          onMouseEnter={() => handleButtonClick(room, currentDateTimestamp)}
         >
+          {selectedButton &&
+            selectedButton.room &&
+            selectedButton.room.id === room.id &&
+            selectedButton.timestamp === currentDateTimestamp && (
+              <div className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 w-[50px] h-[50px] bg-white skew-x-[-35deg] z-[60] shadow-sm">
+                +
+              </div>
+            )}
           {roomEventStartDates.includes(currentDateTimestamp) && (
             <>
               <span
@@ -75,7 +95,7 @@ export const RenderRows = () => {
     }
 
     return (
-      <div key={room.roomName} className="room-row flex">
+      <div key={room.id} className="room-row flex">
         {days}
       </div>
     );
