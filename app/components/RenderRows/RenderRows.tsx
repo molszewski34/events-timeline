@@ -14,6 +14,7 @@ import { pl } from 'date-fns/locale';
 import { Room } from './types';
 import { rooms } from '@/app/data/roomsData';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import Button from '../Reservations/AddReservation/Button/Button';
 
 export const RenderRows = () => {
   const { currentDate, setCurrentDate } = useCalendarContext();
@@ -61,28 +62,20 @@ export const RenderRows = () => {
       days.push(
         <button
           key={`${room.id}-${startDate.toString()}`}
-          className={` flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white ${
-            isToday(startDate) ? 'today' : ''
-          } ${isSameDay(startDate, currentDate) ? 'selected' : ''} ${
-            roomEventStartDates.includes(currentDateTimestamp)
-              ? 'event-start-date'
-              : ''
-          }`}
+          className={
+            ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
+          }
           style={{ overflow: 'visible' }}
           onMouseEnter={() => handleButtonClick(room, currentDateTimestamp)}
         >
           {selectedButton &&
             selectedButton.room &&
             selectedButton.room.id === room.id &&
-            selectedButton.timestamp === currentDateTimestamp && (
-              <div className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 w-[50px] h-[50px] bg-white skew-x-[-35deg] z-[60] shadow-sm">
-                +
-              </div>
-            )}
+            selectedButton.timestamp === currentDateTimestamp && <Button />}
           {roomEventStartDates.includes(currentDateTimestamp) && (
             <>
               <span
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-400 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
+                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
                 style={{ width: eventOverlaySize }}
               >
                 {room.events[eventIndex].title}
