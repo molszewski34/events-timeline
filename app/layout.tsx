@@ -1,8 +1,15 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 import { CalendarWrapper } from './contexts/Calendar/CalendarProvider';
-const inter = Inter({ subsets: ['latin'] });
+import { AddReservationWrapper } from './contexts/AddReservation/AddReservationProvider';
+import { cn } from '@/app/lib/utils';
+
+const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,8 +23,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <CalendarWrapper>{children}</CalendarWrapper>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable
+        )}
+      >
+        <CalendarWrapper>
+          <AddReservationWrapper>{children}</AddReservationWrapper>
+        </CalendarWrapper>
       </body>
     </html>
   );
