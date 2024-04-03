@@ -7,20 +7,21 @@ import { RenderRows } from '../components/RenderRows/RenderRows';
 import { RenderMonths } from '../components/TopPanel/RenderMonths/RenderMonths';
 import { RenderYears } from '../components/TopPanel/RenderYears/RenderYears';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import LeftPanel from '../components/LeftPanel/LeftPanel';
+import AddReservationPanel from '../components/Reservations/AddReservation/AddReservationPanel/AddReservationPanel';
 const Calendar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
   const { currentDate, setCurrentDate } = useCalendarContext();
-
+  const { openAddReservationPanel, setOpenAddReservationPanel } =
+    useAddReservationContext();
   useEffect(() => {
     if (containerRef.current) {
       const width = containerRef.current.offsetWidth;
       setContainerWidth(width);
     }
   }, [containerRef]);
-
-  console.log(currentDate);
 
   return (
     <div className="calendar">
@@ -45,6 +46,7 @@ const Calendar: React.FC = () => {
           <RenderRows />
         </div>
       </div>
+      {openAddReservationPanel && <AddReservationPanel />}
     </div>
   );
 };
