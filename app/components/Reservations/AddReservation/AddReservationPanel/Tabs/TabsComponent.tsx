@@ -11,12 +11,19 @@ import Client from './Client/Client';
 const TabsComponent = () => {
   return (
     <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList>
-        <TabsTrigger data-state="active" value="reservation">
+      <TabsList className="bg-white">
+        <TabsTrigger className="flex items-center gap-1 " value="reservation">
+          <span className="material-icon text-lg text-gray-400">event</span>
           Rezerwacja
         </TabsTrigger>
-        <TabsTrigger value="client">Klient</TabsTrigger>
-        <TabsTrigger value="details">Szczegóły</TabsTrigger>
+        <TabsTrigger value="client">
+          <span className="material-icon text-lg text-gray-400">person</span>
+          Klient
+        </TabsTrigger>
+        <TabsTrigger value="details">
+          <span className="material-icon text-lg text-gray-400">summarize</span>
+          Szczegóły
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="reservation">
         <Reservation />
