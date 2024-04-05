@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import { Button } from '@/app/components/ui/button';
-
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 const Header = () => {
+  const { setOpenAddReservationPanel } = useAddReservationContext();
   return (
     <header>
       <div className="flex justify-between items-center">
@@ -10,6 +11,7 @@ const Header = () => {
         <Button
           className="material-icon text-red-600 text-2xl"
           variant={'ghost'}
+          onClick={() => setOpenAddReservationPanel(false)}
         >
           close
         </Button>
