@@ -24,19 +24,28 @@ const Calendar: React.FC = () => {
   }, [containerRef]);
 
   return (
-    <div className="calendar">
-      <div className="header flex items-center justify-around">
-        <button onClick={() => setCurrentDate(addDays(currentDate, -7))}>
-          Poprzedni tydzień
-        </button>
+    <div className="calendar overflow-hidden">
+      <div className="header flex flex-col items-center gap-4  bg-slate-100 px-2">
+        <div className="flex items-center gap-4">
+          <RenderYears />
+          <button
+            className="material-icon text-gray-700 bg-gray-300 w-5 h-5 flex items-center justify-center text-xs rounded-sm"
+            onClick={() => setCurrentDate(addDays(currentDate, -7))}
+          >
+            arrow_back_ios
+          </button>
+          <span className="text-sm">Tydzień</span>
+          <button
+            className="material-icon text-gray-700 bg-gray-300 w-5 h-5 flex items-center justify-center text-xs rounded-sm"
+            onClick={() => setCurrentDate(addDays(currentDate, 7))}
+          >
+            arrow_forward_ios
+          </button>
+        </div>
         <div className="month-list">
           <RenderMonths />
         </div>
-        <button onClick={() => setCurrentDate(addDays(currentDate, 7))}>
-          Następny tydzień
-        </button>
       </div>
-      <RenderYears />
       <div className="flex">
         <RenderDays />
       </div>
