@@ -10,7 +10,7 @@ import Client from './Client/Client';
 
 const TabsComponent = () => {
   return (
-    <Tabs defaultValue="account" className="w-[400px]">
+    <Tabs defaultValue="reservation" className="w-[400px]">
       <TabsList className="bg-white">
         <TabsTrigger className="flex items-center gap-1 " value="reservation">
           <span className="material-icon text-lg text-gray-400">event</span>

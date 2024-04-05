@@ -14,10 +14,13 @@ import { pl } from 'date-fns/locale';
 import { Room } from './types';
 import { rooms } from '@/app/data/roomsData';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import Button from '../Reservations/AddReservation/Button/Button';
 
 export const RenderRows = () => {
-  const { currentDate, setCurrentDate } = useCalendarContext();
+  const { currentDate } = useCalendarContext();
+  const { setSelectedStartDate, setSelectedEndDate } =
+    useAddReservationContext();
   const dateFormat = 'EEEEEE dd';
 
   const [selectedButton, setSelectedButton] = useState<{
@@ -66,7 +69,11 @@ export const RenderRows = () => {
             ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
           }
           style={{ overflow: 'visible' }}
-          onMouseEnter={() => handleButtonClick(room, currentDateTimestamp)}
+          onMouseEnter={() => {
+            handleButtonClick(room, currentDateTimestamp);
+            setSelectedStartDate(currentDateTimestamp);
+            setSelectedEndDate(currentDateTimestamp);
+          }}
         >
           {selectedButton &&
             selectedButton.room &&
