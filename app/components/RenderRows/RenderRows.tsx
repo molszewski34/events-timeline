@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  format,
   addDays,
   startOfWeek,
   endOfWeek,
   startOfMonth,
   endOfMonth,
-  isSameDay,
-  isToday,
   differenceInDays,
 } from 'date-fns';
 import { pl } from 'date-fns/locale';
@@ -18,7 +15,7 @@ import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReser
 import Button from '../Reservations/AddReservation/Button/Button';
 
 export const RenderRows = () => {
-  const { currentDate } = useCalendarContext();
+  const { currentDate, daysToShow, setDaysToShow } = useCalendarContext();
   const { setSelectedStartDate, setSelectedEndDate } =
     useAddReservationContext();
   const dateFormat = 'EEEEEE dd';
@@ -32,6 +29,22 @@ export const RenderRows = () => {
     setSelectedButton({ room, timestamp });
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
+      const newDaysToShow = Math.floor(windowWidth / 50);
+      setDaysToShow(newDaysToShow);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const rows = rooms.map((room: Room) => {
     const days: JSX.Element[] = [];
     let startDate = startOfWeek(startOfMonth(currentDate), { locale: pl });
@@ -43,6 +56,8 @@ export const RenderRows = () => {
     const roomEventEndDates = room.events.map((event) =>
       new Date(event.end).setHours(0, 0, 0, 0)
     );
+
+    endDate = addDays(startDate, daysToShow);
 
     while (startDate <= endDate) {
       const currentDateTimestamp = startDate.getTime();
@@ -95,7 +110,7 @@ export const RenderRows = () => {
     }
 
     return (
-      <div key={room.id} className="room-row flex">
+      <div key={room.id} className="flex ">
         {days}
       </div>
     );
