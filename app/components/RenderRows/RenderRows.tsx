@@ -17,12 +17,12 @@ import { rooms } from '@/app/data/roomsData';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import Button from '../Reservations/AddReservation/Button/Button';
+import { useSwipeable } from 'react-swipeable';
 
 export const RenderRows = () => {
   const { currentDate, daysToShow, setDaysToShow } = useCalendarContext();
   const { setSelectedStartDate, setSelectedEndDate } =
     useAddReservationContext();
-  // const dateFormat = 'EEEEEE dd';
 
   const [startDate, setStartDate] = useState<Date>(
     startOfWeek(startOfMonth(currentDate), { locale: pl })
@@ -50,6 +50,12 @@ export const RenderRows = () => {
   const handleNextWeek = () => {
     setStartDate((prevStartDate) => addDays(prevStartDate, 7));
   };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNextWeek(),
+    onSwipedRight: () => handlePrevWeek(),
+    trackMouse: true,
+  });
 
   while (currentDateIterator <= endDate) {
     const words = format(currentDateIterator, dateFormat).split(' ');
@@ -98,7 +104,7 @@ export const RenderRows = () => {
   const rows = rooms.map((room: Room) => {
     const days: JSX.Element[] = [];
     console.log(currentDateIterator);
-    // let startDate = startOfWeek(startOfMonth(currentDate), { locale: pl });
+
     let endDate = endOfWeek(endOfMonth(currentDate), { locale: pl });
 
     const roomEventStartDates = room.events.map((event) =>
@@ -125,7 +131,6 @@ export const RenderRows = () => {
         const daysDifference = differenceInDays(end, start);
         eventDuration = `(${daysDifference} dni)`;
         eventOverlaySize = `${(daysDifference + 1) * 50}px`;
-        // console.log(eventOverlaySize);
       }
 
       days.push(
@@ -136,6 +141,11 @@ export const RenderRows = () => {
           }
           style={{ overflow: 'visible' }}
           onMouseEnter={() => {
+            handleButtonClick(room, currentDateTimestamp);
+            setSelectedStartDate(currentDateTimestamp);
+            setSelectedEndDate(currentDateTimestamp);
+          }}
+          onTouchStart={() => {
             handleButtonClick(room, currentDateTimestamp);
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
@@ -168,11 +178,7 @@ export const RenderRows = () => {
   });
 
   return (
-    <div className="flex flex-col">
-      <>
-        <button onClick={handlePrevWeek}>Poprzedni tydzień</button>
-        <button onClick={handleNextWeek}>Następny tydzień</button>
-      </>
+    <div {...handlers} className="flex flex-col">
       <div className="flex"> {days}</div>
       <div className="flex flex-col"> {rows}</div>
     </div>
