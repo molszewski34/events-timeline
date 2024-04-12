@@ -15,10 +15,20 @@ export const RenderYears = () => {
   };
 
   return (
-    <div className="year-list">
-      <button onClick={() => handleYearChange('decrement')}>Prev Year</button>
-      <span>{currentYear}</span>
-      <button onClick={() => handleYearChange('increment')}>Next Year</button>
+    <div className="year-list flex items-center gap-4">
+      <button
+        className="material-icon text-gray-700 bg-gray-300 w-5 h-5 flex items-center justify-center text-xs rounded-sm"
+        onClick={() => handleYearChange('decrement')}
+      >
+        arrow_back_ios
+      </button>
+      <span className="text-sm">{currentYear}</span>
+      <button
+        className="material-icon text-gray-700 bg-gray-300 w-5 h-5 flex items-center justify-center text-xs rounded-sm"
+        onClick={() => handleYearChange('increment')}
+      >
+        arrow_forward_ios
+      </button>
     </div>
   );
 };

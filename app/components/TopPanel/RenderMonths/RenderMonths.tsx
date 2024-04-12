@@ -26,7 +26,7 @@ export const RenderMonths = () => {
       <button
         key={monthDate.toString()}
         onClick={() => setCurrentDate(monthDate)}
-        className={`month-button ${
+        className={`month-button text-xs ${
           isSameMonth(monthDate, currentMonth) ? 'current-month' : ''
         }`}
       >
