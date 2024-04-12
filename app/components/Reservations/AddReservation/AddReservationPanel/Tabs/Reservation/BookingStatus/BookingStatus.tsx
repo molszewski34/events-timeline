@@ -18,7 +18,6 @@ const BookingStatus = () => {
   );
   const [statusListOpen, setStatusListOpen] = useState(false);
 
-  console.log(selectedStatus);
   const handleSelectOption = (status: Status) => {
     setSelectedStatus(status);
   };
