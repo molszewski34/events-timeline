@@ -13,8 +13,6 @@ export function AddReservationWrapper({
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [daysBetween, setDaysBetween] = useState(0);
 
-  console.log(selectedStartDate);
-
   return (
     <AddReservation.Provider
       value={{
