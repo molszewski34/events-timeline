@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import './index.css';
 import { addDays } from 'date-fns';
-import { RenderDays } from '../components/RenderDays/RenderDays';
 import { RenderRows } from '../components/RenderRows/RenderRows';
 import { RenderMonths } from '../components/TopPanel/RenderMonths/RenderMonths';
 import { RenderYears } from '../components/TopPanel/RenderYears/RenderYears';
@@ -45,9 +44,6 @@ const Calendar: React.FC = () => {
         <div className="month-list">
           <RenderMonths />
         </div>
-      </div>
-      <div className="flex">
-        <RenderDays />
       </div>
       <div className="relative flex">
         <LeftPanel />
