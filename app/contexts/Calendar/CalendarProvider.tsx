@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
-import { addDays, startOfWeek, startOfMonth } from 'date-fns';
+import { addDays, startOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
 const CalendarContext = createContext<any>(undefined);
@@ -13,6 +13,9 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
   const [maxWeeksToShow, setMaxWeeksToShow] = useState(2);
   const [startDate, setStartDate] = useState<Date>(
     startOfWeek(startOfMonth(currentDate), { locale: pl })
+  );
+  const [endDate, setEndDate] = useState<Date>(
+    addDays(startOfWeek(endOfMonth(currentDate), { locale: pl }), daysToShow)
   );
   return (
     <CalendarContext.Provider
@@ -29,6 +32,8 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setMaxWeeksToShow,
         startDate,
         setStartDate,
+        endDate,
+        setEndDate,
       }}
     >
       {children}
