@@ -20,19 +20,21 @@ import Button from '../Reservations/AddReservation/Button/Button';
 import { useSwipeable } from 'react-swipeable';
 
 export const RenderRows = () => {
-  const { currentDate, daysToShow, setDaysToShow } = useCalendarContext();
+  const {
+    currentDate,
+    daysToShow,
+    setDaysToShow,
+    endDate,
+    setEndDate,
+    startDate,
+    setStartDate,
+  } = useCalendarContext();
+
   const { setSelectedStartDate, setSelectedEndDate } =
     useAddReservationContext();
 
-  const [startDate, setStartDate] = useState<Date>(
-    startOfWeek(startOfMonth(currentDate), { locale: pl })
-  );
-
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
-
-  let endDate: Date = addDays(startDate, daysToShow);
-  let currentDateIterator = startDate;
 
   const [selectedButton, setSelectedButton] = useState<{
     room: Room | null;
@@ -44,11 +46,13 @@ export const RenderRows = () => {
   };
 
   const handlePrevWeek = () => {
-    setStartDate((prevStartDate) => addDays(prevStartDate, -7));
+    setStartDate((prevStartDate: Date) => addDays(prevStartDate, -7));
+    setEndDate((prevEndDate: Date) => addDays(prevEndDate, -7));
   };
 
   const handleNextWeek = () => {
-    setStartDate((prevStartDate) => addDays(prevStartDate, 7));
+    setStartDate((prevStartDate: Date) => addDays(prevStartDate, 7));
+    setEndDate((prevEndDate: Date) => addDays(prevEndDate, 7));
   };
 
   const handlers = useSwipeable({
@@ -57,6 +61,7 @@ export const RenderRows = () => {
     trackMouse: true,
   });
 
+  let currentDateIterator = startDate;
   while (currentDateIterator <= endDate) {
     const words = format(currentDateIterator, dateFormat).split(' ');
     const isWeekendDay = isWeekend(currentDateIterator);
@@ -84,28 +89,9 @@ export const RenderRows = () => {
     );
     currentDateIterator = addDays(currentDateIterator, 1);
   }
-
-  useEffect(() => {
-    const handleResize = () => {
-      const windowWidth = window.innerWidth;
-      const newDaysToShow = Math.floor(windowWidth / 50);
-      setDaysToShow(newDaysToShow);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const rows = rooms.map((room: Room) => {
     const days: JSX.Element[] = [];
-    console.log(currentDateIterator);
-
-    let endDate = endOfWeek(endOfMonth(currentDate), { locale: pl });
+    currentDateIterator = startDate;
 
     const roomEventStartDates = room.events.map((event) =>
       new Date(event.start).setHours(0, 0, 0, 0)
@@ -113,8 +99,6 @@ export const RenderRows = () => {
     const roomEventEndDates = room.events.map((event) =>
       new Date(event.end).setHours(0, 0, 0, 0)
     );
-
-    endDate = addDays(currentDateIterator, daysToShow);
 
     while (currentDateIterator <= endDate) {
       const currentDateTimestamp = currentDateIterator.getTime();
@@ -176,6 +160,23 @@ export const RenderRows = () => {
       </div>
     );
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
+      const newDaysToShow = Math.floor(windowWidth / 50);
+      setDaysToShow(newDaysToShow);
+      setEndDate((prevEndDate: Date) => addDays(startDate, newDaysToShow));
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [startDate, setDaysToShow]);
 
   return (
     <div {...handlers} className="flex flex-col">

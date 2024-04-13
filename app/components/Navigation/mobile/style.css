@@ -1,0 +1,7 @@
+.date-time-picker-container .time-picker {
+  display: none;
+}
+.react-datepicker {
+  position: absolute;
+  z-index: 999;
+}
