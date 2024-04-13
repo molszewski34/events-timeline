@@ -18,6 +18,7 @@ import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import Button from '../Reservations/AddReservation/Button/Button';
 import { useSwipeable } from 'react-swipeable';
+import LeftPanel from '../LeftPanel/LeftPanel';
 
 export const RenderRows = () => {
   const {
@@ -179,7 +180,8 @@ export const RenderRows = () => {
   }, [startDate, setDaysToShow]);
 
   return (
-    <div {...handlers} className="flex flex-col">
+    <div {...handlers} className="flex flex-col relative overflow-hidden">
+      <LeftPanel />
       <div className="flex"> {days}</div>
       <div className="flex flex-col"> {rows}</div>
     </div>
