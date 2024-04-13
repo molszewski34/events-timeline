@@ -17,7 +17,6 @@ const NavMobile = () => {
     daysToShow,
   } = useCalendarContext();
 
-  console.log(daysToShow);
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -41,12 +40,8 @@ const NavMobile = () => {
 
   const formattedEndDate = `${endDateFormat[0]} ${endDateFormat[1]} ${endDateFormat[2]}`;
 
-  const handleDateClick = () => {
-    setShowDateTimePicker(true);
-  };
-
   const handleButtonClick = () => {
-    setShowCalendar(true);
+    setShowCalendar(!showCalendar);
   };
 
   useEffect(() => {
@@ -69,8 +64,11 @@ const NavMobile = () => {
   const handleDateChange = (date: Date) => {
     setStartDate(date);
     setShowCalendar(false);
-    console.log(`start date ${startDate}`);
-    console.log(`send date ${endDate}`);
+  };
+
+  const handleSwitchToCurrentDay = () => {
+    const today = new Date();
+    setStartDate(today);
   };
 
   return (
@@ -106,7 +104,9 @@ const NavMobile = () => {
       <div className="flex gap-4 text-2xl p-4">
         <button className="material-icon ">search</button>
         <button className="material-icon ">sync</button>
-        <button className="material-icon ">calendar_month</button>
+        <button onClick={handleSwitchToCurrentDay} className="material-icon ">
+          calendar_month
+        </button>
         <button className="material-icon ">notifications</button>
       </div>
     </nav>
