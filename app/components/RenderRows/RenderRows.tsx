@@ -20,14 +20,18 @@ import Button from '../Reservations/AddReservation/Button/Button';
 import { useSwipeable } from 'react-swipeable';
 
 export const RenderRows = () => {
-  const { currentDate, daysToShow, setDaysToShow, endDate, setEndDate } =
-    useCalendarContext();
+  const {
+    currentDate,
+    daysToShow,
+    setDaysToShow,
+    endDate,
+    setEndDate,
+    startDate,
+    setStartDate,
+  } = useCalendarContext();
+
   const { setSelectedStartDate, setSelectedEndDate } =
     useAddReservationContext();
-
-  const [startDate, setStartDate] = useState<Date>(
-    startOfWeek(startOfMonth(currentDate), { locale: pl })
-  );
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
@@ -42,12 +46,12 @@ export const RenderRows = () => {
   };
 
   const handlePrevWeek = () => {
-    setStartDate((prevStartDate) => addDays(prevStartDate, -7));
+    setStartDate((prevStartDate: Date) => addDays(prevStartDate, -7));
     setEndDate((prevEndDate: Date) => addDays(prevEndDate, -7));
   };
 
   const handleNextWeek = () => {
-    setStartDate((prevStartDate) => addDays(prevStartDate, 7));
+    setStartDate((prevStartDate: Date) => addDays(prevStartDate, 7));
     setEndDate((prevEndDate: Date) => addDays(prevEndDate, 7));
   };
 
