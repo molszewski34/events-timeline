@@ -47,8 +47,7 @@ const Calendar: React.FC = () => {
           <NavMobile />
         </div>
       )}
-      <div className="relative flex">
-        <LeftPanel />
+      <div className="flex">
         <div className="flex flex-col">
           <RenderRows />
         </div>
