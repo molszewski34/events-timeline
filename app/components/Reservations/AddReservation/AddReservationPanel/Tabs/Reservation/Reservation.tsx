@@ -6,23 +6,28 @@ import NumOfNights from './NumOfNights/NumOfNights';
 import BookingStatus from './BookingStatus/BookingStatus';
 import NumOfGuests from './NumOfGuests/NumOfGuests';
 import Header from './Header/Header';
+import SelectObject from './SelectObject/SelectObject';
 const Reservation = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-col gap-2">
+    <main className="flex flex-col gap-2">
+      <section className="flex flex-col gap-2">
         <Header title="Termin" />
         <DatePicker />
         <NumOfNights />
-      </div>
-      <div className="flex flex-col gap-2">
+      </section>
+      <section className="flex flex-col gap-2">
         <Header title="Status" />
         <BookingStatus />
-      </div>
-      <div className="flex flex-col gap-2">
+      </section>
+      <section className="flex flex-col gap-2">
         <Header title="Liczba gości" />
         <NumOfGuests />
-      </div>
-    </div>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Header title="Obiekt" />
+        <SelectObject />
+      </section>
+    </main>
   );
 };
 
