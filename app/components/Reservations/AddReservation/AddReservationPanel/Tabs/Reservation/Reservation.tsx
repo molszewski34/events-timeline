@@ -8,7 +8,7 @@ import NumOfGuests from './NumOfGuests/NumOfGuests';
 import Header from './Header/Header';
 const Reservation = () => {
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2">
         <Header title="Termin" />
         <DatePicker />
@@ -22,7 +22,7 @@ const Reservation = () => {
         <Header title="Liczba gości" />
         <NumOfGuests />
       </div>
-    </>
+    </div>
   );
 };
 
