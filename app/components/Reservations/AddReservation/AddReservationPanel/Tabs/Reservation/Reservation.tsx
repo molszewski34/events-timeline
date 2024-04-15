@@ -7,6 +7,8 @@ import BookingStatus from './BookingStatus/BookingStatus';
 import NumOfGuests from './NumOfGuests/NumOfGuests';
 import Header from './Header/Header';
 import SelectObject from './SelectObject/SelectObject';
+import Price from './Price/Price';
+
 const Reservation = () => {
   return (
     <main className="flex flex-col gap-2">
@@ -26,6 +28,10 @@ const Reservation = () => {
       <section className="flex flex-col gap-2">
         <Header title="Obiekt" />
         <SelectObject />
+      </section>
+      <section className="flex flex-col gap-2">
+        <Header title="Cena" />
+        <Price />
       </section>
     </main>
   );

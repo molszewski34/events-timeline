@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { rooms } from '@/app/data/roomsData';
 import { Room } from '@/app/data/types';
-
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 const SelectObject = () => {
-  const [selectedRoom, setSelectedroom] = useState<Room | null>(rooms[0]);
-  const [roomListOpen, setRoomListOpen] = useState(false);
+  const { selectedRoom, setSelectedroom, roomListOpen, setRoomListOpen } =
+    useAddReservationContext();
 
   const handleSelectOption = (room: Room) => {
     setSelectedroom(room);
