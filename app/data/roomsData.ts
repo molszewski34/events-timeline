@@ -5,6 +5,7 @@ export const rooms: Room[] = [
     id: '1',
     roomName: 'Pokój 1',
     roomGuests: 2,
+    roomPrice: 65,
     roomType: 'Pokój',
     roomTypeIcon: 'bed',
     events: [
@@ -29,6 +30,7 @@ export const rooms: Room[] = [
     id: '2',
     roomName: 'Pokój 2',
     roomGuests: 7,
+    roomPrice: 65,
     roomType: 'Apartament',
     roomTypeIcon: 'apartment',
     events: [
@@ -48,6 +50,7 @@ export const rooms: Room[] = [
     id: '3',
     roomName: 'Pokój 3',
     roomGuests: 2,
+    roomPrice: 80,
     roomType: 'Namiot',
     roomTypeIcon: 'apartment',
     events: [
@@ -67,6 +70,7 @@ export const rooms: Room[] = [
     id: '4',
     roomName: 'Pokój 4',
     roomGuests: 6,
+    roomPrice: 70,
     roomType: 'Studio',
     roomTypeIcon: 'weekend',
 
@@ -92,6 +96,7 @@ export const rooms: Room[] = [
     id: '5',
     roomName: 'Pokój 5',
     roomGuests: 3,
+    roomPrice: 50,
     roomType: 'Kamper',
     roomTypeIcon: 'local_shipping',
 
@@ -117,6 +122,7 @@ export const rooms: Room[] = [
     id: '6',
     roomName: 'Pokój 6',
     roomGuests: 10,
+    roomPrice: 120,
     roomType: 'Willa',
     roomTypeIcon: 'local_shipping',
     events: [
@@ -141,6 +147,7 @@ export const rooms: Room[] = [
     id: '7',
     roomName: 'Pokój 7',
     roomGuests: 5,
+    roomPrice: 90,
     roomType: 'Domek',
     roomTypeIcon: 'cottage',
     events: [
