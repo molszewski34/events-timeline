@@ -1,7 +1,8 @@
 'use client';
-
+import { AgeOfKids } from './types';
 import { createContext, useContext, useState } from 'react';
-
+import { Room } from '@/app/components/RenderRows/types';
+import { rooms } from '@/app/data/roomsData';
 const AddReservation = createContext<any>(undefined);
 export function AddReservationWrapper({
   children,
@@ -12,7 +13,11 @@ export function AddReservationWrapper({
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [daysBetween, setDaysBetween] = useState(0);
-
+  const [numOfKids, setNumOfKids] = useState<number>(0);
+  const [ageOfKids, setAgeOfKids] = useState<AgeOfKids>({});
+  const [selectedRoom, setSelectedroom] = useState<Room | null>(rooms[0]);
+  const [roomListOpen, setRoomListOpen] = useState(false);
+  const [totalNumOfGuests, setNumOfGuests] = useState<number>(0);
   return (
     <AddReservation.Provider
       value={{
@@ -24,6 +29,16 @@ export function AddReservationWrapper({
         setSelectedEndDate,
         daysBetween,
         setDaysBetween,
+        numOfKids,
+        setNumOfKids,
+        ageOfKids,
+        setAgeOfKids,
+        selectedRoom,
+        setSelectedroom,
+        roomListOpen,
+        setRoomListOpen,
+        totalNumOfGuests,
+        setNumOfGuests,
       }}
     >
       {children}
