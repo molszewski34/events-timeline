@@ -1,9 +1,10 @@
 import React, { useState, ChangeEvent } from 'react';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
 const AdvancePayment: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [advancePayment, setAdvancePayment] = useState<string>('');
 
+  const { advancePayment, setAdvancePayment } = useAddReservationContext();
   const handleAdvancePaymentChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAdvancePayment(event.target.value);
   };

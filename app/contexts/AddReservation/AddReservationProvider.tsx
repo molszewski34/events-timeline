@@ -18,6 +18,7 @@ export function AddReservationWrapper({
   const [selectedRoom, setSelectedroom] = useState<Room | null>(rooms[0]);
   const [roomListOpen, setRoomListOpen] = useState(false);
   const [totalNumOfGuests, setNumOfGuests] = useState<number>(0);
+  const [advancePayment, setAdvancePayment] = useState<string>('');
   return (
     <AddReservation.Provider
       value={{
@@ -39,6 +40,8 @@ export function AddReservationWrapper({
         setRoomListOpen,
         totalNumOfGuests,
         setNumOfGuests,
+        advancePayment,
+        setAdvancePayment,
       }}
     >
       {children}
