@@ -3,7 +3,7 @@ import { AgeOfKids } from './types';
 import { createContext, useContext, useState } from 'react';
 import { Room } from '@/app/components/RenderRows/types';
 import { rooms } from '@/app/data/roomsData';
-const AddReservation = createContext<any>(undefined);
+export const AddReservation = createContext<any>(undefined);
 export function AddReservationWrapper({
   children,
 }: {
