@@ -2,13 +2,43 @@
 import React, { useState, useEffect } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 const Price = () => {
-  const { daysBetween, selectedRoom, totalNumOfGuests } =
-    useAddReservationContext();
+  const {
+    daysBetween,
+    selectedRoom,
+    totalNumOfGuests,
+    advancePayment,
+    paymentOnPlace,
+    deposit,
+    localTax,
+    includedTax,
+  } = useAddReservationContext();
+
+  console.log(localTax);
 
   const [price, setPrice] = useState(0);
   useEffect(() => {
-    setPrice(daysBetween * totalNumOfGuests * selectedRoom.roomPrice);
-  }, [daysBetween, totalNumOfGuests, selectedRoom]);
+    let finalPrice =
+      daysBetween * totalNumOfGuests * selectedRoom.roomPrice -
+      advancePayment -
+      deposit -
+      paymentOnPlace;
+
+    if (includedTax) {
+      finalPrice *= localTax;
+      setPrice(finalPrice);
+    }
+    console.log(finalPrice);
+    setPrice(finalPrice);
+  }, [
+    daysBetween,
+    totalNumOfGuests,
+    selectedRoom,
+    advancePayment,
+    deposit,
+    paymentOnPlace,
+    localTax,
+    includedTax,
+  ]);
 
   return (
     <div className="">
@@ -16,7 +46,7 @@ const Price = () => {
         <h2 className="text-sm font-bold text-gray-400">Finalna cena</h2>
         <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm">
           <input
-            className=" w-full pl-2"
+            className=" w-full pl-2 py-2"
             value={price}
             type="text"
             aria-label="Finalna cena"
@@ -29,9 +59,9 @@ const Price = () => {
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-bold text-gray-400">Cena za dzień</h2>
-        <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm py-2">
+        <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm">
           <input
-            className=" w-full pl-2"
+            className=" w-full pl-2 py-2"
             value={selectedRoom.roomPrice}
             type="text"
             aria-label="Cena za dzień"

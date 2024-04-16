@@ -18,6 +18,11 @@ export function AddReservationWrapper({
   const [selectedRoom, setSelectedroom] = useState<Room | null>(rooms[0]);
   const [roomListOpen, setRoomListOpen] = useState(false);
   const [totalNumOfGuests, setNumOfGuests] = useState<number>(0);
+  const [advancePayment, setAdvancePayment] = useState<string>('');
+  const [paymentOnPlace, setPaymentOnPlace] = useState<number>(0);
+  const [deposit, setDeposit] = useState<number>(0);
+  const [localTax, setLocalTax] = useState<number>(0.85);
+  const [includedTax, setIncludeTax] = useState(false);
   return (
     <AddReservation.Provider
       value={{
@@ -39,6 +44,16 @@ export function AddReservationWrapper({
         setRoomListOpen,
         totalNumOfGuests,
         setNumOfGuests,
+        advancePayment,
+        setAdvancePayment,
+        paymentOnPlace,
+        setPaymentOnPlace,
+        deposit,
+        setDeposit,
+        localTax,
+        setLocalTax,
+        includedTax,
+        setIncludeTax,
       }}
     >
       {children}
