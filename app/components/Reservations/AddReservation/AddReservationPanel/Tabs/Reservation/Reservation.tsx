@@ -8,6 +8,8 @@ import NumOfGuests from './NumOfGuests/NumOfGuests';
 import Header from './Header/Header';
 import SelectObject from './SelectObject/SelectObject';
 import Price from './Price/Price';
+import AdvancePayment from './AdvancePayment/AdvancePayment';
+import PaymentOnPlace from './PaymentOnPlace/PaymentOnPlace';
 
 const Reservation = () => {
   return (
@@ -33,6 +35,8 @@ const Reservation = () => {
         <Header title="Cena" />
         <Price />
       </section>
+      <AdvancePayment />
+      <PaymentOnPlace />
     </main>
   );
 };
