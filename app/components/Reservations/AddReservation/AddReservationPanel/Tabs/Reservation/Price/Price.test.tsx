@@ -1,23 +1,21 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import '@testing-library/jest-dom/extend-expect';
-import '@testing-library/jest-dom';
 
+import '@testing-library/jest-dom';
 import Price from './Price';
 import {
   AddReservationWrapper,
   useAddReservationContext,
-} from '@/app/contexts/AddReservation/AddReservationProvider'; // Adjust the import path based on your directory structure
+} from '@/app/contexts/AddReservation/AddReservationProvider';
 
-// Mock the context values
 jest.mock(
   '../../../../../../../contexts/AddReservation/AddReservationProvider',
   () => ({
     ...jest.requireActual(
       '../../../../../../../contexts/AddReservation/AddReservationProvider'
-    ), // Use the actual implementation for other exports
-    useAddReservationContext: jest.fn(), // Mocking the useContext hook
+    ),
+    useAddReservationContext: jest.fn(),
   })
 );
 
@@ -27,6 +25,9 @@ describe('Price component', () => {
       daysBetween: 5,
       selectedRoom: { roomPrice: 100 },
       totalNumOfGuests: 3,
+      advancePayment: 100,
+      deposit: 200,
+      paymentOnPlace: 100,
     });
   });
 
@@ -39,9 +40,8 @@ describe('Price component', () => {
 
     const calculateButton = getByRole('button', { name: /calculate/i });
     userEvent.click(calculateButton);
-
     const finalPriceInput = getByRole('textbox', { name: /finalna cena/i });
-    expect(finalPriceInput).toHaveValue('1500'); // 5 days * 3 guests * 100 PLN/day
+    expect(finalPriceInput).toHaveValue('1100');
   });
 
   it('should display the room price correctly', () => {
@@ -52,6 +52,6 @@ describe('Price component', () => {
     );
 
     const roomPriceInput = getByRole('textbox', { name: /cena za dzień/i });
-    expect(roomPriceInput).toHaveValue('100'); // Assuming roomPrice is 100 PLN for testing
+    expect(roomPriceInput).toHaveValue('100');
   });
 });
