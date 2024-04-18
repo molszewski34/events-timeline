@@ -31,7 +31,7 @@ export const RenderRows = () => {
     setStartDate,
   } = useCalendarContext();
 
-  const { setSelectedStartDate, setSelectedEndDate } =
+  const { setSelectedStartDate, setSelectedEndDate, setSelectedRoomId } =
     useAddReservationContext();
 
   const dateFormat = 'EEEEEE dd';
@@ -129,6 +129,7 @@ export const RenderRows = () => {
             handleButtonClick(room, currentDateTimestamp);
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
+            setSelectedRoomId(room.id);
           }}
           onTouchStart={() => {
             handleButtonClick(room, currentDateTimestamp);
