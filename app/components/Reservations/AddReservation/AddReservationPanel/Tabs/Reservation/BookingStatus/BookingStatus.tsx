@@ -1,25 +1,20 @@
 import { useState } from 'react';
-
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { statuses } from './data';
 interface Status {
   name: string;
   color: string;
 }
 
 const BookingStatus = () => {
-  const statuses = [
-    { name: 'Brak płatności', color: '#f87171' },
-    { name: 'Wpłacono zaliczke', color: '#fde68a' },
-    { name: 'Zapłacono', color: '#a3e635' },
-    { name: 'Anulowano', color: '#a78bfa' },
-    { name: 'Niedostępny', color: '#a3a3a3' },
-  ];
-  const [selectedStatus, setSelectedStatus] = useState<Status | null>(
-    statuses[0]
-  );
+  const { formData, setFormData } = useAddReservationContext();
   const [statusListOpen, setStatusListOpen] = useState(false);
 
   const handleSelectOption = (status: Status) => {
-    setSelectedStatus(status);
+    setFormData((prevData: Status) => ({
+      ...prevData,
+      selectedStatus: status,
+    }));
   };
   return (
     <div className="flex flex-col gap-2">
@@ -29,17 +24,17 @@ const BookingStatus = () => {
       >
         <div
           className={`w-8 h-8 rounded-full flex justify-center items-center`}
-          style={{ backgroundColor: selectedStatus?.color }}
+          style={{ backgroundColor: formData.selectedStatus?.color }}
         >
           <span className="material-icon text-white">done</span>
         </div>
 
-        {selectedStatus?.name}
+        {formData.selectedStatus?.name}
       </button>
 
       {statuses.map((status, index) => (
         <div className={`${statusListOpen ? '' : 'h-0 overflow-hidden'}`}>
-          {selectedStatus?.name != status.name && (
+          {formData.selectedStatus?.name != status.name && (
             <button
               className="flex items-center gap-2 hover:bg-slate-200 p-2 rounded-sm"
               key={index}
