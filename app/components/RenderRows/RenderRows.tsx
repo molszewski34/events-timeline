@@ -31,8 +31,12 @@ export const RenderRows = () => {
     setStartDate,
   } = useCalendarContext();
 
-  const { setSelectedStartDate, setSelectedEndDate, setSelectedRoomId } =
-    useAddReservationContext();
+  const {
+    setSelectedStartDate,
+    setSelectedEndDate,
+    setSelectedRoomId,
+    setFormData,
+  } = useAddReservationContext();
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
@@ -130,6 +134,10 @@ export const RenderRows = () => {
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
             setSelectedRoomId(room.id);
+            setFormData((prevData: FormData) => ({
+              ...prevData,
+              numOfAdults: room.roomGuests,
+            }));
           }}
           onTouchStart={() => {
             handleButtonClick(room, currentDateTimestamp);
