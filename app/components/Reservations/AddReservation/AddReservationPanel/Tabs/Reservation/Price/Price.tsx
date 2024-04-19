@@ -11,20 +11,21 @@ const Price = () => {
     deposit,
     localTax,
     includedTax,
+    formData,
   } = useAddReservationContext();
 
-  console.log(localTax);
+  // console.log(formData.selectedRoom.roomPrice);
 
   const [price, setPrice] = useState(0);
   useEffect(() => {
     let finalPrice =
-      daysBetween * totalNumOfGuests * selectedRoom.roomPrice -
+      daysBetween * totalNumOfGuests * formData.selectedRoom.roomPrice -
       advancePayment -
       deposit -
       paymentOnPlace;
 
     if (includedTax) {
-      finalPrice *= localTax;
+      finalPrice += finalPrice * localTax;
       setPrice(finalPrice);
     }
     console.log(finalPrice);
@@ -32,7 +33,7 @@ const Price = () => {
   }, [
     daysBetween,
     totalNumOfGuests,
-    selectedRoom,
+    formData.selectedRoom,
     advancePayment,
     deposit,
     paymentOnPlace,
@@ -50,6 +51,7 @@ const Price = () => {
             value={price}
             type="text"
             aria-label="Finalna cena"
+            disabled
           />
           <p className="text-gray-400">PLN</p>
           <button className="w-12  rounded-sm rounded-l-none material-icon p-2 bg-green-400 text-xl text-white text-center">
@@ -62,7 +64,7 @@ const Price = () => {
         <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm">
           <input
             className=" w-full pl-2 py-2"
-            value={selectedRoom.roomPrice}
+            value={formData.selectedRoom.roomPrice}
             type="text"
             aria-label="Cena za dzień"
           />
