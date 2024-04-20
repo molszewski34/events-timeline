@@ -1,13 +1,51 @@
+import React, { useState, useEffect } from 'react';
 import { rooms } from '@/app/data/roomsData';
 import { Room } from '@/app/data/types';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+
 const SelectObject = () => {
-  const { selectedRoom, setSelectedroom, roomListOpen, setRoomListOpen } =
-    useAddReservationContext();
+  const {
+    selectedRoom,
+    setSelectedroom,
+    roomListOpen,
+    setRoomListOpen,
+    selectedRoomId,
+    setSelectedRoomId,
+    formData,
+    setFormData,
+  } = useAddReservationContext();
+
+  const [foundRoom, setFoundRoom] = useState<Room | null>(null);
+
+  // console.log(foundRoom);
+  // console.log(selectedRoom);
+
+  useEffect(() => {
+    const searchRoomById = () => {
+      const room = rooms.find((room) => room.id === selectedRoomId);
+      if (room) {
+        // setFoundRoom(room);
+        // setSelectedroom(room);
+        setFormData((prevData: Date) => ({
+          ...prevData,
+          selectedRoom: room,
+        }));
+      }
+    };
+
+    searchRoomById();
+  }, [selectedRoomId]);
 
   const handleSelectOption = (room: Room) => {
-    setSelectedroom(room);
+    // setSelectedroom(room);
+    // setSelectedRoomId(room.id);
+    setFormData((prevData: Date) => ({
+      ...prevData,
+      selectedRoom: room,
+    }));
+    setSelectedRoomId(room.id);
   };
+
   return (
     <div className="flex flex-col gap-2">
       <button
@@ -18,34 +56,57 @@ const SelectObject = () => {
           className={`w-8 h-8 rounded-full flex justify-center items-center`}
         >
           <span className="material-icon text-green-500">
-            {selectedRoom?.roomTypeIcon}
+            {formData.selectedRoom?.roomTypeIcon}
           </span>
         </div>
-
-        {selectedRoom?.roomName}
+        {formData.selectedRoom?.roomName}
       </button>
 
-      {rooms.map((room, index) => (
-        <div className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
-          {selectedRoom?.roomName != room.roomName && (
-            <div className="flex bg-white hover:bg-slate-200">
-              <button
-                className="flex items-center gap-2  p-2 rounded-sm w-full"
-                key={index}
-                onClick={() => {
-                  handleSelectOption(room);
-                  setRoomListOpen(false);
-                }}
+      {foundRoom && (
+        <div className={`flex ${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
+          <div className="flex bg-white hover:bg-slate-200">
+            <button
+              className="flex items-center gap-2  p-2 rounded-sm w-full"
+              onClick={() => {
+                handleSelectOption(foundRoom);
+                setRoomListOpen(false);
+              }}
+            >
+              <div
+                className={`w-8 h-8 rounded-full flex justify-center items-center`}
               >
-                <div
-                  className={`w-8 h-8 rounded-full flex justify-center items-center`}
+                <span className="material-icon text-green-500">
+                  {foundRoom.roomTypeIcon}
+                </span>
+              </div>
+              {foundRoom.roomName}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {rooms.map((room, index) => (
+        <div key={index}>
+          {selectedRoom?.roomName !== room.roomName && (
+            <div className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
+              <div className="flex bg-white hover:bg-slate-200">
+                <button
+                  className="flex items-center gap-2  p-2 rounded-sm w-full"
+                  onClick={() => {
+                    handleSelectOption(room);
+                    setRoomListOpen(false);
+                  }}
                 >
-                  <span className="material-icon text-green-500">
-                    {room.roomTypeIcon}
-                  </span>
-                </div>
-                {room.roomName}
-              </button>
+                  <div
+                    className={`w-8 h-8 rounded-full flex justify-center items-center`}
+                  >
+                    <span className="material-icon text-green-500">
+                      {room.roomTypeIcon}
+                    </span>
+                  </div>
+                  {room.roomName}
+                </button>
+              </div>
             </div>
           )}
         </div>

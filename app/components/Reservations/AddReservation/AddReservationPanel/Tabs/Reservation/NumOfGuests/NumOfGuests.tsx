@@ -4,35 +4,46 @@ import { AgeOfKids } from '@/app/contexts/AddReservation/types';
 
 const NumOfGuests: React.FC = () => {
   const {
-    numOfKids,
     setNumOfKids,
     ageOfKids,
     setAgeOfKids,
-    selectedRoom,
+
     totalNumOfGuests,
     setNumOfGuests,
+    formData,
+    setFormData,
   } = useAddReservationContext();
 
-  const [numOfAdults, setNumOfAdults] = useState(selectedRoom.roomGuests);
-
   useEffect(() => {
-    setNumOfGuests(numOfKids + numOfAdults);
-  }, [numOfKids, numOfAdults]);
+    setNumOfGuests(formData.numOfKids + formData.numOfAdults);
+  }, [formData.numOfKids, formData.numOfAdults]);
 
   const handleNumOfAdultsIncrement = () => {
-    setNumOfAdults(numOfAdults + 1);
+    setFormData((prevData: FormData) => ({
+      ...prevData,
+      numOfAdults: formData.numOfAdults + 1,
+    }));
   };
 
   const handleNumOfAdultsDecrement = () => {
-    setNumOfAdults(Math.max(numOfAdults - 1, 0));
+    setFormData((prevData: FormData) => ({
+      ...prevData,
+      numOfAdults: Math.max(formData.numOfAdults - 1, 0),
+    }));
   };
 
   const handleNumOfKidsIncrement = () => {
-    setNumOfKids(numOfKids + 1);
+    setFormData((prevData: FormData) => ({
+      ...prevData,
+      numOfKids: formData.numOfKids + 1,
+    }));
   };
 
   const handleNumOfKidsDecrement = () => {
-    setNumOfKids(Math.max(numOfKids - 1, 0));
+    setFormData((prevData: FormData) => ({
+      ...prevData,
+      numOfKids: Math.max(formData.numOfKids - 1, 0),
+    }));
   };
 
   const handleAgeIncrement = (index: number) => {
@@ -49,7 +60,8 @@ const NumOfGuests: React.FC = () => {
     }));
   };
 
-  const isExceedingCapacity = totalNumOfGuests > selectedRoom.roomGuests;
+  const isExceedingCapacity =
+    totalNumOfGuests > formData.selectedRoom.roomGuests;
 
   return (
     <main className="flex flex-col gap-2">
@@ -69,7 +81,7 @@ const NumOfGuests: React.FC = () => {
               -
             </button>
             <input
-              value={numOfAdults}
+              value={formData.numOfAdults}
               className="text-center w-full"
               type="text"
             />
@@ -97,7 +109,7 @@ const NumOfGuests: React.FC = () => {
               -
             </button>
             <input
-              value={numOfKids}
+              value={formData.numOfKids}
               className="text-center w-full"
               type="text"
             />
@@ -110,7 +122,7 @@ const NumOfGuests: React.FC = () => {
             </button>
           </form>
         </div>
-        {[...Array(numOfKids)].map((_, index) => (
+        {[...Array(formData.numOfKids)].map((_, index) => (
           <div key={index} className="flex flex-col gap-2">
             <h2 className="text-sm font-bold text-gray-400">
               Wiek {`(Dziecko ${index + 1})`}

@@ -2,20 +2,30 @@ import React from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
 const NumOfNights: React.FC = () => {
-  const { selectedEndDate, setSelectedEndDate, daysBetween, setDaysBetween } =
+  const { daysBetween, setDaysBetween, formData, setFormData } =
     useAddReservationContext();
 
+  // console.log(daysBetween);
+
   const incrementEndDate = (amount: number): void => {
-    const newEndDate = new Date(selectedEndDate);
+    const newEndDate = new Date(formData.selectedEndDate);
     newEndDate.setDate(newEndDate.getDate() + amount);
-    setSelectedEndDate(newEndDate);
+    // setSelectedEndDate(newEndDate);
+    setFormData((prevData: Date) => ({
+      ...prevData,
+      selectedEndDate: newEndDate,
+    }));
   };
 
   const decrementEndDate = (amount: number): void => {
     if (daysBetween - amount >= 0) {
-      const newEndDate = new Date(selectedEndDate);
+      const newEndDate = new Date(formData.selectedEndDate);
       newEndDate.setDate(newEndDate.getDate() - amount);
-      setSelectedEndDate(newEndDate);
+      // setSelectedEndDate(newEndDate);
+      setFormData((prevData: Date) => ({
+        ...prevData,
+        selectedEndDate: newEndDate,
+      }));
     } else {
       setDaysBetween(0);
     }

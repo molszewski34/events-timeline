@@ -4,38 +4,37 @@ import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReser
 const Price = () => {
   const {
     daysBetween,
-    selectedRoom,
     totalNumOfGuests,
-    advancePayment,
-    paymentOnPlace,
-    deposit,
     localTax,
     includedTax,
+    formData,
+    price,
+    setPrice,
+    tax,
   } = useAddReservationContext();
 
-  console.log(localTax);
+  console.log(daysBetween);
 
-  const [price, setPrice] = useState(0);
   useEffect(() => {
     let finalPrice =
-      daysBetween * totalNumOfGuests * selectedRoom.roomPrice -
-      advancePayment -
-      deposit -
-      paymentOnPlace;
+      daysBetween * totalNumOfGuests * formData.selectedRoom.roomPrice -
+      formData.advancePayment -
+      formData.deposit -
+      formData.paymentOnPlace;
 
     if (includedTax) {
-      finalPrice *= localTax;
+      finalPrice += tax;
       setPrice(finalPrice);
     }
-    console.log(finalPrice);
     setPrice(finalPrice);
+    console.log(`final price ${finalPrice}`);
   }, [
     daysBetween,
     totalNumOfGuests,
-    selectedRoom,
-    advancePayment,
-    deposit,
-    paymentOnPlace,
+    formData.selectedRoom,
+    formData.advancePayment,
+    formData.deposit,
+    formData.paymentOnPlace,
     localTax,
     includedTax,
   ]);
@@ -50,6 +49,7 @@ const Price = () => {
             value={price}
             type="text"
             aria-label="Finalna cena"
+            disabled
           />
           <p className="text-gray-400">PLN</p>
           <button className="w-12  rounded-sm rounded-l-none material-icon p-2 bg-green-400 text-xl text-white text-center">
@@ -62,7 +62,7 @@ const Price = () => {
         <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm">
           <input
             className=" w-full pl-2 py-2"
-            value={selectedRoom.roomPrice}
+            value={formData.selectedRoom.roomPrice}
             type="text"
             aria-label="Cena za dzień"
           />
