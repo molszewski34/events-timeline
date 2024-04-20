@@ -4,39 +4,37 @@ import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReser
 const Price = () => {
   const {
     daysBetween,
-    selectedRoom,
     totalNumOfGuests,
-    advancePayment,
-    paymentOnPlace,
-    deposit,
     localTax,
     includedTax,
     formData,
+    price,
+    setPrice,
+    tax,
   } = useAddReservationContext();
 
-  // console.log(formData.selectedRoom.roomPrice);
+  console.log(daysBetween);
 
-  const [price, setPrice] = useState(0);
   useEffect(() => {
     let finalPrice =
       daysBetween * totalNumOfGuests * formData.selectedRoom.roomPrice -
-      advancePayment -
-      deposit -
-      paymentOnPlace;
+      formData.advancePayment -
+      formData.deposit -
+      formData.paymentOnPlace;
 
     if (includedTax) {
-      finalPrice += finalPrice * localTax;
+      finalPrice += tax;
       setPrice(finalPrice);
     }
-    console.log(finalPrice);
     setPrice(finalPrice);
+    console.log(`final price ${finalPrice}`);
   }, [
     daysBetween,
     totalNumOfGuests,
     formData.selectedRoom,
-    advancePayment,
-    deposit,
-    paymentOnPlace,
+    formData.advancePayment,
+    formData.deposit,
+    formData.paymentOnPlace,
     localTax,
     includedTax,
   ]);
