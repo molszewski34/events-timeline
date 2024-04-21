@@ -4,24 +4,23 @@ import { AgeOfKids } from '@/app/contexts/AddReservation/types';
 
 const NumOfGuests: React.FC = () => {
   const {
-    setNumOfKids,
     ageOfKids,
     setAgeOfKids,
-
     totalNumOfGuests,
-    setNumOfGuests,
+    setTotalNumOfGuests,
     formData,
     setFormData,
   } = useAddReservationContext();
 
   useEffect(() => {
-    setNumOfGuests(formData.numOfKids + formData.numOfAdults);
+    setTotalNumOfGuests(formData.numOfKids + formData.numOfAdults);
   }, [formData.numOfKids, formData.numOfAdults]);
 
   const handleNumOfAdultsIncrement = () => {
     setFormData((prevData: FormData) => ({
       ...prevData,
       numOfAdults: formData.numOfAdults + 1,
+      numOfKids: Math.max(formData.numOfKids - 1, 0),
     }));
   };
 
@@ -36,6 +35,7 @@ const NumOfGuests: React.FC = () => {
     setFormData((prevData: FormData) => ({
       ...prevData,
       numOfKids: formData.numOfKids + 1,
+      numOfAdults: Math.max(formData.numOfAdults - 1, 0),
     }));
   };
 
@@ -43,6 +43,7 @@ const NumOfGuests: React.FC = () => {
     setFormData((prevData: FormData) => ({
       ...prevData,
       numOfKids: Math.max(formData.numOfKids - 1, 0),
+      numOfAdults: formData.numOfAdults + 1,
     }));
   };
 
