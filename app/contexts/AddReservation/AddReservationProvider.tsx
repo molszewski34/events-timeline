@@ -19,7 +19,7 @@ export function AddReservationWrapper({
 
   const [selectedRoom, setSelectedroom] = useState<Room | null>();
   const [roomListOpen, setRoomListOpen] = useState(false);
-  const [totalNumOfGuests, setNumOfGuests] = useState<number>(0);
+  const [totalNumOfGuests, setTotalNumOfGuests] = useState<number>(0);
   const [advancePayment, setAdvancePayment] = useState<string>('');
   const [paymentOnPlace, setPaymentOnPlace] = useState<number>(0);
   const [deposit, setDeposit] = useState<number>(0);
@@ -61,7 +61,7 @@ export function AddReservationWrapper({
         roomListOpen,
         setRoomListOpen,
         totalNumOfGuests,
-        setNumOfGuests,
+        setTotalNumOfGuests,
         advancePayment,
         setAdvancePayment,
         paymentOnPlace,
