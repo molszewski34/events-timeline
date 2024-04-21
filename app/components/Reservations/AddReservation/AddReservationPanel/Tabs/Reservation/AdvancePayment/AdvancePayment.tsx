@@ -12,8 +12,6 @@ const AdvancePayment: React.FC = () => {
     }));
   };
 
-  // console.log(advancePayment);
-
   return (
     <section className="flex flex-col gap-2">
       <button
@@ -31,9 +29,19 @@ const AdvancePayment: React.FC = () => {
       </button>
       {isOpen && (
         <div className="flex flex-col gap-2">
-          <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm">
+          <form
+            className={`"border border-gray-300 flex justify-between items-center gap-2 rounded-sm" ${
+              formData.selectedStatus.name === 'Wpłacono zaliczke'
+                ? 'bg-gray-200'
+                : 'bg-white'
+            }`}
+          >
             <input
-              className="w-full pl-2 py-2"
+              className={`w-full pl-2 py-2 ${
+                formData.selectedStatus.name === 'Wpłacono zaliczke'
+                  ? 'bg-gray-200'
+                  : 'bg-white'
+              }`}
               value={formData.advancePayment}
               onChange={handleAdvancePaymentChange}
               type="text"
