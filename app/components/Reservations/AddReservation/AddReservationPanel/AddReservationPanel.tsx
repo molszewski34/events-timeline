@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import Header from './Header/Header';
+import Header from './Headers/Header';
 import TabsComponent from './Tabs/TabsComponent';
 
 const AddReservationPanel = () => {
