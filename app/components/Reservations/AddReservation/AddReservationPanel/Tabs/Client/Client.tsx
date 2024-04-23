@@ -9,27 +9,59 @@ const Client = () => {
       <section className="flex flex-col gap-2">
         <SectionHeader title="Główny gość" />
         <Field
+          type="text"
           label=""
           placeholder="Wpisz imię i nazwisko głównego gościa"
           formDataKey="mainGuest"
         />
-        <Field label="Ulica" placeholder="" formDataKey="mainGuest" />
+        <Field
+          type="text"
+          label="Ulica"
+          placeholder=""
+          formDataKey="mainGuest"
+        />
         <div className="grid grid-cols-2 gap-2">
-          <Field label="Numer domu" placeholder="" formDataKey="houseNumber" />
           <Field
+            type="text"
+            label="Numer domu"
+            placeholder=""
+            formDataKey="houseNumber"
+          />
+          <Field
+            type="text"
             label="Numer mieszkania"
             placeholder=""
             formDataKey="apartmentNumber"
           />
         </div>
-        <Field label="Miasto" placeholder="" formDataKey="apartmentNumber" />
         <Field
+          type="text"
+          label="Miasto"
+          placeholder=""
+          formDataKey="apartmentNumber"
+        />
+        <Field
+          type="text"
           label="Kod pocztowy"
           placeholder=""
           formDataKey="apartmentNumber"
         />
         <CountriesList />
-        <Field label="Paszport" placeholder="" formDataKey="apartmentNumber" />
+        <Field
+          type="text"
+          label="Paszport"
+          placeholder=""
+          formDataKey="apartmentNumber"
+        />
+      </section>
+      <section className="flex flex-col gap-2">
+        <SectionHeader title="Firma" />
+        <Field
+          type="text"
+          label=""
+          placeholder="Wprowadź nazwe firmy"
+          formDataKey="company"
+        />
       </section>
     </main>
   );
