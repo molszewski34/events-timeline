@@ -4,7 +4,7 @@ interface HeaderProps {
   title: string;
 }
 
-const Header: FC<HeaderProps> = ({ title }) => {
+const SectionHeader: FC<HeaderProps> = ({ title }) => {
   return (
     <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400">
       <h1>{title}</h1>
@@ -12,4 +12,4 @@ const Header: FC<HeaderProps> = ({ title }) => {
   );
 };
 
-export default Header;
+export default SectionHeader;

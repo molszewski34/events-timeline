@@ -3,10 +3,10 @@ interface HeaderProps {
   title: string;
 }
 
-const Header: FC<HeaderProps> = ({ title }) => {
+const Label: FC<HeaderProps> = ({ title }) => {
   return (
     <h2 className="font-semibold text-gray-400 w-full text-sm">{title}</h2>
   );
 };
 
-export default Header;
+export default Label;
