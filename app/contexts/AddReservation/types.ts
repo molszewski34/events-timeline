@@ -15,6 +15,14 @@ export interface FormData {
   deposit: string;
   paymentOnPlace: string;
   localTax: number;
+  mainGuest: string;
+  houseNumber: string;
+  apartmentNumber: string;
+  city: string;
+  postCode: string;
+  country: string;
+  passport: string;
+  company: string;
 }
 
 export interface SelectedStatus {

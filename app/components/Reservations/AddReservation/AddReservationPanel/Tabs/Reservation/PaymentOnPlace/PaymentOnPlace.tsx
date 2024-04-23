@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
+import Label from '../../../Headers/Label';
 
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
@@ -48,7 +48,7 @@ const PaymentOnPlace = () => {
         </form>
       </div>
       <div className="flex justify-between items-center gap-1 flex-nowrap ">
-        <Header title={'Depozyt'} />
+        <Label title={'Depozyt'} />
       </div>
       <div className="flex flex-col gap-2">
         <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm ">
@@ -67,7 +67,7 @@ const PaymentOnPlace = () => {
         </form>
       </div>
       <div className="flex justify-between items-center gap-1 flex-nowrap ">
-        <Header title={'Lokalny podatek'} />
+        <Label title={'Lokalny podatek'} />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">

@@ -39,6 +39,14 @@ export function AddReservationWrapper({
     deposit: '',
     paymentOnPlace: '',
     localTax: 0.085,
+    mainGuest: '',
+    houseNumber: '',
+    apartmentNumber: '',
+    city: '',
+    postCode: '',
+    country: 'Wybierz',
+    passport: '',
+    company: '',
   });
 
   return (
