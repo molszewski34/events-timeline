@@ -40,6 +40,7 @@ export function AddReservationWrapper({
     paymentOnPlace: '',
     localTax: 0.085,
     mainGuest: '',
+    phone: '',
     houseNumber: '',
     apartmentNumber: '',
     city: '',
@@ -47,7 +48,13 @@ export function AddReservationWrapper({
     country: 'Wybierz',
     passport: '',
     company: '',
+    notes: '',
+    passCode: '',
+    registration: 'Brak',
+    boarding: '',
   });
+
+  console.log(formData);
 
   return (
     <AddReservation.Provider

@@ -14,12 +14,14 @@ const Client = () => {
           placeholder="Wpisz imię i nazwisko głównego gościa"
           formDataKey="mainGuest"
         />
+        <Field type="text" label="Telefon" placeholder="" formDataKey="phone" />
         <Field
           type="text"
           label="Ulica"
           placeholder=""
           formDataKey="mainGuest"
         />
+
         <div className="grid grid-cols-2 gap-2">
           <Field
             type="text"

@@ -7,6 +7,7 @@ import {
 } from '@/app/components/ui/tabs';
 import Reservation from './Reservation/Reservation';
 import Client from './Client/Client';
+import Details from './Details/Details';
 
 const TabsComponent = () => {
   return (
@@ -31,7 +32,9 @@ const TabsComponent = () => {
       <TabsContent value="client">
         <Client />
       </TabsContent>
-      <TabsContent value="details">Details</TabsContent>
+      <TabsContent value="details">
+        <Details />
+      </TabsContent>
     </Tabs>
   );
 };

@@ -19,10 +19,10 @@ const CountriesList = () => {
 
         <select
           className="p-2 bg-white border border-gray-300 rounded-sm text-gray-500"
-          value="Wybierz"
+          value={formData.country}
           onChange={handleCountryChange}
         >
-          <option>{formData.country}</option>
+          <option>Wybierz</option>
           {countries.map((country) => (
             <option>{country.name_pl}</option>
           ))}

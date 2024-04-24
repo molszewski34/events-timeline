@@ -16,6 +16,7 @@ export interface FormData {
   paymentOnPlace: string;
   localTax: number;
   mainGuest: string;
+  phone: string;
   houseNumber: string;
   apartmentNumber: string;
   city: string;
@@ -23,6 +24,10 @@ export interface FormData {
   country: string;
   passport: string;
   company: string;
+  notes: string;
+  registration: string;
+  boarding: string;
+  passCode: string;
 }
 
 export interface SelectedStatus {
