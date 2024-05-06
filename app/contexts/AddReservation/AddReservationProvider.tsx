@@ -28,6 +28,11 @@ export function AddReservationWrapper({
   const [tax, setTax] = useState<number>(0);
   const [includedTax, setIncludedTax] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState('');
+
+  const [selectedButton, setSelectedButton] = useState<{
+    room: Room | null;
+    timestamp: number | null;
+  }>({ room: null, timestamp: null });
   const [formData, setFormData] = useState<FormData>({
     selectedStartDate: new Date(),
     selectedEndDate: new Date(),
@@ -41,13 +46,19 @@ export function AddReservationWrapper({
     localTax: 0.085,
     mainGuest: '',
     phone: '',
+    email: '',
     houseNumber: '',
     apartmentNumber: '',
     city: '',
     postCode: '',
-    country: 'Wybierz',
+    country: '',
     passport: '',
     company: '',
+    company_street: '',
+    company_city: '',
+    company_postCode: '',
+    company_country: '',
+    company_nip: '',
     notes: '',
     passCode: '',
     registration: 'Brak',
@@ -95,6 +106,8 @@ export function AddReservationWrapper({
         setPrice,
         tax,
         setTax,
+        selectedButton,
+        setSelectedButton,
       }}
     >
       {children}
