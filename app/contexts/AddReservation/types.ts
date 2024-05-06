@@ -17,6 +17,7 @@ export interface FormData {
   localTax: number;
   mainGuest: string;
   phone: string;
+  email: string;
   houseNumber: string;
   apartmentNumber: string;
   city: string;
@@ -24,6 +25,11 @@ export interface FormData {
   country: string;
   passport: string;
   company: string;
+  company_street: string;
+  company_city: string;
+  company_postCode: string;
+  company_country: string;
+  company_nip: string;
   notes: string;
   registration: string;
   boarding: string;
