@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { countries } from '@/app/data/countriesData';
 import Label from '../../../Headers/Label';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-const CountriesList = () => {
+import { FormData } from '@/app/contexts/AddReservation/types';
+interface FieldProps {
+  formDataKey: keyof FormData;
+}
+
+const CountriesList: React.FC<FieldProps> = ({ formDataKey }) => {
   const { formData, setFormData } = useAddReservationContext();
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value: string = e.target.value;
     setFormData((prevData: FormData) => ({
       ...prevData,
-      country: e.target.value,
+      [formDataKey]: value,
     }));
   };
 
@@ -18,7 +24,7 @@ const CountriesList = () => {
         <Label title="Kraj/Region" />
 
         <select
-          className="p-2 bg-white border border-gray-300 rounded-sm text-gray-500"
+          className="p-2 bg-white border border-gray-300 rounded-sm text-gray-500 text-sm py-3"
           value={formData.country}
           onChange={handleCountryChange}
         >
