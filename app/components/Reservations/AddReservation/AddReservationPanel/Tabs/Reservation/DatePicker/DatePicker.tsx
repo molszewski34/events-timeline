@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import DateTimePicker from 'react-datetime-picker';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { format } from 'date-fns';
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
-import pl from 'date-fns/locale/pl';
+import { pl } from 'date-fns/locale/pl';
+import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import handleCountDaysBetweenDates from './utils/handleCountDaysBetweenDates';
 
-const DatePicker: React.FC = () => {
+const CustomDatePicker: React.FC = () => {
   const {
     selectedStartDate,
     setSelectedStartDate,
@@ -19,28 +18,17 @@ const DatePicker: React.FC = () => {
     setFormData,
   } = useAddReservationContext();
 
-  const formattedStartDate = format(
-    formData.selectedStartDate,
-    'yyyy-MM-dd h:mm'
-  );
-
   useEffect(() => {
     const days = handleCountDaysBetweenDates(
       formData.selectedStartDate,
       formData.selectedEndDate
     );
     setDaysBetween(days);
-  }, [
-    formData.selectedStartDate,
-    formData.selectedEndDate,
-    setDaysBetween,
-    selectedStartDate,
-    selectedEndDate,
-  ]);
+  }, [formData.selectedStartDate, formData.selectedEndDate, setDaysBetween]);
 
-  const handleStartDateChange = (date: Date | Date[] | null) => {
+  const handleStartDateChange = (date: Date | [Date, Date] | null) => {
     if (date instanceof Date) {
-      setFormData((prevData: Date) => ({
+      setFormData((prevData: any) => ({
         ...prevData,
         selectedStartDate: date,
       }));
@@ -48,9 +36,9 @@ const DatePicker: React.FC = () => {
     }
   };
 
-  const handleEndDateChange = (date: Date | Date[] | null) => {
+  const handleEndDateChange = (date: Date | [Date, Date] | null) => {
     if (date instanceof Date) {
-      setFormData((prevData: Date) => ({
+      setFormData((prevData: any) => ({
         ...prevData,
         selectedEndDate: date,
       }));
@@ -59,28 +47,30 @@ const DatePicker: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 mt-2">
-      <div className="flex gap-2">
-        <label>Od:</label>
-        <DateTimePicker
-          className={'w-20'}
-          format="yyyy-MM-dd h:mm"
-          clearIcon={null}
-          value={formattedStartDate}
+    <div className="flex justify-around mt-2 gap-2">
+      <div className="flex flex-col gap-2 w-full">
+        <label>Od</label>
+        <DatePicker
+          className={'w-full border border-gray-200 p-1'}
+          dateFormat="yyyy-MM-dd h:mm"
+          selected={formData.selectedStartDate}
           onChange={handleStartDateChange}
-          locale="pl"
+          locale={pl}
+          showTimeInput
+          timeInputLabel="Czas:"
           data-testid="start-date-picker"
         />
       </div>
-      <div className="flex gap-2">
-        <label>Do:</label>
-        <DateTimePicker
-          className={'w-20'}
-          format="yyyy-MM-dd h:mm"
-          clearIcon={null}
-          value={formData.selectedEndDate}
+      <div className="flex flex-col gap-2 w-full">
+        <label>Do</label>
+        <DatePicker
+          className={'w-full border border-gray-200 p-1'}
+          dateFormat="yyyy-MM-dd h:mm"
+          selected={formData.selectedEndDate}
           onChange={handleEndDateChange}
           locale="pl"
+          showTimeInput
+          timeInputLabel="Czas:"
           data-testid="end-date-picker"
         />
       </div>
@@ -88,4 +78,4 @@ const DatePicker: React.FC = () => {
   );
 };
 
-export default DatePicker;
+export default CustomDatePicker;

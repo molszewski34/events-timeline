@@ -10,6 +10,7 @@ import SelectObject from './SelectObject/SelectObject';
 import Price from './Price/Price';
 import AdvancePayment from './AdvancePayment/AdvancePayment';
 import PaymentOnPlace from './PaymentOnPlace/PaymentOnPlace';
+import Footer from '../../Footer/Footer';
 
 const Reservation = () => {
   return (
@@ -37,6 +38,7 @@ const Reservation = () => {
       </section>
       <AdvancePayment />
       <PaymentOnPlace />
+      <Footer />
     </main>
   );
 };

@@ -36,15 +36,12 @@ export const RenderRows = () => {
     setSelectedEndDate,
     setSelectedRoomId,
     setFormData,
+    selectedButton,
+    setSelectedButton,
   } = useAddReservationContext();
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
-
-  const [selectedButton, setSelectedButton] = useState<{
-    room: Room | null;
-    timestamp: number | null;
-  }>({ room: null, timestamp: null });
 
   const handleButtonClick = (room: Room, timestamp: number) => {
     setSelectedButton({ room, timestamp });

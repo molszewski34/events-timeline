@@ -20,20 +20,26 @@ const Field: React.FC<FieldProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let value: string | number = event.target.value;
+    const value: string = event.target.value;
 
-    if (
-      (formDataKey === 'houseNumber' || formDataKey === 'apartmentNumber') &&
+    if (formDataKey === 'email') {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(value)) {
+        setError('Niepoprawny wzór adresu email');
+        return;
+      } else {
+        setError(null);
+      }
+    } else if (
+      (formDataKey === 'houseNumber' ||
+        formDataKey === 'apartmentNumber' ||
+        formDataKey === 'phone') &&
       value.trim() !== '' &&
       !/^\d+$/.test(value)
     ) {
-      setError(`Pole ${label} może zawierać tylko cyfry.`);
+      setError(`Pole "${label}" może zawierać tylko cyfry.`);
       return;
-    } else {
-      setError(null);
-    }
-
-    if (value.length > 20) {
+    } else if (value.length > 20) {
       setError(`Pole ${label} nie może przekraczać 20 znaków.`);
       return;
     } else {
@@ -47,7 +53,7 @@ const Field: React.FC<FieldProps> = ({
   };
 
   return (
-    <main className="flex flex-col gap-2">
+    <main className="flex flex-col gap-2 w-full">
       <div className="flex flex-col gap-2">
         <label className="font-semibold text-gray-400 w-full text-sm">
           {label}
