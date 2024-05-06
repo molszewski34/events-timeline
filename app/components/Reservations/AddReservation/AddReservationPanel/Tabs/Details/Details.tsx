@@ -5,6 +5,7 @@ import Notes from './Notes/Notes';
 import Field from '../Client/Field/Field';
 import Registration from './Registration/Registration';
 import Boarding from './Boarding/Boarding';
+import Footer from '../../Footer/Footer';
 
 const Details = () => {
   return (
@@ -23,6 +24,7 @@ const Details = () => {
         type="text"
         placeholder=""
       />
+      <Footer />
     </main>
   );
 };
