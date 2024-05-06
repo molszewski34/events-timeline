@@ -17,6 +17,7 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
   const [endDate, setEndDate] = useState<Date>(
     addDays(startOfWeek(endOfMonth(currentDate), { locale: pl }), daysToShow)
   );
+  const [openAddRoom, setOpenAddRoom] = useState(false);
   return (
     <CalendarContext.Provider
       value={{
@@ -34,6 +35,8 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setStartDate,
         endDate,
         setEndDate,
+        openAddRoom,
+        setOpenAddRoom,
       }}
     >
       {children}

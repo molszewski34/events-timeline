@@ -11,6 +11,7 @@ import LeftPanel from '../components/LeftPanel/LeftPanel';
 import AddReservationPanel from '../components/Reservations/AddReservation/AddReservationPanel/AddReservationPanel';
 import NavDesktop from '../components/Navigation/desktop/NavDesktop';
 import NavMobile from '../components/Navigation/mobile/NavMobile';
+import Footer from '../components/Footer/Footer';
 const Calendar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
@@ -52,7 +53,7 @@ const Calendar: React.FC = () => {
           <RenderRows />
         </div>
       </div>
-
+      <Footer />
       {openAddReservationPanel && <AddReservationPanel />}
     </div>
   );
