@@ -3,6 +3,7 @@ import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 import { CalendarWrapper } from './contexts/Calendar/CalendarProvider';
 import { AddReservationWrapper } from './contexts/AddReservation/AddReservationProvider';
+import { AddRoomWrapper } from './contexts/AddRoom/AddRoomProvider';
 import { cn } from '@/app/lib/utils';
 
 const fontSans = FontSans({
@@ -30,7 +31,9 @@ export default function RootLayout({
         )}
       >
         <CalendarWrapper>
-          <AddReservationWrapper>{children}</AddReservationWrapper>
+          <AddRoomWrapper>
+            <AddReservationWrapper>{children}</AddReservationWrapper>
+          </AddRoomWrapper>
         </CalendarWrapper>
       </body>
     </html>
