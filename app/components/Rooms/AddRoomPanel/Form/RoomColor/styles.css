@@ -1,0 +1,4 @@
+.grid-template {
+  grid-template-columns: repeat(auto-fit, 51px);
+  justify-content: space-between;
+}
