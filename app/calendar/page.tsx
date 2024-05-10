@@ -7,17 +7,20 @@ import { RenderMonths } from '../components/TopPanel/RenderMonths/RenderMonths';
 import { RenderYears } from '../components/TopPanel/RenderYears/RenderYears';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useAddRoomContext } from '../contexts/AddRoom/AddRoomProvider';
 import LeftPanel from '../components/LeftPanel/LeftPanel';
 import AddReservationPanel from '../components/Reservations/AddReservation/AddReservationPanel/AddReservationPanel';
 import NavDesktop from '../components/Navigation/desktop/NavDesktop';
 import NavMobile from '../components/Navigation/mobile/NavMobile';
-import Footer from '../components/Footer/Footer';
+import Footer from '../components/Reservations/Footer/Footer';
+import AddRoomPanel from '../components/Rooms/AddRoomPanel/AddRoomPanel';
+import Overlay from '../components/utils/Overlay';
 const Calendar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
-  const { currentDate, setCurrentDate } = useCalendarContext();
-  const { openAddReservationPanel, setOpenAddReservationPanel } =
-    useAddReservationContext();
+  const { overlay } = useCalendarContext();
+  const { openAddReservationPanel } = useAddReservationContext();
+  const { openAddRoom } = useAddRoomContext();
 
   useEffect(() => {
     const updateContainerWidth = () => {
@@ -55,6 +58,8 @@ const Calendar: React.FC = () => {
       </div>
       <Footer />
       {openAddReservationPanel && <AddReservationPanel />}
+      {openAddRoom && <AddRoomPanel />}
+      {overlay && <Overlay />}
     </div>
   );
 };

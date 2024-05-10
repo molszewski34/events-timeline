@@ -3,7 +3,7 @@ import { rooms } from '@/app/data/roomsData';
 
 const LeftPanel = () => {
   return (
-    <div className="fixed   bg-gray-100 z-[99] min-w-[100px] flex flex-col">
+    <div className="fixed   bg-gray-100 z-[50] min-w-[100px] flex flex-col">
       <div className="h-[50px] text-xs text-left p-2 border-2 border-l-0 text-gray-500">
         <i className="material-icons text-2xl">filter_alt</i>
       </div>

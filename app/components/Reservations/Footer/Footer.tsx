@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
-import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 const Footer = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const { openAddRoom, setOpenAddRoom } = useCalendarContext();
+  const { openAddRoom, setOpenAddRoom } = useAddRoomContext();
+  const { overlay, setOverlay } = useCalendarContext();
   return (
     <footer className="fixed bottom-0 flex justify-end w-full">
       {isClicked ? (
@@ -19,6 +20,7 @@ const Footer = () => {
               className="flex gap-2 bg-white px-1 py-3 hover:bg-gray-100 text-green-500"
               onClick={() => {
                 setOpenAddRoom(true);
+                setOverlay(true);
                 setIsClicked(false);
               }}
             >
