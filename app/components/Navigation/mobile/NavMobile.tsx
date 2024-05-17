@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { addDays } from 'date-fns';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import DateTimePicker from 'react-datetime-picker';
@@ -7,7 +7,8 @@ import './style.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { pl } from 'date-fns/locale';
-const NavMobile = () => {
+
+const NavMobile = ({ children }: { children: React.ReactNode }) => {
   const {
     startDate,
     setStartDate,
@@ -16,6 +17,8 @@ const NavMobile = () => {
     setDaysToShow,
     daysToShow,
   } = useCalendarContext();
+
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -72,7 +75,7 @@ const NavMobile = () => {
   };
 
   return (
-    <nav className="flex justify-between bg-gray-100 items-center shadow-md">
+    <nav className="flex justify-between bg-gray-100 items-center shadow-md md:hidden">
       <div className="flex justify-around bg-gray-100 items-center">
         <button className="flex justify-around gap-4 p-4">
           <span className="material-icon text-2xl">menu</span>
@@ -101,14 +104,8 @@ const NavMobile = () => {
           )}
         </div>
       </div>
-      <div className="flex gap-4 text-2xl p-4">
-        <button className="material-icon ">search</button>
-        <button className="material-icon ">sync</button>
-        <button onClick={handleSwitchToCurrentDay} className="material-icon ">
-          calendar_month
-        </button>
-        <button className="material-icon ">notifications</button>
-      </div>
+
+      {children}
     </nav>
   );
 };
