@@ -23,7 +23,7 @@ const Header = () => {
       </div>
       <div className="flex gap-4">
         <button className="bg-gray-200 text-xs p-1">
-          {selectedButton.room.roomName}
+          {selectedButton.room?.roomName}
         </button>
         <button
           className="text-xs text-white p-1"
