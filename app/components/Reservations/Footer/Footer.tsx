@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';

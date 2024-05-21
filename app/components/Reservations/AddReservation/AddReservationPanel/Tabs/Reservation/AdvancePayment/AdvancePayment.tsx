@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, ChangeEvent } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
@@ -20,12 +21,9 @@ const AdvancePayment: React.FC = () => {
       >
         <h2 className="font-semibold text-gray-400">Zaliczka</h2>
         <hr className="bg-gray-70000 w-full" />
-        <button
-          type="button"
-          className="material-icon bg-gray-300 text-center flex items-center p-1 h-6 rounded-sm"
-        >
+        <span className="material-icon bg-gray-300 text-center flex items-center p-1 h-6 rounded-sm">
           arrow_drop_down
-        </button>
+        </span>
       </button>
       {isOpen && (
         <div className="flex flex-col gap-2">
