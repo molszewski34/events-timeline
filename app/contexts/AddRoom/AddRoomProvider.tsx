@@ -6,6 +6,7 @@ export const AddRoom = createContext<any>(undefined);
 
 export function AddRoomWrapper({ children }: { children: React.ReactNode }) {
   const [roomFormData, setRoomFormData] = useState<RoomFormData>({
+    user_id: '',
     roomName: '',
     roomGuests: 0,
     roomPrice: 0,

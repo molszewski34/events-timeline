@@ -1,4 +1,5 @@
 export interface RoomFormData {
+  user_id: string;
   roomName: string;
   roomGuests: number;
   roomPrice: number;
