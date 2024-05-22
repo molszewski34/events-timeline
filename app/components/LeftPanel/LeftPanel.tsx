@@ -1,23 +1,27 @@
 import React from 'react';
-import { rooms } from '@/app/data/roomsData';
-
+// import { rooms } from '@/app/data/roomsData';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 const LeftPanel = () => {
+  const { rooms, setRooms } = useAddRoomContext();
+
   return (
-    <div className="fixed   bg-gray-100 z-[50] min-w-[100px] flex flex-col">
+    <div className="fixed   bg-white z-[50] min-w-[100px] flex flex-col">
       <div className="h-[50px] text-xs text-left p-2 border-2 border-l-0 text-gray-500">
         <i className="material-icons text-2xl">filter_alt</i>
       </div>
-      {rooms.map((room) => (
-        <div className="h-[50px] text-xs text-left p-2 shadow-sm border-r-2 gap-1">
+      {rooms.map((room: any) => (
+        <button className="h-[50px] text-xs text-left p-2 shadow-sm border-r-2 gap-1">
+          {room.name}
           <div className="flex gap-1 items-center">
-            <p className="material-icon text-gray-500">{room.roomTypeIcon}</p>
+            <p className="material-icon text-gray-500 text-base">
+              {room.type_icon}
+            </p>
             <div className="flex items-center">
               <p className="material-icon text-gray-500 text-base">person</p>
-              <p>{room.roomGuests}</p>
+              <p>{room.guests}</p>
             </div>
           </div>
-          {room.roomName}
-        </div>
+        </button>
       ))}
     </div>
   );
