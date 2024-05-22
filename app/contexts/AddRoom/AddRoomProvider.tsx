@@ -3,9 +3,12 @@
 import { createContext, useContext, useState } from 'react';
 import { RoomFormData } from './types';
 export const AddRoom = createContext<any>(undefined);
-
+import { Room } from '@/app/data/types';
 export function AddRoomWrapper({ children }: { children: React.ReactNode }) {
+  const [rooms, setRooms] = useState<Room[]>([]);
+
   const [roomFormData, setRoomFormData] = useState<RoomFormData>({
+    user_id: '',
     roomName: '',
     roomGuests: 0,
     roomPrice: 0,
@@ -38,6 +41,8 @@ export function AddRoomWrapper({ children }: { children: React.ReactNode }) {
   return (
     <AddRoom.Provider
       value={{
+        rooms,
+        setRooms,
         roomFormData,
         setRoomFormData,
         openAddRoom,

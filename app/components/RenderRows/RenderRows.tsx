@@ -1,28 +1,23 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import {
   addDays,
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
-  endOfMonth,
   differenceInDays,
   format,
-  isWeekend,
-  isToday,
   isSameDay,
+  isToday,
+  isWeekend,
 } from 'date-fns';
-import { pl } from 'date-fns/locale';
-import { Room } from './types';
-import { rooms } from '@/app/data/roomsData';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import Button from '../Reservations/AddReservation/Button/Button';
-import { useSwipeable } from 'react-swipeable';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
+import { fetchRooms } from '@/app/actions/fetchRoom';
+import { Room } from './types';
+import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
+import Button from '../Reservations/AddReservation/Button/Button';
 
-export const RenderRows = () => {
+export const RenderRows: React.FC = () => {
   const {
     currentDate,
     daysToShow,
@@ -42,6 +37,24 @@ export const RenderRows = () => {
     setSelectedButton,
   } = useAddReservationContext();
 
+  const { rooms, setRooms } = useAddRoomContext();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserRooms = async () => {
+      const result = await fetchRooms();
+      if (result.success) {
+        setRooms(result.data || []);
+      } else {
+        console.error(result.error);
+      }
+      setLoading(false);
+    };
+
+    fetchUserRooms();
+  }, []);
+
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
 
@@ -59,7 +72,7 @@ export const RenderRows = () => {
     setEndDate((prevEndDate: Date) => addDays(prevEndDate, 7));
   };
 
-  const handlers = useSwipeable({
+  const handlers: SwipeableHandlers = useSwipeable({
     onSwipedLeft: () => handleNextWeek(),
     onSwipedRight: () => handlePrevWeek(),
     trackMouse: true,
@@ -93,33 +106,34 @@ export const RenderRows = () => {
     );
     currentDateIterator = addDays(currentDateIterator, 1);
   }
+
   const rows = rooms.map((room: Room) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    const roomEventStartDates = room.events.map((event) =>
-      new Date(event.start).setHours(0, 0, 0, 0)
-    );
-    const roomEventEndDates = room.events.map((event) =>
-      new Date(event.end).setHours(0, 0, 0, 0)
-    );
+    // const roomEventStartDates = room.events.map((event) =>
+    //   new Date(event.start).setHours(0, 0, 0, 0)
+    // );
+    // const roomEventEndDates = room.events.map((event) =>
+    //   new Date(event.end).setHours(0, 0, 0, 0)
+    // );
 
     while (currentDateIterator <= endDate) {
       const currentDateTimestamp = currentDateIterator.getTime();
       let eventDuration = '';
       let eventOverlaySize = '';
 
-      const eventIndex = roomEventStartDates.findIndex(
-        (date) => date === currentDateTimestamp
-      );
+      // const eventIndex = roomEventStartDates.findIndex(
+      //   (date) => date === currentDateTimestamp
+      // );
 
-      if (eventIndex !== -1) {
-        const start = new Date(room.events[eventIndex].start);
-        const end = new Date(room.events[eventIndex].end);
-        const daysDifference = differenceInDays(end, start);
-        eventDuration = `(${daysDifference} dni)`;
-        eventOverlaySize = `${(daysDifference + 1) * 50}px`;
-      }
+      // if (eventIndex !== -1) {
+      //   const start = new Date(room.events[eventIndex].start);
+      //   const end = new Date(room.events[eventIndex].end);
+      //   const daysDifference = differenceInDays(end, start);
+      //   eventDuration = `(${daysDifference} dni)`;
+      //   eventOverlaySize = `${(daysDifference + 1) * 50}px`;
+      // }
 
       days.push(
         <button
@@ -133,7 +147,7 @@ export const RenderRows = () => {
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
             setSelectedRoomId(room.id);
-            setFormData((prevData: FormData) => ({
+            setFormData((prevData: any) => ({
               ...prevData,
               numOfAdults: room.roomGuests,
             }));
@@ -148,7 +162,7 @@ export const RenderRows = () => {
             selectedButton.room &&
             selectedButton.room.id === room.id &&
             selectedButton.timestamp === currentDateTimestamp && <Button />}
-          {roomEventStartDates.includes(currentDateTimestamp) && (
+          {/* {roomEventStartDates.includes(currentDateTimestamp) && (
             <>
               <span
                 className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
@@ -157,7 +171,7 @@ export const RenderRows = () => {
                 {room.events[eventIndex].title}
               </span>
             </>
-          )}
+          )} */}
         </button>
       );
       currentDateIterator = addDays(currentDateIterator, 1);
