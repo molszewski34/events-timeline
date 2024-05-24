@@ -8,6 +8,8 @@ import {
   isSameDay,
   isToday,
   isWeekend,
+  startOfWeek,
+  endOfWeek,
 } from 'date-fns';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
@@ -47,6 +49,14 @@ export const RenderRows: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   console.log(reservations);
+
+  useEffect(() => {
+    const today = new Date();
+    const startOfWeekDate = startOfWeek(today);
+    const endOfWeekDate = endOfWeek(today);
+    setStartDate(startOfWeekDate);
+    setEndDate(endOfWeekDate);
+  }, []);
 
   useEffect(() => {
     const fetchUserRooms = async () => {
