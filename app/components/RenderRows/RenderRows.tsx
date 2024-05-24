@@ -45,7 +45,6 @@ export const RenderRows: React.FC = () => {
   const { rooms, setRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
-  // const [reservations, setReservations] = useState<Reservation[]>([]);
 
   console.log(reservations);
 
@@ -129,7 +128,6 @@ export const RenderRows: React.FC = () => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    // Filtracja rezerwacji dla danego pokoju
     const roomReservations = reservations.filter(
       (reservation: Reservation) => reservation.room_id === room.id
     );
@@ -139,7 +137,6 @@ export const RenderRows: React.FC = () => {
       let eventDuration = '';
       let eventOverlaySize = '';
 
-      // Sprawdzenie, czy istnieje rezerwacja na bieżący dzień
       const reservation = roomReservations.find((res: Reservation) =>
         isSameDay(new Date(res.selected_start_date), currentDateIterator)
       );
