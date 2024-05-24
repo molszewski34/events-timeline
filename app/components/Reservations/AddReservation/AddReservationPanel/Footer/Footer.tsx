@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button } from '@/app/components/ui/button';
-const Footer = () => {
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import AddReservationSubmitBtn from '../../AddReservationSubmitBtn/AddReservationSubmitBtn';
+
+const Footer: React.FC = () => {
   return (
     <div className="flex items-center">
       <Button
@@ -10,14 +13,7 @@ const Footer = () => {
       >
         Zamknij
       </Button>
-      <Button
-        size={'sm'}
-        className="flex gap-1 bg-green-500 text-white w-full"
-        variant="outline"
-      >
-        <span className="material-icon">save</span>
-        Zapisz
-      </Button>
+      <AddReservationSubmitBtn />
     </div>
   );
 };
