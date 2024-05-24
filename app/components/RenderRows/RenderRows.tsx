@@ -12,7 +12,7 @@ import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
-import { Room } from './types';
+import { FetchedRooms, Room } from './types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
@@ -20,7 +20,6 @@ import Button from '../Reservations/AddReservation/Button/Button';
 export const RenderRows: React.FC = () => {
   const {
     currentDate,
-    daysToShow,
     setDaysToShow,
     endDate,
     setEndDate,
@@ -31,7 +30,6 @@ export const RenderRows: React.FC = () => {
   const {
     setSelectedStartDate,
     setSelectedEndDate,
-    setSelectedRoomId,
     setFormData,
     selectedButton,
     setSelectedButton,
@@ -58,7 +56,7 @@ export const RenderRows: React.FC = () => {
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
 
-  const handleButtonClick = (room: Room, timestamp: number) => {
+  const handleButtonClick = (room: FetchedRooms, timestamp: number) => {
     setSelectedButton({ room, timestamp });
   };
 
@@ -107,7 +105,7 @@ export const RenderRows: React.FC = () => {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = rooms.map((room: Room) => {
+  const rows = rooms.map((room: FetchedRooms) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
@@ -146,10 +144,11 @@ export const RenderRows: React.FC = () => {
             handleButtonClick(room, currentDateTimestamp);
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
-            setSelectedRoomId(room.id);
-            setFormData((prevData: any) => ({
+            // setSelectedRoomId(room.id);
+            setFormData((prevData: FormData) => ({
               ...prevData,
-              numOfAdults: room.roomGuests,
+              numOfAdults: room.num_of_persons,
+              selectedRoomId: room.id,
             }));
           }}
           onTouchStart={() => {
