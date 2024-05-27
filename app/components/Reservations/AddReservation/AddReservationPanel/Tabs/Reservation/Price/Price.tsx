@@ -13,11 +13,9 @@ const Price = () => {
     tax,
   } = useAddReservationContext();
 
-  console.log(daysBetween);
-
   useEffect(() => {
     let finalPrice =
-      daysBetween * totalNumOfGuests * formData.selectedRoom.roomPrice -
+      daysBetween * totalNumOfGuests * 65 -
       formData.advancePayment -
       formData.deposit -
       formData.paymentOnPlace;
@@ -27,7 +25,6 @@ const Price = () => {
       setPrice(finalPrice);
     }
     setPrice(finalPrice);
-    console.log(`final price ${finalPrice}`);
   }, [
     daysBetween,
     totalNumOfGuests,
