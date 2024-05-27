@@ -1,11 +1,12 @@
 import React from 'react';
 import Label from '../../Headers/Label';
 import Field from '../Field/Field';
-import { rooms } from '@/app/data/roomsData';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import SelectRoomType from '../../SelectRoomType/SelectRoomtype';
 import RoomDetails from './RoomDetails/RoomDetails';
 import RoomExtras from './RoomExtras/RoomExtras';
 const BasicInformations = () => {
+  const { rooms } = useAddRoomContext();
   return (
     <div className="flex flex-col">
       <div className="flex flex-col">
@@ -14,8 +15,8 @@ const BasicInformations = () => {
           formDataKey="roomName"
           type="text"
           label="Nazwa pokoju"
-          placeholder={`Pokój ${rooms.length}`}
-          value={`Pokój ${rooms.length}`}
+          placeholder={`Pokój ${rooms.length + 1}`}
+          value={`Pokój ${rooms.length + 1}`}
         />
         <Label title="Typ" />
         <SelectRoomType />
