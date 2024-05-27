@@ -84,3 +84,8 @@
 i {
   font-family: 'Material Icons';
 }
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
