@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import {
   addDays,
@@ -7,12 +8,15 @@ import {
   isSameDay,
   isToday,
   isWeekend,
+  startOfWeek,
+  endOfWeek,
 } from 'date-fns';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
-import { Room } from './types';
+import { fetchReservations } from '@/app/actions/fetchReservations';
+import { FetchedRooms, Reservation } from './types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
@@ -32,14 +36,27 @@ export const RenderRows: React.FC = () => {
     setSelectedStartDate,
     setSelectedEndDate,
     setSelectedRoomId,
+    formData,
     setFormData,
     selectedButton,
     setSelectedButton,
+    reservations,
+    setReservations,
   } = useAddReservationContext();
 
   const { rooms, setRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
+
+  console.log(reservations);
+
+  useEffect(() => {
+    const today = new Date();
+    const startOfWeekDate = startOfWeek(today);
+    const endOfWeekDate = endOfWeek(today);
+    setStartDate(startOfWeekDate);
+    setEndDate(endOfWeekDate);
+  }, []);
 
   useEffect(() => {
     const fetchUserRooms = async () => {
@@ -52,13 +69,23 @@ export const RenderRows: React.FC = () => {
       setLoading(false);
     };
 
+    const fetchAllReservations = async () => {
+      const result = await fetchReservations();
+      if (result.success) {
+        setReservations(result.data || []);
+      } else {
+        console.error(result.error);
+      }
+    };
+
     fetchUserRooms();
+    fetchAllReservations();
   }, []);
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
 
-  const handleButtonClick = (room: Room, timestamp: number) => {
+  const handleButtonClick = (room: FetchedRooms, timestamp: number) => {
     setSelectedButton({ room, timestamp });
   };
 
@@ -107,33 +134,30 @@ export const RenderRows: React.FC = () => {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = rooms.map((room: Room) => {
+  const rows = rooms.map((room: FetchedRooms) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    // const roomEventStartDates = room.events.map((event) =>
-    //   new Date(event.start).setHours(0, 0, 0, 0)
-    // );
-    // const roomEventEndDates = room.events.map((event) =>
-    //   new Date(event.end).setHours(0, 0, 0, 0)
-    // );
+    const roomReservations = reservations.filter(
+      (reservation: Reservation) => reservation.room_id === room.id
+    );
 
     while (currentDateIterator <= endDate) {
       const currentDateTimestamp = currentDateIterator.getTime();
       let eventDuration = '';
       let eventOverlaySize = '';
 
-      // const eventIndex = roomEventStartDates.findIndex(
-      //   (date) => date === currentDateTimestamp
-      // );
+      const reservation = roomReservations.find((res: Reservation) =>
+        isSameDay(new Date(res.selected_start_date), currentDateIterator)
+      );
 
-      // if (eventIndex !== -1) {
-      //   const start = new Date(room.events[eventIndex].start);
-      //   const end = new Date(room.events[eventIndex].end);
-      //   const daysDifference = differenceInDays(end, start);
-      //   eventDuration = `(${daysDifference} dni)`;
-      //   eventOverlaySize = `${(daysDifference + 1) * 50}px`;
-      // }
+      if (reservation) {
+        const start = new Date(reservation.selected_start_date);
+        const end = new Date(reservation.selected_end_date);
+        const daysDifference = differenceInDays(end, start);
+        eventDuration = `(${daysDifference + 1} dni)`;
+        eventOverlaySize = `${(daysDifference + 1) * 50}px`;
+      }
 
       days.push(
         <button
@@ -146,10 +170,10 @@ export const RenderRows: React.FC = () => {
             handleButtonClick(room, currentDateTimestamp);
             setSelectedStartDate(currentDateTimestamp);
             setSelectedEndDate(currentDateTimestamp);
-            setSelectedRoomId(room.id);
-            setFormData((prevData: any) => ({
+            setFormData((prevData: FormData) => ({
               ...prevData,
-              numOfAdults: room.roomGuests,
+              numOfAdults: room.num_of_persons,
+              selectedRoomId: room.id,
             }));
           }}
           onTouchStart={() => {
@@ -162,16 +186,14 @@ export const RenderRows: React.FC = () => {
             selectedButton.room &&
             selectedButton.room.id === room.id &&
             selectedButton.timestamp === currentDateTimestamp && <Button />}
-          {/* {roomEventStartDates.includes(currentDateTimestamp) && (
-            <>
-              <span
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
-                style={{ width: eventOverlaySize }}
-              >
-                {room.events[eventIndex].title}
-              </span>
-            </>
-          )} */}
+          {reservation && (
+            <span
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
+              style={{ width: eventOverlaySize }}
+            >
+              {reservation.main_guest} {eventDuration}
+            </span>
+          )}
         </button>
       );
       currentDateIterator = addDays(currentDateIterator, 1);

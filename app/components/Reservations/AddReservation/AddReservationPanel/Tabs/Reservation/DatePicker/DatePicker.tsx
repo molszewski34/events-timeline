@@ -3,7 +3,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { format } from 'date-fns';
-import { pl } from 'date-fns/locale/pl';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import handleCountDaysBetweenDates from './utils/handleCountDaysBetweenDates';
 
@@ -55,7 +54,6 @@ const CustomDatePicker: React.FC = () => {
           dateFormat="yyyy-MM-dd h:mm"
           selected={formData.selectedStartDate}
           onChange={handleStartDateChange}
-          locale={pl}
           showTimeInput
           timeInputLabel="Czas:"
           data-testid="start-date-picker"
@@ -68,7 +66,6 @@ const CustomDatePicker: React.FC = () => {
           dateFormat="yyyy-MM-dd h:mm"
           selected={formData.selectedEndDate}
           onChange={handleEndDateChange}
-          locale="pl"
           showTimeInput
           timeInputLabel="Czas:"
           data-testid="end-date-picker"

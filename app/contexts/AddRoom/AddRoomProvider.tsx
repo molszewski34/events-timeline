@@ -11,7 +11,7 @@ export function AddRoomWrapper({ children }: { children: React.ReactNode }) {
     user_id: '',
     roomName: '',
     roomGuests: 0,
-    roomPrice: 0,
+    roomPrice: 65,
     roomType: 'Pokój',
     roomTypeIcon: 'bed',
     roomDetails: '',
@@ -31,10 +31,7 @@ export function AddRoomWrapper({ children }: { children: React.ReactNode }) {
     roomCity: '',
   });
 
-  console.log(roomFormData);
-
-  console.log(roomFormData.roomType);
-  const [openAddRoom, setOpenAddRoom] = useState(true);
+  const [openAddRoom, setOpenAddRoom] = useState(false);
   const [roomListOpen, setRoomListOpen] = useState(false);
   const [selectedRoomType, setSelectedRoomType] = useState(false);
 

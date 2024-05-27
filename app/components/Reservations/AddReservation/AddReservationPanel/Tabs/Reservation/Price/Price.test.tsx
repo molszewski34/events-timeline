@@ -24,7 +24,7 @@ describe('Price component', () => {
       daysBetween: 5,
       totalNumOfGuests: 3,
       formData: {
-        selectedRoom: { roomPrice: 100 },
+        selectedRoom: { roomPrice: 65 },
         advancePayment: 100,
         deposit: 200,
         paymentOnPlace: 100,
@@ -43,6 +43,6 @@ describe('Price component', () => {
     const calculateButton = getByRole('button', { name: /calculate/i });
     userEvent.click(calculateButton);
     const { setPrice } = useAddReservationContext();
-    expect(setPrice).toHaveBeenCalledWith(1100);
+    expect(setPrice).toHaveBeenCalledWith(575);
   });
 });
