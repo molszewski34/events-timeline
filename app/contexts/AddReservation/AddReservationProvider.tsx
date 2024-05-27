@@ -2,6 +2,7 @@
 import { AgeOfKids, FormData } from './types';
 import { createContext, useContext, useState } from 'react';
 import { Room } from '@/app/components/RenderRows/types';
+import { Reservation } from '@/app/components/RenderRows/types';
 import { rooms } from '@/app/data/roomsData';
 import { statuses } from '@/app/components/Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
 export const AddReservation = createContext<any>(undefined);
@@ -27,13 +28,16 @@ export function AddReservationWrapper({
   const [price, setPrice] = useState(0);
   const [tax, setTax] = useState<number>(0);
   const [includedTax, setIncludedTax] = useState(false);
-  const [selectedRoomId, setSelectedRoomId] = useState('');
+  // const [selectedRoomId, setSelectedRoomId] = useState('');
 
   const [selectedButton, setSelectedButton] = useState<{
     room: Room | null;
     timestamp: number | null;
   }>({ room: null, timestamp: null });
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+
   const [formData, setFormData] = useState<FormData>({
+    selectedRoomId: '',
     selectedStartDate: new Date(),
     selectedEndDate: new Date(),
     selectedStatus: statuses[0],
@@ -65,11 +69,13 @@ export function AddReservationWrapper({
     boarding: '',
   });
 
-  console.log(formData);
+  console.log(formData.selectedRoomId);
 
   return (
     <AddReservation.Provider
       value={{
+        reservations,
+        setReservations,
         openAddReservationPanel,
         setOpenAddReservationPanel,
         selectedStartDate,
@@ -100,8 +106,8 @@ export function AddReservationWrapper({
         setIncludedTax,
         formData,
         setFormData,
-        selectedRoomId,
-        setSelectedRoomId,
+        // selectedRoomId,
+        // setSelectedRoomId,
         price,
         setPrice,
         tax,
