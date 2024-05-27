@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { rooms } from '@/app/data/roomsData';
 import { Room } from '@/app/data/types';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
+import { FetchedRooms } from '@/app/components/RenderRows/types';
 
 const SelectObject = () => {
   const {
@@ -15,17 +16,16 @@ const SelectObject = () => {
     setFormData,
   } = useAddReservationContext();
 
-  const [foundRoom, setFoundRoom] = useState<Room | null>(null);
+  const { rooms } = useAddRoomContext();
 
-  // console.log(foundRoom);
-  // console.log(selectedRoom);
+  const [foundRoom, setFoundRoom] = useState<FetchedRooms | null>(null);
 
   useEffect(() => {
     const searchRoomById = () => {
-      const room = rooms.find((room) => room.id === selectedRoomId);
+      const room = rooms.find(
+        (room: FetchedRooms) => room.id === formData.selectedRoomId
+      );
       if (room) {
-        // setFoundRoom(room);
-        // setSelectedroom(room);
         setFormData((prevData: Date) => ({
           ...prevData,
           selectedRoom: room,
@@ -34,16 +34,14 @@ const SelectObject = () => {
     };
 
     searchRoomById();
-  }, [selectedRoomId]);
+  }, [formData.selectedRoomId]);
 
-  const handleSelectOption = (room: Room) => {
-    // setSelectedroom(room);
-    // setSelectedRoomId(room.id);
+  const handleSelectOption = (room: FetchedRooms) => {
     setFormData((prevData: Date) => ({
       ...prevData,
       selectedRoom: room,
+      selectedRoomId: room.id,
     }));
-    setSelectedRoomId(room.id);
   };
 
   return (
@@ -56,10 +54,10 @@ const SelectObject = () => {
           className={`w-8 h-8 rounded-full flex justify-center items-center`}
         >
           <span className="material-icon text-green-500">
-            {formData.selectedRoom?.roomTypeIcon}
+            {formData.selectedRoom?.type_icon}
           </span>
         </div>
-        {formData.selectedRoom?.roomName}
+        {formData.selectedRoom?.name}
       </button>
 
       {foundRoom && (
@@ -76,18 +74,18 @@ const SelectObject = () => {
                 className={`w-8 h-8 rounded-full flex justify-center items-center`}
               >
                 <span className="material-icon text-green-500">
-                  {foundRoom.roomTypeIcon}
+                  {foundRoom.type_icon}
                 </span>
               </div>
-              {foundRoom.roomName}
+              {foundRoom.name}
             </button>
           </div>
         </div>
       )}
 
-      {rooms.map((room, index) => (
+      {rooms.map((room: FetchedRooms, index: number) => (
         <div key={index}>
-          {selectedRoom?.roomName !== room.roomName && (
+          {selectedRoom?.roomName !== room.name && (
             <div className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
               <div className="flex bg-white hover:bg-slate-200">
                 <button
@@ -101,10 +99,10 @@ const SelectObject = () => {
                     className={`w-8 h-8 rounded-full flex justify-center items-center`}
                   >
                     <span className="material-icon text-green-500">
-                      {room.roomTypeIcon}
+                      {room.type_icon}
                     </span>
                   </div>
-                  {room.roomName}
+                  {room.name}
                 </button>
               </div>
             </div>
