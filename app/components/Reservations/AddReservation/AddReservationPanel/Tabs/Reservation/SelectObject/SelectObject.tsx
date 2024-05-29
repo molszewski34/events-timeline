@@ -47,7 +47,7 @@ const SelectObject = () => {
   return (
     <div className="flex flex-col gap-2">
       <button
-        className="flex items-center gap-2 bg-gray-100 p-2 rounded-sm"
+        className="flex items-center gap-2 bg-gray-100 p-1 rounded-sm text-sm"
         onClick={() => setRoomListOpen(!roomListOpen)}
       >
         <div
@@ -64,7 +64,7 @@ const SelectObject = () => {
         <div className={`flex ${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
           <div className="flex bg-white hover:bg-slate-200">
             <button
-              className="flex items-center gap-2  p-2 rounded-sm w-full"
+              className="flex items-center gap-2 p-2 rounded-sm w-full"
               onClick={() => {
                 handleSelectOption(foundRoom);
                 setRoomListOpen(false);
@@ -83,32 +83,34 @@ const SelectObject = () => {
         </div>
       )}
 
-      {rooms.map((room: FetchedRooms, index: number) => (
-        <div key={index}>
-          {selectedRoom?.roomName !== room.name && (
-            <div className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}>
-              <div className="flex bg-white hover:bg-slate-200">
-                <button
-                  className="flex items-center gap-2  p-2 rounded-sm w-full"
-                  onClick={() => {
-                    handleSelectOption(room);
-                    setRoomListOpen(false);
-                  }}
+      {rooms
+        .filter((room: FetchedRooms) => room.id !== formData.selectedRoomId)
+        .map((room: FetchedRooms, index: number) => (
+          <div
+            key={index}
+            className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}
+          >
+            <div className="flex bg-white hover:bg-slate-200 justify-around">
+              <button
+                className="flex items-center gap-2 p-2 rounded-sm w-full text-sm"
+                onClick={() => {
+                  handleSelectOption(room);
+                  setRoomListOpen(false);
+                }}
+              >
+                <div
+                  className={`w-8 h-8 rounded-full flex justify-center items-center`}
                 >
-                  <div
-                    className={`w-8 h-8 rounded-full flex justify-center items-center`}
-                  >
-                    <span className="material-icon text-green-500">
-                      {room.type_icon}
-                    </span>
-                  </div>
-                  {room.name}
-                </button>
-              </div>
+                  <span className="material-icon text-green-500">
+                    {room.type_icon}
+                  </span>
+                </div>
+                {room.name}
+              </button>
+              <i>arrow_drop_down</i>
             </div>
-          )}
-        </div>
-      ))}
+          </div>
+        ))}
     </div>
   );
 };
