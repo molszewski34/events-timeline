@@ -6,7 +6,7 @@ interface FieldProps {
   placeholder: string;
   formDataKey: keyof FormData;
   label: string;
-  type: 'text' | 'number';
+  type: 'text' | 'number' | 'tel';
   validateNumber?: boolean;
 }
 
@@ -24,11 +24,11 @@ const Field: React.FC<FieldProps> = ({
 
     if (formDataKey === 'email') {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(value)) {
+      if (value && !emailPattern.test(value)) {
         setError('Niepoprawny wzór adresu email');
         return;
       } else {
-        setError(null);
+        setError('');
       }
     } else if (
       (formDataKey === 'houseNumber' ||
@@ -37,7 +37,16 @@ const Field: React.FC<FieldProps> = ({
       value.trim() !== '' &&
       !/^\d+$/.test(value)
     ) {
-      setError(`Pole "${label}" może zawierać tylko cyfry.`);
+      setError(`Pole "${label}" może zawierać tylko liczby.`);
+      return;
+    } else if (
+      formDataKey === 'postCode' &&
+      value.trim() !== '' &&
+      !/^[A-Za-z0-9\- ]+$/.test(value)
+    ) {
+      setError(
+        `Pole "${label}" może zawierać tylko litery, cyfry, myślniki i spacje.`
+      );
       return;
     } else if (value.length > 20) {
       setError(`Pole ${label} nie może przekraczać 20 znaków.`);
