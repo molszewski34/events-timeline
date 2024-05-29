@@ -13,16 +13,16 @@ const Registration = () => {
   };
   return (
     <div className="flex flex-col gap-2">
-      <Label title="Rejestracja" />
+      <Label title="Meldunek" />
 
       <select
-        className="p-2 bg-white border border-gray-300 rounded-sm text-gray-500"
+        className="p-2 bg-white border border-gray-300 rounded-sm text-gray-500 text-xs"
         value={formData.registration}
         onChange={handleCountryChange}
       >
-        <option>Wybierz</option>
-        <option>Zameldowanie</option>
-        <option>Wymeldowanie</option>
+        <option className="text-base">Wybierz</option>
+        <option className="text-base">Zameldowanie</option>
+        <option className="text-base">Wymeldowanie</option>
       </select>
     </div>
   );
