@@ -33,11 +33,11 @@ const NumOfNights: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-sm font-bold text-gray-400">Liczba nocy</h2>
+      <h2 className="text-sm  text-gray-500">Ilość dni</h2>
       <form className="border border-gray-300 flex justify-between p-1">
         <button
           type="button"
-          className="w-8 bg-gray-300 rounded-sm"
+          className="w-8 bg-gray-300 rounded-sm text-gray-600"
           onClick={() => decrementEndDate(1)}
         >
           -
@@ -50,7 +50,7 @@ const NumOfNights: React.FC = () => {
         />
         <button
           type="button"
-          className="w-8 bg-gray-300 rounded-sm"
+          className="w-8 bg-gray-300 rounded-sm text-gray-600"
           onClick={() => incrementEndDate(1)}
         >
           +

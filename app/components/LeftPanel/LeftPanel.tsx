@@ -18,7 +18,7 @@ const LeftPanel = () => {
             </p>
             <div className="flex items-center">
               <p className="material-icon text-gray-500 text-base">person</p>
-              <p>{room.guests}</p>
+              <p>{room.num_of_persons}</p>
             </div>
           </div>
         </button>

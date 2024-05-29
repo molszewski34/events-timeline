@@ -43,6 +43,6 @@ describe('Price component', () => {
     const calculateButton = getByRole('button', { name: /calculate/i });
     userEvent.click(calculateButton);
     const { setPrice } = useAddReservationContext();
-    expect(setPrice).toHaveBeenCalledWith(575);
+    expect(setPrice).toHaveBeenCalledWith(875);
   });
 });

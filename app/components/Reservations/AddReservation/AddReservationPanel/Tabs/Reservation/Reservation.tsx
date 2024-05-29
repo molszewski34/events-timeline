@@ -25,11 +25,11 @@ const Reservation = () => {
         <BookingStatus />
       </section>
       <section className="flex flex-col gap-2">
-        <SectionHeader title="Liczba gości" />
+        <SectionHeader title="Ilość osób" />
         <NumOfGuests />
       </section>
       <section className="flex flex-col gap-2">
-        <SectionHeader title="Obiekt" />
+        <SectionHeader title="Pokój" />
         <SelectObject />
       </section>
       <section className="flex flex-col gap-2">

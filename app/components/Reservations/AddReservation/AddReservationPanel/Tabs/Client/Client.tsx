@@ -52,17 +52,12 @@ const Client = () => {
               formDataKey="apartmentNumber"
             />
           </div>
-          <Field
-            type="text"
-            label="Miasto"
-            placeholder=""
-            formDataKey="apartmentNumber"
-          />
+          <Field type="text" label="Miasto" placeholder="" formDataKey="city" />
           <Field
             type="text"
             label="Kod pocztowy"
             placeholder=""
-            formDataKey="apartmentNumber"
+            formDataKey="postCode"
           />
 
           <CountriesList formDataKey="country" />
@@ -70,11 +65,11 @@ const Client = () => {
             type="text"
             label="Paszport"
             placeholder=""
-            formDataKey="apartmentNumber"
+            formDataKey="passport"
           />
         </section>
       </section>
-      <Field type="text" label="Telefon" placeholder="" formDataKey="phone" />
+      <Field type="tel" label="Telefon" placeholder="" formDataKey="phone" />
       <Field type="text" label="Email" placeholder="" formDataKey="email" />
       <section className="flex flex-col gap-2">
         <SectionHeader title="Firma" />

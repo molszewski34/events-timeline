@@ -48,9 +48,9 @@ const CustomDatePicker: React.FC = () => {
   return (
     <div className="flex justify-around mt-2 gap-2">
       <div className="flex flex-col gap-2 w-full">
-        <label>Od</label>
+        <label className="text-sm">Od</label>
         <DatePicker
-          className={'w-full border border-gray-200 p-1'}
+          className={'w-full border border-gray-200 p-2 text-xs'}
           dateFormat="yyyy-MM-dd h:mm"
           selected={formData.selectedStartDate}
           onChange={handleStartDateChange}
@@ -60,9 +60,9 @@ const CustomDatePicker: React.FC = () => {
         />
       </div>
       <div className="flex flex-col gap-2 w-full">
-        <label>Do</label>
+        <label className="text-sm">Do</label>
         <DatePicker
-          className={'w-full border border-gray-200 p-1'}
+          className={'w-full border border-gray-200 p-2 text-xs'}
           dateFormat="yyyy-MM-dd h:mm"
           selected={formData.selectedEndDate}
           onChange={handleEndDateChange}

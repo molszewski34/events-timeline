@@ -11,7 +11,7 @@ const AddReservationPanel = () => {
 
   return (
     <main
-      className="absolute top-0 bottom-0 right-0 left-0 bg-white z-[999] p-2 h-screen flex flex-col gap-4 overflow-y-auto"
+      className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white z-[999] p-4 max-w-[92vw] h-[95vh]   flex flex-col gap-4 overflow-y-auto rounded-sm  w-full `}
       style={{ display: openAddReservationPanel ? 'flex' : 'none' }}
     >
       <Header />

@@ -11,19 +11,22 @@ import Details from './Details/Details';
 
 const TabsComponent = () => {
   return (
-    <Tabs defaultValue="reservation" className="w-[400px]">
-      <TabsList className="bg-white">
-        <TabsTrigger className="flex items-center gap-1 " value="reservation">
+    <Tabs defaultValue="reservation" className="w-full">
+      <TabsList className="bg-white w-full flex ">
+        <TabsTrigger
+          className="flex items-center gap-1 w-full"
+          value="reservation"
+        >
           <span className="material-icon text-lg text-gray-400">event</span>
-          Rezerwacja
+          <p className="hidden w-full">Rezerwacja</p>
         </TabsTrigger>
-        <TabsTrigger value="client">
+        <TabsTrigger className="flex items-center gap-1 w-full" value="client">
           <span className="material-icon text-lg text-gray-400">person</span>
-          Klient
+          <p className="hidden w-full">Klient</p>
         </TabsTrigger>
-        <TabsTrigger value="details">
+        <TabsTrigger className="flex items-center gap-1 w-full" value="details">
           <span className="material-icon text-lg text-gray-400">summarize</span>
-          Szczegóły
+          <p className="hidden w-full">Szczegóły</p>
         </TabsTrigger>
       </TabsList>
       <TabsContent value="reservation">
