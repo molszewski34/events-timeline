@@ -12,12 +12,15 @@ const Notes = () => {
   return (
     <div>
       <textarea
-        className="border border-gray-300"
+        className="border border-gray-300 rounded-sm px-2 py-1 text-xs w-full"
         name="notes"
         cols={30}
-        rows={5}
+        rows={3}
         value={formData.notes}
         onChange={handleNotesChange}
+        style={{
+          resize: 'none',
+        }}
       />
     </div>
   );
