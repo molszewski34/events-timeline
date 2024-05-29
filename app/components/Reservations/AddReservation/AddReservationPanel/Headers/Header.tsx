@@ -3,9 +3,12 @@ import React from 'react';
 import { Button } from '@/app/components/ui/button';
 
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 const Header = () => {
   const { setOpenAddReservationPanel, selectedButton, formData } =
     useAddReservationContext();
+
+  const { setOverlay } = useCalendarContext();
 
   return (
     <header className="flex flex-col">
@@ -16,7 +19,10 @@ const Header = () => {
         <Button
           className="material-icon text-gray-700 text-2xl"
           variant={'ghost'}
-          onClick={() => setOpenAddReservationPanel(false)}
+          onClick={() => {
+            setOpenAddReservationPanel(false);
+            setOverlay(false);
+          }}
         >
           close
         </Button>
