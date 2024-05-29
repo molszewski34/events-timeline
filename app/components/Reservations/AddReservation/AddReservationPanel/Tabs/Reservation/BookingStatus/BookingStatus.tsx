@@ -18,38 +18,26 @@ const BookingStatus = () => {
   };
   return (
     <div className="flex flex-col gap-2">
-      <button
-        className="flex items-center gap-2 bg-slate-200 p-2 rounded-sm"
-        onClick={() => setStatusListOpen(!statusListOpen)}
-      >
-        <div
-          className={`w-8 h-8 rounded-full flex justify-center items-center`}
-          style={{ backgroundColor: formData.selectedStatus?.color }}
-        >
-          <span className="material-icon text-white">done</span>
-        </div>
-
-        {formData.selectedStatus?.name}
-      </button>
-
       {statuses.map((status, index) => (
-        <div className={`${statusListOpen ? '' : 'h-0 overflow-hidden'}`}>
-          {formData.selectedStatus?.name != status.name && (
-            <button
-              className="flex items-center gap-2 hover:bg-slate-200 p-2 rounded-sm"
-              key={index}
-              onClick={() => {
-                handleSelectOption(status);
-                setStatusListOpen(false);
-              }}
+        <div>
+          <button
+            className={`flex items-center gap-2 hover:bg-slate-200 p-2 rounded-sm w-full text-sm  ${
+              formData.selectedStatus?.name === status.name ? 'bg-gray-200' : ''
+            }`}
+            key={index}
+            onClick={() => {
+              handleSelectOption(status);
+              setStatusListOpen(false);
+            }}
+          >
+            <div
+              className={`w-8 h-8 rounded-full flex justify-center items-center text-white`}
+              style={{ backgroundColor: status.color }}
             >
-              <div
-                className={`w-8 h-8 rounded-full`}
-                style={{ backgroundColor: status.color }}
-              ></div>
-              {status.name}
-            </button>
-          )}
+              {formData.selectedStatus?.name === status.name && <i>done</i>}
+            </div>
+            {status.name}
+          </button>
         </div>
       ))}
     </div>
