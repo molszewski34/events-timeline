@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { AgeOfKids } from '@/app/contexts/AddReservation/types';
 
 const NumOfGuests: React.FC = () => {
@@ -11,6 +12,8 @@ const NumOfGuests: React.FC = () => {
     formData,
     setFormData,
   } = useAddReservationContext();
+
+  const { rooms } = useAddRoomContext();
 
   useEffect(() => {
     setTotalNumOfGuests(formData.numOfKids + formData.numOfAdults);
@@ -62,16 +65,17 @@ const NumOfGuests: React.FC = () => {
   };
 
   const isExceedingCapacity =
-    totalNumOfGuests > formData.selectedRoom.roomGuests;
+    totalNumOfGuests > formData.selectedRoom.num_of_persons;
+  // totalNumOfGuests > formData.selectedRoom.roomGuests;
 
   return (
     <main className="flex flex-col gap-2">
       <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-bold text-gray-400">Dorośli</h2>
+          <h2 className="text-sm text-gray-500">Dorośli</h2>
           <form
-            className={`border border-gray-300 flex justify-between p-1 ${
-              isExceedingCapacity ? 'border-red-500' : ''
+            className={`border border-gray-300 flex justify-between p-1 rounded-sm ${
+              isExceedingCapacity ? 'border-red-600' : ''
             }`}
           >
             <button
@@ -83,7 +87,9 @@ const NumOfGuests: React.FC = () => {
             </button>
             <input
               value={formData.numOfAdults}
-              className="text-center w-full"
+              className={`text-center w-full text-sm ${
+                isExceedingCapacity ? 'text-red-600' : ''
+              }`}
               type="text"
             />
             <button
@@ -96,10 +102,10 @@ const NumOfGuests: React.FC = () => {
           </form>
         </div>
         <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-bold text-gray-400">Dzieci</h2>
+          <h2 className="text-sm text-gray-500">Dzieci</h2>
           <form
-            className={`border border-gray-300 flex justify-between p-1 ${
-              isExceedingCapacity ? 'border-red-500' : ''
+            className={`border border-gray-300 flex justify-between p-1 rounded-sm ${
+              isExceedingCapacity ? 'border-red-600' : ''
             }`}
           >
             <button
@@ -111,7 +117,9 @@ const NumOfGuests: React.FC = () => {
             </button>
             <input
               value={formData.numOfKids}
-              className="text-center w-full"
+              className={`text-center w-full text-sm ${
+                isExceedingCapacity ? 'text-red-600' : ''
+              }`}
               type="text"
             />
             <button
@@ -130,7 +138,7 @@ const NumOfGuests: React.FC = () => {
             </h2>
             <form
               className={`border border-gray-300 flex justify-between p-1 ${
-                isExceedingCapacity ? 'border-red-500' : ''
+                isExceedingCapacity ? 'border-red-600' : ''
               }`}
             >
               <button
@@ -156,11 +164,6 @@ const NumOfGuests: React.FC = () => {
           </div>
         ))}
       </div>
-      {isExceedingCapacity && (
-        <p className="text-red-600 text-xs">
-          Liczba osób przekracza maksymalną ilość miejsc w obiekcie
-        </p>
-      )}
     </main>
   );
 };
