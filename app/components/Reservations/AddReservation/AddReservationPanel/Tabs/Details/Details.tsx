@@ -12,7 +12,7 @@ const Details = () => {
     <main className="flex flex-col gap-2">
       <section className="flex flex-col gap-2">
         <SectionHeader title="Pozostałe" />
-        <Label title="Notatki" />
+        <Label title="Uwagi" />
         <Notes />
       </section>
 
