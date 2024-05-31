@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   addDays,
   differenceInDays,
@@ -17,10 +17,11 @@ import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import { fetchReservations } from '@/app/actions/fetchReservations';
 import { FetchedRooms, Reservation } from './types';
+import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
-
+import { statuses } from '../Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
 export const RenderRows: React.FC = () => {
   const {
     currentDate,
@@ -30,6 +31,9 @@ export const RenderRows: React.FC = () => {
     setEndDate,
     startDate,
     setStartDate,
+    isEditing,
+    setIsEditing,
+    setOverlay,
   } = useCalendarContext();
 
   const {
@@ -42,11 +46,45 @@ export const RenderRows: React.FC = () => {
     setSelectedButton,
     reservations,
     setReservations,
+    setOpenAddReservationPanel,
   } = useAddReservationContext();
 
   const { rooms, setRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
+
+  const defaultFormData: FormData = {
+    selectedRoomId: '',
+    selectedStartDate: new Date(),
+    selectedEndDate: new Date(),
+    selectedStatus: statuses[0],
+    selectedRoom: rooms[0],
+    numOfAdults: 0,
+    numOfKids: 0,
+    advancePayment: '',
+    deposit: '',
+    paymentOnPlace: '',
+    localTax: 0.085,
+    mainGuest: '',
+    phone: '',
+    email: '',
+    houseNumber: '',
+    apartmentNumber: '',
+    city: '',
+    postCode: '',
+    country: '',
+    passport: '',
+    company: '',
+    company_street: '',
+    company_city: '',
+    company_postCode: '',
+    company_country: '',
+    company_nip: '',
+    notes: '',
+    passCode: '',
+    registration: 'Brak',
+    boarding: '',
+  };
 
   console.log(reservations);
 
@@ -105,6 +143,62 @@ export const RenderRows: React.FC = () => {
     trackMouse: true,
   });
 
+  const handleSetFormData = useCallback(
+    (reservation: Reservation) => {
+      setFormData((prevData: FormData) => ({
+        ...prevData,
+        selectedStartDate: reservation.selected_start_date,
+        selectedEndDate: reservation.selected_end_date,
+        selectedStatus: reservation.selected_status,
+        numOfAdults: reservation.num_of_adults,
+        numOfKids: reservation.num_of_kids,
+        advancePayment: reservation.advance_payment,
+        deposit: reservation.deposit,
+        paymentOnPlace: reservation.payment_on_place,
+        localTax: reservation.local_tax,
+        mainGuest: reservation.main_guest,
+        phone: reservation.phone,
+        email: reservation.email,
+        houseNumber: reservation.house_number,
+        apartmentNumber: reservation.apartment_number,
+        city: reservation.city,
+        postCode: reservation.post_code,
+        country: reservation.country,
+        passport: reservation.passport,
+        company: reservation.company,
+        companyStreet: reservation.company_street,
+        companyCity: reservation.company_city,
+        companyPostCode: reservation.company_post_code,
+        companyCountry: reservation.company_country,
+        companyNip: reservation.company_nip,
+        notes: reservation.notes,
+        passCode: reservation.pass_code,
+        registration: reservation.registration,
+        boarding: reservation.boarding,
+      }));
+    },
+    [setFormData]
+  );
+
+  useEffect(() => {
+    if (isEditing && selectedButton && selectedButton.room) {
+      const reservation = reservations.find(
+        (res: Reservation) =>
+          res.room_id === selectedButton.room.id &&
+          isSameDay(
+            new Date(res.selected_start_date),
+            new Date(selectedButton.timestamp)
+          )
+      );
+
+      if (reservation) {
+        handleSetFormData(reservation);
+      }
+    } else if (!isEditing) {
+      setFormData(defaultFormData);
+    }
+  }, [isEditing, selectedButton, reservations, handleSetFormData, setFormData]);
+
   let currentDateIterator = startDate;
   while (currentDateIterator <= endDate) {
     const words = format(currentDateIterator, dateFormat).split(' ');
@@ -160,7 +254,7 @@ export const RenderRows: React.FC = () => {
       }
 
       days.push(
-        <button
+        <span
           key={`${room.id}-${currentDateIterator.toString()}`}
           className={
             ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
@@ -187,16 +281,26 @@ export const RenderRows: React.FC = () => {
             selectedButton.room.id === room.id &&
             selectedButton.timestamp === currentDateTimestamp && <Button />}
           {reservation && (
-            <span
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
+            <button
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-500  border border-slate-50 text-gray-700 text-sm font-semibold z-[99]"
               style={{ width: eventOverlaySize }}
+              onClick={() => {
+                if (typeof setIsEditing === 'function') {
+                  setIsEditing(true);
+                } else {
+                  console.error('setIsEditing is not a function');
+                }
+                setOpenAddReservationPanel(true);
+                setOverlay(true);
+              }}
             >
               {reservation.main_guest} {eventDuration}
-            </span>
+            </button>
           )}
-        </button>
+        </span>
       );
       currentDateIterator = addDays(currentDateIterator, 1);
+      console.log(reservation);
     }
 
     return (
