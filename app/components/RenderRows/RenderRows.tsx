@@ -21,8 +21,7 @@ import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
-import { statuses } from '../Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
-import useDefaultFormData from './defaultReservationState';
+
 export const RenderRows: React.FC = () => {
   const {
     currentDate,
@@ -54,8 +53,6 @@ export const RenderRows: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const originalFormDataRef = useRef<FormData | null>(null);
-
-  const defaultFormData = useDefaultFormData();
 
   console.log(reservations);
 
@@ -175,11 +172,11 @@ export const RenderRows: React.FC = () => {
     }
   }, [
     isEditing,
-    selectedButton,
-    reservations,
+    // selectedButton,
+    // reservations,
     handleSetFormData,
-    formData,
-    setFormData,
+    // formData,
+    // setFormData,
   ]);
 
   let currentDateIterator = startDate;
