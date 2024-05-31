@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   addDays,
   differenceInDays,
@@ -22,6 +22,7 @@ import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
 import { statuses } from '../Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
+import useDefaultFormData from './defaultReservationState';
 export const RenderRows: React.FC = () => {
   const {
     currentDate,
@@ -52,39 +53,9 @@ export const RenderRows: React.FC = () => {
   const { rooms, setRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
+  const originalFormDataRef = useRef<FormData | null>(null);
 
-  const defaultFormData: FormData = {
-    selectedRoomId: '',
-    selectedStartDate: new Date(),
-    selectedEndDate: new Date(),
-    selectedStatus: statuses[0],
-    selectedRoom: rooms[0],
-    numOfAdults: 0,
-    numOfKids: 0,
-    advancePayment: '',
-    deposit: '',
-    paymentOnPlace: '',
-    localTax: 0.085,
-    mainGuest: '',
-    phone: '',
-    email: '',
-    houseNumber: '',
-    apartmentNumber: '',
-    city: '',
-    postCode: '',
-    country: '',
-    passport: '',
-    company: '',
-    company_street: '',
-    company_city: '',
-    company_postCode: '',
-    company_country: '',
-    company_nip: '',
-    notes: '',
-    passCode: '',
-    registration: 'Brak',
-    boarding: '',
-  };
+  const defaultFormData = useDefaultFormData();
 
   console.log(reservations);
 
@@ -182,6 +153,10 @@ export const RenderRows: React.FC = () => {
 
   useEffect(() => {
     if (isEditing && selectedButton && selectedButton.room) {
+      if (!originalFormDataRef.current) {
+        originalFormDataRef.current = formData;
+      }
+
       const reservation = reservations.find(
         (res: Reservation) =>
           res.room_id === selectedButton.room.id &&
@@ -194,10 +169,18 @@ export const RenderRows: React.FC = () => {
       if (reservation) {
         handleSetFormData(reservation);
       }
-    } else if (!isEditing) {
-      setFormData(defaultFormData);
+    } else if (!isEditing && originalFormDataRef.current) {
+      setFormData(originalFormDataRef.current);
+      originalFormDataRef.current = null;
     }
-  }, [isEditing, selectedButton, reservations, handleSetFormData, setFormData]);
+  }, [
+    isEditing,
+    selectedButton,
+    reservations,
+    handleSetFormData,
+    formData,
+    setFormData,
+  ]);
 
   let currentDateIterator = startDate;
   while (currentDateIterator <= endDate) {
