@@ -6,13 +6,9 @@ import AddReservationSubmitBtn from '../../AddReservationSubmitBtn/AddReservatio
 const Footer: React.FC = () => {
   return (
     <div className="flex items-center">
-      <Button
-        size={'sm'}
-        className="flex gap-1 bg-gray-200 text-black w-full"
-        variant="outline"
-      >
+      <button className="flex gap-1 bg-gray-300   w-full items-center justify-center py-1 rounded-sm ">
         Zamknij
-      </Button>
+      </button>
       <AddReservationSubmitBtn />
     </div>
   );
