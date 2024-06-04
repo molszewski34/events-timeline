@@ -8,7 +8,7 @@ import Overlay from '../components/utils/Overlay';
 import AuthButton from '../components/Navigation/AuthButton/AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import OverlayDelete from '../components/Reservations/AddReservation/AddReservationPanel/Header/DeleteBtn/OverlayDelete';
+import OverlayDelete from '../components/Reservations/AddReservation/AddReservationPanel/Header/DeleteReservationBtn/OverlayDelete';
 import DeleteConfirmation from '../components/Reservations/AddReservation/DeleteConfirmation/DeleteConfirmation';
 
 const Calendar: React.FC = async () => {
