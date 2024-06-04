@@ -115,6 +115,7 @@ export const RenderRows: React.FC = () => {
     (reservation: Reservation) => {
       setFormData((prevData: FormData) => ({
         ...prevData,
+        selectedReservationId: reservation.id,
         selectedStartDate: reservation.selected_start_date,
         selectedEndDate: reservation.selected_end_date,
         selectedStatus: reservation.selected_status,
@@ -220,6 +221,7 @@ export const RenderRows: React.FC = () => {
       const currentDateTimestamp = currentDateIterator.getTime();
       let eventDuration = '';
       let eventOverlaySize = '';
+      let duration = 1;
 
       const reservation = roomReservations.find((res: Reservation) =>
         isSameDay(new Date(res.selected_start_date), currentDateIterator)
@@ -229,6 +231,7 @@ export const RenderRows: React.FC = () => {
         const start = new Date(reservation.selected_start_date);
         const end = new Date(reservation.selected_end_date);
         const daysDifference = differenceInDays(end, start);
+        duration = daysDifference + 1;
         eventDuration = `(${daysDifference + 1} dni)`;
         eventOverlaySize = `${(daysDifference + 1) * 50}px`;
       }
@@ -262,7 +265,7 @@ export const RenderRows: React.FC = () => {
             selectedButton.timestamp === currentDateTimestamp && <Button />}
           {reservation && (
             <button
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-500  border border-slate-50 text-gray-700 text-sm font-semibold z-[99]"
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40] "
               style={{ width: eventOverlaySize }}
               onClick={() => {
                 if (typeof setIsEditing === 'function') {
@@ -274,7 +277,18 @@ export const RenderRows: React.FC = () => {
                 setOverlay(true);
               }}
             >
-              {reservation.main_guest} {eventDuration}
+              {duration < 3 ? (
+                reservation.main_guest
+                  .match(/(\b\S)?/g)
+                  .join('')
+                  .toUpperCase()
+              ) : (
+                <p>
+                  {reservation.main_guest
+                    ? reservation.main_guest
+                    : 'Brak Nazwy'}
+                </p>
+              )}
             </button>
           )}
         </span>
