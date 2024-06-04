@@ -265,8 +265,11 @@ export const RenderRows: React.FC = () => {
             selectedButton.timestamp === currentDateTimestamp && <Button />}
           {reservation && (
             <button
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40] "
-              style={{ width: eventOverlaySize }}
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40] skew-x-[-35deg] "
+              style={{
+                width: eventOverlaySize,
+                backgroundColor: reservation.selected_status.color,
+              }}
               onClick={() => {
                 if (typeof setIsEditing === 'function') {
                   setIsEditing(true);
