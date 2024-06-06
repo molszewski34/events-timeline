@@ -21,8 +21,12 @@ import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
+import useSupabaseBrowser from '@/utils/supabase-browser';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 
-export const RenderRows: React.FC = () => {
+export default function RenderRows({ id }: { id: string }) {
+  const supabase = useSupabaseBrowser();
+  const { data: reservations } = useQuery(fetchReservations(supabase, id));
   const {
     currentDate,
     daysToShow,
@@ -44,8 +48,8 @@ export const RenderRows: React.FC = () => {
     setFormData,
     selectedButton,
     setSelectedButton,
-    reservations,
-    setReservations,
+    fetchedReservations,
+    setFetchedReservations,
     setOpenAddReservationPanel,
   } = useAddReservationContext();
 
@@ -76,11 +80,11 @@ export const RenderRows: React.FC = () => {
     };
 
     const fetchAllReservations = async () => {
-      const result = await fetchReservations();
-      if (result.success) {
-        setReservations(result.data || []);
+      const result = await reservations;
+      if (result) {
+        setFetchedReservations(reservations || []);
       } else {
-        console.error(result.error);
+        console.error(result);
       }
     };
 
@@ -155,7 +159,7 @@ export const RenderRows: React.FC = () => {
         originalFormDataRef.current = formData;
       }
 
-      const reservation = reservations.find(
+      const reservation = fetchedReservations.find(
         (res: Reservation) =>
           res.room_id === selectedButton.room.id &&
           isSameDay(
@@ -213,7 +217,7 @@ export const RenderRows: React.FC = () => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    const roomReservations = reservations.filter(
+    const roomReservations = fetchedReservations.filter(
       (reservation: Reservation) => reservation.room_id === room.id
     );
 
@@ -331,4 +335,4 @@ export const RenderRows: React.FC = () => {
       <div className="flex flex-col"> {rows}</div>
     </div>
   );
-};
+}
