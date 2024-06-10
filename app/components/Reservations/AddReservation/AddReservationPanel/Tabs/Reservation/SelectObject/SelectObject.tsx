@@ -16,13 +16,13 @@ const SelectObject = () => {
     setFormData,
   } = useAddReservationContext();
 
-  const { rooms } = useAddRoomContext();
+  const { fetchedRooms } = useAddRoomContext();
 
   const [foundRoom, setFoundRoom] = useState<FetchedRooms | null>(null);
 
   useEffect(() => {
     const searchRoomById = () => {
-      const room = rooms.find(
+      const room = fetchedRooms.find(
         (room: FetchedRooms) => room.id === formData.selectedRoomId
       );
       if (room) {
@@ -83,7 +83,7 @@ const SelectObject = () => {
         </div>
       )}
 
-      {rooms
+      {fetchedRooms
         .filter((room: FetchedRooms) => room.id !== formData.selectedRoomId)
         .map((room: FetchedRooms, index: number) => (
           <div

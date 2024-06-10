@@ -27,6 +27,8 @@ import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
+  const { data: rooms } = useQuery(fetchRooms(supabase, id));
+  // const { data: rooms } = useQuery(fetchRooms(supabase, id));
   const {
     currentDate,
     daysToShow,
@@ -53,7 +55,7 @@ export default function RenderRows({ id }: { id: string }) {
     setOpenAddReservationPanel,
   } = useAddReservationContext();
 
-  const { rooms, setRooms } = useAddRoomContext();
+  const { fetchedRooms, setFetchedRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
   const originalFormDataRef = useRef<FormData | null>(null);
@@ -70,11 +72,11 @@ export default function RenderRows({ id }: { id: string }) {
 
   useEffect(() => {
     const fetchUserRooms = async () => {
-      const result = await fetchRooms();
-      if (result.success) {
-        setRooms(result.data || []);
+      const result = await rooms;
+      if (result) {
+        setFetchedRooms(rooms || []);
       } else {
-        console.error(result.error);
+        console.error(result);
       }
       setLoading(false);
     };
@@ -213,7 +215,7 @@ export default function RenderRows({ id }: { id: string }) {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = rooms.map((room: FetchedRooms) => {
+  const rows = fetchedRooms.map((room: FetchedRooms) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 

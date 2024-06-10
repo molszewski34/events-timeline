@@ -6,7 +6,7 @@ import SelectRoomType from '../../SelectRoomType/SelectRoomtype';
 import RoomDetails from './RoomDetails/RoomDetails';
 import RoomExtras from './RoomExtras/RoomExtras';
 const BasicInformations = () => {
-  const { rooms } = useAddRoomContext();
+  const { fetchedRooms } = useAddRoomContext();
   return (
     <div className="flex flex-col">
       <div className="flex flex-col">
@@ -15,8 +15,8 @@ const BasicInformations = () => {
           formDataKey="roomName"
           type="text"
           label="Nazwa pokoju"
-          placeholder={`Pokój ${rooms.length + 1}`}
-          value={`Pokój ${rooms.length + 1}`}
+          placeholder={`Pokój ${fetchedRooms.length + 1}`}
+          value={`Pokój ${fetchedRooms.length + 1}`}
         />
         <Label title="Typ" />
         <SelectRoomType />

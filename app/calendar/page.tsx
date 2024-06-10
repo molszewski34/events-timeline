@@ -20,12 +20,14 @@ import useSupabaseServer from '@/utils/supabase-server';
 import { cookies } from 'next/headers';
 
 import { fetchReservations } from '../actions/fetchReservations';
+import { fetchRooms } from '../actions/fetchRoom';
 
 export default async function Calendar({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
   const cookieStore = cookies();
   const supabase = useSupabaseServer(cookieStore);
   await prefetchQuery(queryClient, fetchReservations(supabase, params.id));
+  await prefetchQuery(queryClient, fetchRooms(supabase, params.id));
   const {
     data: { user },
   } = await supabase.auth.getUser();
