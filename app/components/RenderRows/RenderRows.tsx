@@ -70,29 +70,29 @@ export default function RenderRows({ id }: { id: string }) {
     setEndDate(endOfWeekDate);
   }, []);
 
-  useEffect(() => {
-    const fetchUserRooms = async () => {
-      const result = await rooms;
-      if (result) {
-        setFetchedRooms(rooms || []);
-      } else {
-        console.error(result);
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchUserRooms = async () => {
+  //     const result = await rooms;
+  //     if (result) {
+  //       setFetchedRooms(rooms || []);
+  //     } else {
+  //       console.error(result);
+  //     }
+  //     setLoading(false);
+  //   };
 
-    const fetchAllReservations = async () => {
-      const result = await reservations;
-      if (result) {
-        setFetchedReservations(reservations || []);
-      } else {
-        console.error(result);
-      }
-    };
+  //   const fetchAllReservations = async () => {
+  //     const result = await reservations;
+  //     if (result) {
+  //       setFetchedReservations(reservations || []);
+  //     } else {
+  //       console.error(result);
+  //     }
+  //   };
 
-    fetchUserRooms();
-    fetchAllReservations();
-  }, []);
+  //   fetchUserRooms();
+  //   fetchAllReservations();
+  // }, []);
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
@@ -161,9 +161,9 @@ export default function RenderRows({ id }: { id: string }) {
         originalFormDataRef.current = formData;
       }
 
-      const reservation = fetchedReservations.find(
+      const reservation = reservations?.find(
         (res: Reservation) =>
-          res.room_id === selectedButton.room.id &&
+          res.room_id === selectedButton?.room.id &&
           isSameDay(
             new Date(res.selected_start_date),
             new Date(selectedButton.timestamp)
@@ -215,11 +215,11 @@ export default function RenderRows({ id }: { id: string }) {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = fetchedRooms.map((room: FetchedRooms) => {
+  const rows = rooms.map((room: FetchedRooms) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    const roomReservations = fetchedReservations.filter(
+    const roomReservations = reservations.filter(
       (reservation: Reservation) => reservation.room_id === room.id
     );
 
@@ -271,10 +271,10 @@ export default function RenderRows({ id }: { id: string }) {
             selectedButton.timestamp === currentDateTimestamp && <Button />}
           {reservation && (
             <button
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40] skew-x-[-35deg] "
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40]  "
               style={{
                 width: eventOverlaySize,
-                backgroundColor: reservation.selected_status.color,
+                backgroundColor: reservation?.selected_status?.color,
               }}
               onClick={() => {
                 if (typeof setIsEditing === 'function') {
@@ -287,7 +287,7 @@ export default function RenderRows({ id }: { id: string }) {
               }}
             >
               {duration < 3 ? (
-                reservation.main_guest
+                reservation?.main_guest
                   .match(/(\b\S)?/g)
                   .join('')
                   .toUpperCase()

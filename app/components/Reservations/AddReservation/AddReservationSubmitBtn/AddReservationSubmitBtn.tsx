@@ -1,26 +1,34 @@
 'use client';
 import React, { useState } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import { createRoom } from '@/app/actions/createRoom';
 import { addReservation } from '@/app/actions/addReservation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const AddReservationSubmitBtn = () => {
   const { formData } = useAddReservationContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: addReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries('reservations');
+      alert('Dodano rezerwacje');
+    },
+    onError: (error) => {
+      alert('Error adding reservation: ' + error.message);
+    },
+  });
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const { data, error } = await addReservation(formData);
-
-    if (error) {
-      alert('Error adding reservation: ' + error);
-    } else {
-      alert('Reservation added successfully!');
+    try {
+      await mutation.mutateAsync(formData);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
