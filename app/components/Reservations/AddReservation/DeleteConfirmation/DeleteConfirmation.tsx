@@ -1,8 +1,39 @@
+// @ts-nocheck
 'use client';
 import React from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteReservation } from '@/app/actions/deleteReservation';
 const DeleteConfirmation = () => {
-  const { isDeleting, setIsDeleting, setOverlayDelete } = useCalendarContext();
+  const { isDeleting, setIsDeleting, setOverlayDelete, setOverlay } =
+    useCalendarContext();
+  const { formData, setOpenAddReservationPanel } = useAddReservationContext();
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: deleteReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries('reservations');
+      alert('Usunięto rezerwacje');
+    },
+    onError: (error) => {
+      alert('Błąd podczas usuwania rezerwacji ' + error.message);
+    },
+  });
+
+  const handleSubmit = async () => {
+    try {
+      await mutation.mutateAsync(formData);
+    } finally {
+      setIsDeleting(false);
+      setOverlayDelete(false);
+      setOpenAddReservationPanel(false);
+      setOverlay(false);
+    }
+  };
   return (
     <div>
       {isDeleting && (
@@ -21,7 +52,10 @@ const DeleteConfirmation = () => {
             >
               Anuluj
             </button>
-            <button className="px-3 py-1 rounded-sm bg-red-500 text-white font-semibold">
+            <button
+              className="px-3 py-1 rounded-sm bg-red-500 text-white font-semibold"
+              onClick={handleSubmit}
+            >
               Skasuj
             </button>
           </div>
