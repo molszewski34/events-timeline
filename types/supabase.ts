@@ -42,7 +42,7 @@ export interface Database {
           selected_end_date: string | null
           selected_room: Json | null
           selected_start_date: string | null
-          selected_status: string | null
+          selected_status: Json | null
           start_date: string | null
           user_id: string | null
         }
