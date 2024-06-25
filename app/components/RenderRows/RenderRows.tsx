@@ -23,11 +23,14 @@ import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { Database } from '@/types/supabase';
 
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
+  type Reservation = Database['public']['Tables']['reservations']['Row'];
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
+  type Room = Database['public']['Tables']['rooms']['Row'];
   // const { data: rooms } = useQuery(fetchRooms(supabase, id));
   const {
     currentDate,
@@ -59,8 +62,6 @@ export default function RenderRows({ id }: { id: string }) {
 
   const [loading, setLoading] = useState(true);
   const originalFormDataRef = useRef<FormData | null>(null);
-
-  console.log(reservations);
 
   useEffect(() => {
     const today = new Date();
@@ -97,7 +98,7 @@ export default function RenderRows({ id }: { id: string }) {
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
 
-  const handleButtonClick = (room: FetchedRooms, timestamp: number) => {
+  const handleButtonClick = (room: Room, timestamp: number) => {
     setSelectedButton({ room, timestamp });
   };
 
@@ -162,8 +163,9 @@ export default function RenderRows({ id }: { id: string }) {
       }
 
       const reservation = reservations?.find(
-        (res: Reservation) =>
+        (res) =>
           res.room_id === selectedButton?.room.id &&
+          res.selected_start_date &&
           isSameDay(
             new Date(res.selected_start_date),
             new Date(selectedButton.timestamp)
@@ -215,11 +217,11 @@ export default function RenderRows({ id }: { id: string }) {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = rooms.map((room: FetchedRooms) => {
+  const rows = rooms?.map((room: Room) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    const roomReservations = reservations.filter(
+    const roomReservations = reservations?.filter(
       (reservation: Reservation) => reservation.room_id === room.id
     );
 
@@ -229,13 +231,15 @@ export default function RenderRows({ id }: { id: string }) {
       let eventOverlaySize = '';
       let duration = 1;
 
-      const reservation = roomReservations.find((res: Reservation) =>
+      const reservation = roomReservations?.find((res: Reservation) =>
         isSameDay(new Date(res.selected_start_date), currentDateIterator)
       );
 
       if (reservation) {
         const start = new Date(reservation.selected_start_date);
         const end = new Date(reservation.selected_end_date);
+        const selectedStatus = reservation.selected_status;
+        const selectedStatusColor = selectedStatus.color;
         const daysDifference = differenceInDays(end, start);
         duration = daysDifference + 1;
         eventDuration = `(${daysDifference + 1} dni)`;
@@ -269,6 +273,7 @@ export default function RenderRows({ id }: { id: string }) {
             selectedButton.room &&
             selectedButton.room.id === room.id &&
             selectedButton.timestamp === currentDateTimestamp && <Button />}
+
           {reservation && (
             <button
               className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40]  "
@@ -303,7 +308,6 @@ export default function RenderRows({ id }: { id: string }) {
         </span>
       );
       currentDateIterator = addDays(currentDateIterator, 1);
-      console.log(reservation);
     }
 
     return (
@@ -332,7 +336,7 @@ export default function RenderRows({ id }: { id: string }) {
 
   return (
     <div {...handlers} className="flex flex-col relative overflow-hidden">
-      <LeftPanel />
+      <LeftPanel id={id} />
       <div className="flex"> {days}</div>
       <div className="flex flex-col"> {rows}</div>
     </div>
