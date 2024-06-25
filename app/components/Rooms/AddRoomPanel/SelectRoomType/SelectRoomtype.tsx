@@ -10,8 +10,6 @@ const SelectRoomType = () => {
     'Wybierz'
   );
 
-  console.log(selectedType);
-
   const handleSelectOption = ({ roomType, roomTypeIcon }: RoomType) => {
     setRoomFormData((prevData: any) => ({
       ...prevData,

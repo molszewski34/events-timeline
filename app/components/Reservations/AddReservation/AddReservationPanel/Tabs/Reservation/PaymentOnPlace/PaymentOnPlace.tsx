@@ -14,8 +14,6 @@ const PaymentOnPlace = () => {
     setTax,
   } = useAddReservationContext();
 
-  console.log(tax);
-
   useEffect(() => {
     if (!includedTax) {
       const tax = price * formData.localTax;

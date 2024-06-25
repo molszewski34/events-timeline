@@ -13,8 +13,6 @@ const Header = () => {
     selectedRoomId,
   } = useAddReservationContext();
 
-  console.log(formData.mainGuest);
-
   const { setOverlay, isEditing, setIsEditing } = useCalendarContext();
 
   return (

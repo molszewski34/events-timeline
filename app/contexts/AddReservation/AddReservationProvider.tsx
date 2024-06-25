@@ -72,8 +72,6 @@ export function AddReservationWrapper({
     boarding: '',
   });
 
-  console.log(fetchedReservations);
-
   return (
     <AddReservation.Provider
       value={{

@@ -9,7 +9,6 @@ const RoomColor = () => {
   const [expandGuestField, setExpandGuestField] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const { roomFormData, setRoomFormData } = useAddRoomContext();
-  console.log(selectedColor);
 
   const handleSelectedColor = (roomColor: string) => {
     setRoomFormData((prevData: any) => ({

@@ -53,7 +53,7 @@ export async function updateReservation(formData: FormData) {
     boarding,
   } = formData;
 
-  console.log(formData);
+ 
 
   const { data, error } = await supabase
     .from('reservations')
