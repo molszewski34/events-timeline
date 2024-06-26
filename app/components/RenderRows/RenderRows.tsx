@@ -238,8 +238,6 @@ export default function RenderRows({ id }: { id: string }) {
       if (reservation) {
         const start = new Date(reservation.selected_start_date);
         const end = new Date(reservation.selected_end_date);
-        const selectedStatus = reservation.selected_status;
-        const selectedStatusColor = selectedStatus.color;
         const daysDifference = differenceInDays(end, start);
         duration = daysDifference + 1;
         eventDuration = `(${daysDifference + 1} dni)`;
