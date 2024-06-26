@@ -5,6 +5,7 @@ export interface AgeOfKids {
 }
 
 export interface FormData {
+  selectedReservationId: string;
   selectedRoomId: string;
   selectedStartDate: Date;
   selectedEndDate: Date;
