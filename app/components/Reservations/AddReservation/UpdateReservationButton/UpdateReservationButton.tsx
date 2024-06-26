@@ -1,22 +1,24 @@
+// @ts-nocheck
 'use client';
 import React, { useState } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import { addReservation } from '@/app/actions/addReservation';
+import { updateReservation } from '@/app/actions/updateReservation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const AddReservationSubmitBtn = () => {
-  const { formData } = useAddReservationContext();
+const UpdateReservationButton = () => {
+  const { formData, selectedReservationId } = useAddReservationContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: addReservation,
+    mutationFn: updateReservation,
     onSuccess: () => {
       queryClient.invalidateQueries('reservations');
-      alert('Dodano rezerwacje');
+      alert('Zaktualizowano rezerwacje');
     },
     onError: (error) => {
-      alert('Error adding reservation: ' + error.message);
+      alert('Błąd podczas dodawania rezerwacji ' + error.message);
     },
   });
 
@@ -34,7 +36,7 @@ const AddReservationSubmitBtn = () => {
   return (
     <button
       type="button"
-      className="flex gap-1 bg-green-600 hover:bg-green-700 text-white w-full items-center justify-center py-1 rounded-sm"
+      className="flex gap-1 bg-green-600 text-white w-full items-center justify-center py-1 rounded-sm"
       onClick={handleSubmit}
       disabled={isSubmitting}
     >
@@ -44,4 +46,4 @@ const AddReservationSubmitBtn = () => {
   );
 };
 
-export default AddReservationSubmitBtn;
+export default UpdateReservationButton;

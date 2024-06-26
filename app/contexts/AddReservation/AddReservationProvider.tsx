@@ -34,9 +34,12 @@ export function AddReservationWrapper({
     room: Room | null;
     timestamp: number | null;
   }>({ room: null, timestamp: null });
-  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [fetchedReservations, setFetchedReservations] = useState<Reservation[]>(
+    []
+  );
 
   const [formData, setFormData] = useState<FormData>({
+    selectedReservationId: '',
     selectedRoomId: '',
     selectedStartDate: new Date(),
     selectedEndDate: new Date(),
@@ -69,13 +72,11 @@ export function AddReservationWrapper({
     boarding: '',
   });
 
-  console.log(formData.selectedRoomId);
-
   return (
     <AddReservation.Provider
       value={{
-        reservations,
-        setReservations,
+        fetchedReservations,
+        setFetchedReservations,
         openAddReservationPanel,
         setOpenAddReservationPanel,
         selectedStartDate,

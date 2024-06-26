@@ -7,7 +7,7 @@ import Footer from '../../Footer/Footer';
 const Client = () => {
   const [expandGuestField, setExpandGuestField] = useState(false);
   const [expandCompanyField, setExpandCompanyField] = useState(false);
-  console.log(expandCompanyField);
+
   return (
     <main className="flex flex-col gap-2">
       <section className="flex flex-col gap-2">

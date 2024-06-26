@@ -18,6 +18,9 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
     addDays(startOfWeek(endOfMonth(currentDate), { locale: pl }), daysToShow)
   );
   const [overlay, setOverlay] = useState(false);
+  const [overlayDelete, setOverlayDelete] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <CalendarContext.Provider
       value={{
@@ -37,6 +40,12 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setEndDate,
         overlay,
         setOverlay,
+        overlayDelete,
+        setOverlayDelete,
+        isEditing,
+        setIsEditing,
+        isDeleting,
+        setIsDeleting,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   addDays,
   differenceInDays,
@@ -17,11 +17,21 @@ import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import { fetchReservations } from '@/app/actions/fetchReservations';
 import { FetchedRooms, Reservation } from './types';
+import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
+import useSupabaseBrowser from '@/utils/supabase-browser';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { Database } from '@/types/supabase';
 
-export const RenderRows: React.FC = () => {
+export default function RenderRows({ id }: { id: string }) {
+  const supabase = useSupabaseBrowser();
+  const { data: reservations } = useQuery(fetchReservations(supabase, id));
+  type Reservation = Database['public']['Tables']['reservations']['Row'];
+  const { data: rooms } = useQuery(fetchRooms(supabase, id));
+  type Room = Database['public']['Tables']['rooms']['Row'];
+  // const { data: rooms } = useQuery(fetchRooms(supabase, id));
   const {
     currentDate,
     daysToShow,
@@ -30,6 +40,9 @@ export const RenderRows: React.FC = () => {
     setEndDate,
     startDate,
     setStartDate,
+    isEditing,
+    setIsEditing,
+    setOverlay,
   } = useCalendarContext();
 
   const {
@@ -40,15 +53,15 @@ export const RenderRows: React.FC = () => {
     setFormData,
     selectedButton,
     setSelectedButton,
-    reservations,
-    setReservations,
+    fetchedReservations,
+    setFetchedReservations,
+    setOpenAddReservationPanel,
   } = useAddReservationContext();
 
-  const { rooms, setRooms } = useAddRoomContext();
+  const { fetchedRooms, setFetchedRooms } = useAddRoomContext();
 
   const [loading, setLoading] = useState(true);
-
-  console.log(reservations);
+  const originalFormDataRef = useRef<FormData | null>(null);
 
   useEffect(() => {
     const today = new Date();
@@ -58,34 +71,34 @@ export const RenderRows: React.FC = () => {
     setEndDate(endOfWeekDate);
   }, []);
 
-  useEffect(() => {
-    const fetchUserRooms = async () => {
-      const result = await fetchRooms();
-      if (result.success) {
-        setRooms(result.data || []);
-      } else {
-        console.error(result.error);
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchUserRooms = async () => {
+  //     const result = await rooms;
+  //     if (result) {
+  //       setFetchedRooms(rooms || []);
+  //     } else {
+  //       console.error(result);
+  //     }
+  //     setLoading(false);
+  //   };
 
-    const fetchAllReservations = async () => {
-      const result = await fetchReservations();
-      if (result.success) {
-        setReservations(result.data || []);
-      } else {
-        console.error(result.error);
-      }
-    };
+  //   const fetchAllReservations = async () => {
+  //     const result = await reservations;
+  //     if (result) {
+  //       setFetchedReservations(reservations || []);
+  //     } else {
+  //       console.error(result);
+  //     }
+  //   };
 
-    fetchUserRooms();
-    fetchAllReservations();
-  }, []);
+  //   fetchUserRooms();
+  //   fetchAllReservations();
+  // }, []);
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
 
-  const handleButtonClick = (room: FetchedRooms, timestamp: number) => {
+  const handleButtonClick = (room: Room, timestamp: number) => {
     setSelectedButton({ room, timestamp });
   };
 
@@ -104,6 +117,76 @@ export const RenderRows: React.FC = () => {
     onSwipedRight: () => handlePrevWeek(),
     trackMouse: true,
   });
+
+  const handleSetFormData = useCallback(
+    (reservation: Reservation) => {
+      setFormData((prevData: FormData) => ({
+        ...prevData,
+        selectedReservationId: reservation.id,
+        selectedStartDate: reservation.selected_start_date,
+        selectedEndDate: reservation.selected_end_date,
+        selectedStatus: reservation.selected_status,
+        numOfAdults: reservation.num_of_adults,
+        numOfKids: reservation.num_of_kids,
+        advancePayment: reservation.advance_payment,
+        deposit: reservation.deposit,
+        paymentOnPlace: reservation.payment_on_place,
+        localTax: reservation.local_tax,
+        mainGuest: reservation.main_guest,
+        phone: reservation.phone,
+        email: reservation.email,
+        houseNumber: reservation.house_number,
+        apartmentNumber: reservation.apartment_number,
+        city: reservation.city,
+        postCode: reservation.post_code,
+        country: reservation.country,
+        passport: reservation.passport,
+        company: reservation.company,
+        companyStreet: reservation.company_street,
+        companyCity: reservation.company_city,
+        companyPostCode: reservation.company_post_code,
+        companyCountry: reservation.company_country,
+        companyNip: reservation.company_nip,
+        notes: reservation.notes,
+        passCode: reservation.pass_code,
+        registration: reservation.registration,
+        boarding: reservation.boarding,
+      }));
+    },
+    [setFormData]
+  );
+
+  useEffect(() => {
+    if (isEditing && selectedButton && selectedButton.room) {
+      if (!originalFormDataRef.current) {
+        originalFormDataRef.current = formData;
+      }
+
+      const reservation = reservations?.find(
+        (res) =>
+          res.room_id === selectedButton?.room.id &&
+          res.selected_start_date &&
+          isSameDay(
+            new Date(res.selected_start_date),
+            new Date(selectedButton.timestamp)
+          )
+      );
+
+      if (reservation) {
+        handleSetFormData(reservation);
+      }
+    } else if (!isEditing && originalFormDataRef.current) {
+      setFormData(originalFormDataRef.current);
+      originalFormDataRef.current = null;
+    }
+  }, [
+    isEditing,
+    // selectedButton,
+    // reservations,
+    handleSetFormData,
+    // formData,
+    // setFormData,
+  ]);
 
   let currentDateIterator = startDate;
   while (currentDateIterator <= endDate) {
@@ -134,11 +217,11 @@ export const RenderRows: React.FC = () => {
     currentDateIterator = addDays(currentDateIterator, 1);
   }
 
-  const rows = rooms.map((room: FetchedRooms) => {
+  const rows = rooms?.map((room: Room) => {
     const days: JSX.Element[] = [];
     currentDateIterator = startDate;
 
-    const roomReservations = reservations.filter(
+    const roomReservations = reservations?.filter(
       (reservation: Reservation) => reservation.room_id === room.id
     );
 
@@ -146,8 +229,9 @@ export const RenderRows: React.FC = () => {
       const currentDateTimestamp = currentDateIterator.getTime();
       let eventDuration = '';
       let eventOverlaySize = '';
+      let duration = 1;
 
-      const reservation = roomReservations.find((res: Reservation) =>
+      const reservation = roomReservations?.find((res: Reservation) =>
         isSameDay(new Date(res.selected_start_date), currentDateIterator)
       );
 
@@ -155,12 +239,13 @@ export const RenderRows: React.FC = () => {
         const start = new Date(reservation.selected_start_date);
         const end = new Date(reservation.selected_end_date);
         const daysDifference = differenceInDays(end, start);
+        duration = daysDifference + 1;
         eventDuration = `(${daysDifference + 1} dni)`;
         eventOverlaySize = `${(daysDifference + 1) * 50}px`;
       }
 
       days.push(
-        <button
+        <span
           key={`${room.id}-${currentDateIterator.toString()}`}
           className={
             ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
@@ -186,15 +271,39 @@ export const RenderRows: React.FC = () => {
             selectedButton.room &&
             selectedButton.room.id === room.id &&
             selectedButton.timestamp === currentDateTimestamp && <Button />}
+
           {reservation && (
-            <span
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-green-500 z-50 border border-slate-50 text-gray-700 text-sm font-semibold"
-              style={{ width: eventOverlaySize }}
+            <button
+              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40]  "
+              style={{
+                width: eventOverlaySize,
+                backgroundColor: reservation?.selected_status?.color,
+              }}
+              onClick={() => {
+                if (typeof setIsEditing === 'function') {
+                  setIsEditing(true);
+                } else {
+                  console.error('setIsEditing is not a function');
+                }
+                setOpenAddReservationPanel(true);
+                setOverlay(true);
+              }}
             >
-              {reservation.main_guest} {eventDuration}
-            </span>
+              {duration < 3 ? (
+                reservation?.main_guest
+                  .match(/(\b\S)?/g)
+                  .join('')
+                  .toUpperCase()
+              ) : (
+                <p>
+                  {reservation.main_guest
+                    ? reservation.main_guest
+                    : 'Brak Nazwy'}
+                </p>
+              )}
+            </button>
           )}
-        </button>
+        </span>
       );
       currentDateIterator = addDays(currentDateIterator, 1);
     }
@@ -225,9 +334,9 @@ export const RenderRows: React.FC = () => {
 
   return (
     <div {...handlers} className="flex flex-col relative overflow-hidden">
-      <LeftPanel />
+      <LeftPanel id={id} />
       <div className="flex"> {days}</div>
       <div className="flex flex-col"> {rows}</div>
     </div>
   );
-};
+}

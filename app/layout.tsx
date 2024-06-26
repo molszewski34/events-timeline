@@ -5,11 +5,12 @@ import { CalendarWrapper } from './contexts/Calendar/CalendarProvider';
 import { AddReservationWrapper } from './contexts/AddReservation/AddReservationProvider';
 import { AddRoomWrapper } from './contexts/AddRoom/AddRoomProvider';
 import { cn } from '@/app/lib/utils';
-
+import { ReactQueryClientProvider } from './components/ReactQueryClientProvider';
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
 });
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -23,19 +24,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          'min-h-screen bg-background font-sans antialiased bg-gray-100',
-          fontSans.variable
-        )}
-      >
-        <CalendarWrapper>
-          <AddRoomWrapper>
-            <AddReservationWrapper>{children}</AddReservationWrapper>
-          </AddRoomWrapper>
-        </CalendarWrapper>
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en">
+        <body
+          className={cn(
+            'min-h-screen bg-background font-sans antialiased bg-gray-100',
+            fontSans.variable
+          )}
+        >
+          <CalendarWrapper>
+            <AddRoomWrapper>
+              <AddReservationWrapper>{children}</AddReservationWrapper>
+            </AddRoomWrapper>
+          </CalendarWrapper>
+        </body>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </html>
+    </ReactQueryClientProvider>
   );
 }

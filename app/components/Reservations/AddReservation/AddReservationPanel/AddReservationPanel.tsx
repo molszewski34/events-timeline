@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import Header from './Headers/Header';
+import Header from './Header/Header';
 import TabsComponent from './Tabs/TabsComponent';
 
 const AddReservationPanel = () => {
@@ -11,7 +11,7 @@ const AddReservationPanel = () => {
 
   return (
     <main
-      className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white z-[999] p-4 max-w-[92vw] h-[95vh]   flex flex-col gap-4 overflow-y-auto rounded-sm  w-full `}
+      className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white z-[99] p-4 max-w-[92vw] h-[95vh]   flex flex-col gap-4 overflow-y-auto rounded-sm  w-full `}
       style={{ display: openAddReservationPanel ? 'flex' : 'none' }}
     >
       <Header />
