@@ -22,6 +22,7 @@ const LeftPanel = ({ id }: { id: string }) => {
 
   const handleButtonClick = (room: Room) => {
     const newRoomFormData = {
+      selectedRoomId: room.id,
       user_id: room.user_id,
       roomName: room.name,
       roomGuests: room.guests || 0,

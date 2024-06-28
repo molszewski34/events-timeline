@@ -21,6 +21,7 @@ export async function updateRoom(roomFormData: RoomFormData) {
   }
 
   const {
+    selectedRoomId,
     roomName,
     roomGuests,
     roomPrice,
@@ -42,6 +43,7 @@ export async function updateRoom(roomFormData: RoomFormData) {
 
   const { error } = await supabase.from('rooms').update([
     {
+      id: selectedRoomId,
       user_id: user.id,
       name: roomName,
       guests: roomGuests,
@@ -62,7 +64,8 @@ export async function updateRoom(roomFormData: RoomFormData) {
       post_code: roomPostCode,
       city: roomCity,
     },
-  ]);
+  ])
+  .eq('id', selectedRoomId)
 
   if (error) {
     console.error('Error adding room:', error);
