@@ -16,7 +16,7 @@ const LeftPanel = ({ id }: { id: string }) => {
     setRoomFormData,
   } = useAddRoomContext();
   const supabase = useSupabaseBrowser();
-  const { isEditing, setIsEditing } = useCalendarContext();
+  const { isEditing, setIsEditing, setOverlay } = useCalendarContext();
 
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
 
@@ -58,6 +58,7 @@ const LeftPanel = ({ id }: { id: string }) => {
           onClick={() => {
             setIsEditing(true);
             setOpenAddRoom(true);
+            setOverlay(true);
             handleButtonClick(room);
           }}
         >
