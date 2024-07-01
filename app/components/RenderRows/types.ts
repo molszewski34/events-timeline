@@ -1,12 +1,9 @@
-export interface Room {
-  roomName: string;
-  id: string;
-  roomGuests: number;
-  roomPrice: number;
-  roomType: string;
-  roomTypeIcon: string;
-  events: Event[];
-}
+
+import { Database } from '@/types/supabase';
+
+
+export type Room = Database['public']['Tables']['rooms']['Row'];
+
 
 export interface FetchedRooms {
   id: string;
@@ -64,11 +61,6 @@ export interface Reservation {
   boarding: string;
 }
 
-export interface Event {
-  start: string;
-  end: string;
-  title: string;
-}
 
 export interface Day {
   date: Date;
