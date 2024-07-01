@@ -21,6 +21,7 @@ import { cookies } from 'next/headers';
 
 import { fetchReservations } from '../actions/fetchReservations';
 import { fetchRooms } from '../actions/fetchRoom';
+import DeleteRoomConfirmation from '../components/Rooms/AddRoomPanel/DeleteConfirmation/DeleteConfirmation';
 
 export default async function Calendar({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ export default async function Calendar({ params }: { params: { id: string } }) {
         <Overlay />
         <OverlayDelete />
         <DeleteConfirmation />
+        <DeleteRoomConfirmation id={params.id} />
       </div>
     </HydrationBoundary>
   );
