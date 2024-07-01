@@ -1,43 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Room } from '@/app/data/types';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
-import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
-import { FetchedRooms } from '@/app/components/RenderRows/types';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { fetchRooms } from '@/app/actions/fetchRoom';
+import useSupabaseBrowser from '@/utils/supabase-browser';
+import { Database } from '@/types/supabase';
 
-const SelectObject = () => {
+const SelectObject = ({ id }: { id: string }) => {
   const {
-    selectedRoom,
-    setSelectedroom,
     roomListOpen,
     setRoomListOpen,
-    selectedRoomId,
-    setSelectedRoomId,
+
     formData,
     setFormData,
   } = useAddReservationContext();
+  type Room = Database['public']['Tables']['rooms']['Row'];
 
-  const { fetchedRooms } = useAddRoomContext();
+  const supabase = useSupabaseBrowser();
+  const { data: rooms } = useQuery(fetchRooms(supabase, id));
 
-  const [foundRoom, setFoundRoom] = useState<FetchedRooms | null>(null);
+  const [foundRoom, setFoundRoom] = useState<Room | null>(null);
 
   useEffect(() => {
-    const searchRoomById = () => {
-      const room = fetchedRooms.find(
-        (room: FetchedRooms) => room.id === formData.selectedRoomId
-      );
-      if (room) {
-        setFormData((prevData: Date) => ({
-          ...prevData,
-          selectedRoom: room,
-        }));
-      }
-    };
+    if (rooms && formData.selectedRoomId) {
+      const searchRoomById = () => {
+        const room = rooms.find(
+          (room: Room) => room.id === formData.selectedRoomId
+        );
+        if (room) {
+          setFormData((prevData: Room) => ({
+            ...prevData,
+            selectedRoom: room,
+          }));
+        }
+      };
 
-    searchRoomById();
-  }, [formData.selectedRoomId]);
+      searchRoomById();
+    }
+  }, [rooms, formData.selectedRoomId]);
 
-  const handleSelectOption = (room: FetchedRooms) => {
-    setFormData((prevData: Date) => ({
+  const handleSelectOption = (room: Room) => {
+    setFormData((prevData: Room) => ({
       ...prevData,
       selectedRoom: room,
       selectedRoomId: room.id,
@@ -50,9 +52,7 @@ const SelectObject = () => {
         className="flex items-center gap-2 bg-gray-100 p-1 rounded-sm text-sm"
         onClick={() => setRoomListOpen(!roomListOpen)}
       >
-        <div
-          className={`w-8 h-8 rounded-full flex justify-center items-center`}
-        >
+        <div className="w-8 h-8 rounded-full flex justify-center items-center">
           <span className="material-icon text-green-500">
             {formData.selectedRoom?.type_icon}
           </span>
@@ -70,9 +70,7 @@ const SelectObject = () => {
                 setRoomListOpen(false);
               }}
             >
-              <div
-                className={`w-8 h-8 rounded-full flex justify-center items-center`}
-              >
+              <div className="w-8 h-8 rounded-full flex justify-center items-center">
                 <span className="material-icon text-green-500">
                   {foundRoom.type_icon}
                 </span>
@@ -83,34 +81,33 @@ const SelectObject = () => {
         </div>
       )}
 
-      {fetchedRooms
-        .filter((room: FetchedRooms) => room.id !== formData.selectedRoomId)
-        .map((room: FetchedRooms, index: number) => (
-          <div
-            key={index}
-            className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}
-          >
-            <div className="flex bg-white hover:bg-slate-200 justify-around">
-              <button
-                className="flex items-center gap-2 p-2 rounded-sm w-full text-sm"
-                onClick={() => {
-                  handleSelectOption(room);
-                  setRoomListOpen(false);
-                }}
-              >
-                <div
-                  className={`w-8 h-8 rounded-full flex justify-center items-center`}
+      {rooms &&
+        rooms
+          .filter((room: Room) => room.id !== formData.selectedRoomId)
+          .map((room: Room, index: number) => (
+            <div
+              key={index}
+              className={`${roomListOpen ? '' : 'h-0 overflow-hidden'}`}
+            >
+              <div className="flex bg-white hover:bg-slate-200 justify-around">
+                <button
+                  className="flex items-center gap-2 p-2 rounded-sm w-full text-sm"
+                  onClick={() => {
+                    handleSelectOption(room);
+                    setRoomListOpen(false);
+                  }}
                 >
-                  <span className="material-icon text-green-500">
-                    {room.type_icon}
-                  </span>
-                </div>
-                {room.name}
-              </button>
-              <i>arrow_drop_down</i>
+                  <div className="w-8 h-8 rounded-full flex justify-center items-center">
+                    <span className="material-icon text-green-500">
+                      {room.type_icon}
+                    </span>
+                  </div>
+                  {room.name}
+                </button>
+                <i>arrow_drop_down</i>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
     </div>
   );
 };
