@@ -38,7 +38,10 @@ export default function RootLayout({
             </AddRoomWrapper>
           </CalendarWrapper>
         </body>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools
+          buttonPosition="bottom-left"
+          initialIsOpen={false}
+        />
       </html>
     </ReactQueryClientProvider>
   );
