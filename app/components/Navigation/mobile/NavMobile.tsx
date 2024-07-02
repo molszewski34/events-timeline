@@ -76,7 +76,7 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <nav className="flex justify-between bg-white items-center shadow-md md:hidden relative">
+    <nav className="flex justify-between bg-white items-center shadow-md md:hidden relative z-50">
       <div className="flex justify-around bg-white items-center h-12">
         <button className="flex justify-around gap-4 p-4">
           <span className="material-icon text-2xl">menu</span>
