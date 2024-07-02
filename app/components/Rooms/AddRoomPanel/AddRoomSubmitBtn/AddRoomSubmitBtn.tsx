@@ -2,23 +2,33 @@
 import React, { useState } from 'react';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { createRoom } from '@/app/actions/createRoom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const AddRoomSubmitBtn = () => {
   const { roomFormData } = useAddRoomContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: createRoom,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('rooms');
+      alert('Dodano pokój');
+    },
+    onError: (error) => {
+      alert('Błąd podczas dodawania rezeracji: ' + error.message);
+    },
+  });
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const result = await createRoom(roomFormData);
-    if (result.success) {
-      alert('Room added successfully!');
-    } else {
-      alert('Error adding room: ' + result.error);
+    try {
+      await mutation.mutateAsync(roomFormData);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
