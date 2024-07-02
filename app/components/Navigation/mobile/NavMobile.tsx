@@ -7,6 +7,7 @@ import './style.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { pl } from 'date-fns/locale';
+import SearchBtn from '../SearchBtn/SearchBtn';
 
 const NavMobile = ({ children }: { children: React.ReactNode }) => {
   const {
@@ -80,6 +81,7 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
         <button className="flex justify-around gap-4 p-4">
           <span className="material-icon text-2xl">menu</span>
         </button>
+        <SearchBtn />
         <div className="relative ">
           <button
             onClick={handleButtonClick}
@@ -92,11 +94,12 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
               </div>
               <div className="">{endDateFormat[2]}</div>
             </div>
-            <span className=" flex items-center material-icon text-lg bg-gray-300 h-5 w-5 rounded-sm">
+            <span className=" flex items-center justify-center material-icon text-lg bg-gray-300 h-5 w-5 rounded-sm">
               expand_more
             </span>
           </button>
         </div>
+
         <div className="absolute top-0 right-0 ">
           {showCalendar && (
             <DatePicker
