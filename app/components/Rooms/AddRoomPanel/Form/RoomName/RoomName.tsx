@@ -29,7 +29,7 @@ const RoomName = () => {
 
         <form className="border border-gray-300 flex justify-between items-center gap-2 rounded-sm ">
           <input
-            className="w-full pl-2 py-2 text-sm text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-full pl-2 py-2 text-xs text-gray-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             defaultValue={roomFormData.roomName}
             onChange={handleChange}
           />
