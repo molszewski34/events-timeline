@@ -23,6 +23,7 @@ import { fetchReservations } from '../actions/fetchReservations';
 import { fetchRooms } from '../actions/fetchRoom';
 import DeleteRoomConfirmation from '../components/Rooms/AddRoomPanel/DeleteConfirmation/DeleteConfirmation';
 import SearchBar from '../components/Navigation/SearchBar/SearchBar';
+import OverlaySearchBar from '../components/Navigation/SearchBar/OverlaySearchBar/OverlaySearchBar';
 
 export default async function Calendar({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ export default async function Calendar({ params }: { params: { id: string } }) {
         <DeleteConfirmation />
         <DeleteRoomConfirmation id={params.id} />
         <SearchBar />
+        <OverlaySearchBar />
       </div>
     </HydrationBoundary>
   );
