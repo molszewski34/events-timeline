@@ -4,7 +4,7 @@ import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 const Footer = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const { openAddRoom, setOpenAddRoom } = useAddRoomContext();
+  const { setOpenAddRoom, setRoomFormData, roomFormData } = useAddRoomContext();
   const { overlay, setOverlay } = useCalendarContext();
   return (
     <footer className="fixed bottom-0 flex justify-end w-full">
@@ -23,6 +23,7 @@ const Footer = () => {
                 setOpenAddRoom(true);
                 setOverlay(true);
                 setIsClicked(false);
+                setRoomFormData(roomFormData);
               }}
             >
               <i className="material-icon text-lg">house</i>

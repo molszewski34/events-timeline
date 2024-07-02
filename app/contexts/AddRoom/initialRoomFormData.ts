@@ -1,0 +1,25 @@
+export  const initialRoomFormData = {
+    selectedRoomId: '',
+    user_id: '',
+    roomName: '',
+    roomGuests: 0,
+    roomPrice: 65,
+    roomType: 'Pokój',
+    roomTypeIcon: 'bed',
+    roomDetails: '',
+    roomExtras: '',
+    roomArea: '',
+    roomNumOfPersons: 2,
+    roomAdditionalPersons: 0,
+    roomNumOfSingleBeds: 2,
+    roomNumOfDoubleBeds: 0,
+    roomColor: '',
+    roomCountry: {
+      name: 'Polska',
+      file_url: '//upload.wikimedia.org/wikipedia/en/1/12/Flag_of_Poland.svg',
+    },
+    roomAdress: '',
+    roomPostCode: '',
+    roomCity: '',
+  };
+

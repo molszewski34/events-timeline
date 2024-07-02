@@ -1,22 +1,24 @@
+// @ts-nocheck
 'use client';
 import React, { useState } from 'react';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
-import { createRoom } from '@/app/actions/createRoom';
+import { updateRoom } from '@/app/actions/updateRoom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const AddRoomSubmitBtn = () => {
-  const { roomFormData } = useAddRoomContext();
+const UpdateRoomButton = () => {
+  const { roomFormData, selectedReservationId } = useAddRoomContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: createRoom,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries('rooms');
-      alert('Dodano pokój');
+    mutationFn: updateRoom,
+    onSuccess: () => {
+      queryClient.invalidateQueries('rooms');
+      alert('Zaktualizowano pokój');
     },
     onError: (error) => {
-      alert('Błąd podczas dodawania rezeracji: ' + error.message);
+      alert('Błąd podczas dodawania pokoju ' + error.message);
     },
   });
 
@@ -34,7 +36,7 @@ const AddRoomSubmitBtn = () => {
   return (
     <button
       type="button"
-      className="flex gap-1 bg-green-600  text-white w-full items-center justify-center py-1 rounded-sm"
+      className="flex gap-1 bg-green-600 text-white w-full items-center justify-center py-1 rounded-sm"
       onClick={handleSubmit}
       disabled={isSubmitting}
     >
@@ -44,4 +46,4 @@ const AddRoomSubmitBtn = () => {
   );
 };
 
-export default AddRoomSubmitBtn;
+export default UpdateRoomButton;

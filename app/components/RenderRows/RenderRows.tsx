@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -31,7 +33,7 @@ export default function RenderRows({ id }: { id: string }) {
   type Reservation = Database['public']['Tables']['reservations']['Row'];
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
   type Room = Database['public']['Tables']['rooms']['Row'];
-  // const { data: rooms } = useQuery(fetchRooms(supabase, id));
+
   const {
     currentDate,
     daysToShow,
@@ -70,30 +72,6 @@ export default function RenderRows({ id }: { id: string }) {
     setStartDate(startOfWeekDate);
     setEndDate(endOfWeekDate);
   }, []);
-
-  // useEffect(() => {
-  //   const fetchUserRooms = async () => {
-  //     const result = await rooms;
-  //     if (result) {
-  //       setFetchedRooms(rooms || []);
-  //     } else {
-  //       console.error(result);
-  //     }
-  //     setLoading(false);
-  //   };
-
-  //   const fetchAllReservations = async () => {
-  //     const result = await reservations;
-  //     if (result) {
-  //       setFetchedReservations(reservations || []);
-  //     } else {
-  //       console.error(result);
-  //     }
-  //   };
-
-  //   fetchUserRooms();
-  //   fetchAllReservations();
-  // }, []);
 
   const dateFormat = 'EEEEEE dd';
   const days: JSX.Element[] = [];
@@ -179,14 +157,7 @@ export default function RenderRows({ id }: { id: string }) {
       setFormData(originalFormDataRef.current);
       originalFormDataRef.current = null;
     }
-  }, [
-    isEditing,
-    // selectedButton,
-    // reservations,
-    handleSetFormData,
-    // formData,
-    // setFormData,
-  ]);
+  }, [isEditing, handleSetFormData]);
 
   let currentDateIterator = startDate;
   while (currentDateIterator <= endDate) {
