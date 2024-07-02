@@ -19,8 +19,10 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
   );
   const [overlay, setOverlay] = useState(false);
   const [overlayDelete, setOverlayDelete] = useState(false);
+  const [clickOutside, setClickOutside] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeletingRoom, setIsDeletingRoom] = useState(false);
   return (
     <CalendarContext.Provider
       value={{
@@ -42,10 +44,14 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setOverlay,
         overlayDelete,
         setOverlayDelete,
+        clickOutside,
+        setClickOutside,
         isEditing,
         setIsEditing,
         isDeleting,
         setIsDeleting,
+        isDeletingRoom,
+        setIsDeletingRoom,
       }}
     >
       {children}
