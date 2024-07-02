@@ -23,6 +23,8 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletingRoom, setIsDeletingRoom] = useState(false);
+  const [openSearchBar, setOpenSearchBar] = useState(false);
+  const [overlaySearchBar, setOverlaySearchBar] = useState(false);
   return (
     <CalendarContext.Provider
       value={{
@@ -52,6 +54,10 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setIsDeleting,
         isDeletingRoom,
         setIsDeletingRoom,
+        openSearchBar,
+        setOpenSearchBar,
+        overlaySearchBar,
+        setOverlaySearchBar,
       }}
     >
       {children}
