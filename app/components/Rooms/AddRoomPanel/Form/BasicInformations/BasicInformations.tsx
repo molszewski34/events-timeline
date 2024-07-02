@@ -10,6 +10,7 @@ import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { RoomFormData } from '@/app/contexts/AddRoom/types';
+import RoomName from '../RoomName/RoomName';
 
 const BasicInformations = ({ id }: { id: string }) => {
   const { fetchedRooms, roomFormData, setRoomFormData } = useAddRoomContext();
@@ -34,13 +35,7 @@ const BasicInformations = ({ id }: { id: string }) => {
     <div className="flex flex-col">
       <div className="flex flex-col">
         {isEditing ? (
-          <Field
-            formDataKey="roomName"
-            type="text"
-            label="Nazwa pokoju"
-            placeholder={roomFormData.roomName}
-            value={roomFormData.roomName}
-          />
+          <RoomName />
         ) : (
           <Field
             formDataKey="roomName"
