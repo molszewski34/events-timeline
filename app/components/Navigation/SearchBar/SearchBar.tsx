@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchReservations } from '@/app/actions/fetchReservations';
@@ -20,20 +20,26 @@ const SearchBar = ({ id }: { id: string }) => {
     setFilteredReservations,
   } = useCalendarContext();
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
 
-    const filtered = reservations.filter((reservation) => {
-      const { phone, email, id, main_guest } = reservation;
+    const filtered = reservations
+      .filter((reservation) => {
+        const { phone, email, id, main_guest } = reservation;
 
-      return (
-        phone.toLowerCase().includes(query) ||
-        email.toLowerCase().includes(query) ||
-        id.toString().toLowerCase().includes(query) ||
-        main_guest.toLowerCase().includes(query)
+        return (
+          phone?.toLowerCase().includes(query) ||
+          email?.toLowerCase().includes(query) ||
+          id.toString().toLowerCase().includes(query) ||
+          main_guest?.toLowerCase().includes(query)
+        );
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.selected_start_date).valueOf() -
+          new Date(a.selected_start_date).valueOf()
       );
-    });
 
     if (query === '') {
       setFilteredReservations([]);
