@@ -19,6 +19,7 @@ const SearchBar = ({ id }: { id: string }) => {
     filteredReservations,
     setFilteredReservations,
   } = useCalendarContext();
+
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
@@ -34,24 +35,37 @@ const SearchBar = ({ id }: { id: string }) => {
       );
     });
 
-    if (query == '') {
+    if (query === '') {
       setFilteredReservations([]);
-    } else setFilteredReservations(filtered);
+    } else {
+      setFilteredReservations(filtered);
+    }
   };
 
-  console.log(filteredReservations);
+  const handleClear = () => {
+    setSearchQuery('');
+    setFilteredReservations([]);
+  };
   return (
     <>
       {openSearchBar && (
         <main className="absolute top-0 left-0 right-0 z-[60] bg-white w-full ">
-          <input
-            className="w-full h-16 pl-8"
-            type="text"
-            placeholder="Szukaj"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-          {searchQuery && filteredReservations.length === 0 && <NoResults />}{' '}
+          <div className="relative w-full h-16">
+            <input
+              className="w-full h-full pl-8 pr-16 text-gray-600"
+              type="text"
+              placeholder="Szukaj"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            <button
+              className="absolute right-0 top-0 h-full px-4"
+              onClick={handleClear}
+            >
+              <i className="text-lg text-gray-500">close</i>
+            </button>
+          </div>
+          {searchQuery && filteredReservations.length === 0 && <NoResults />}
           {filteredReservations.length > 0 && <SearchResult />}
         </main>
       )}
