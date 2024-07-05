@@ -13,7 +13,8 @@ const Header = () => {
     selectedRoomId,
   } = useAddReservationContext();
 
-  const { setOverlay, isEditing, setIsEditing } = useCalendarContext();
+  const { setOverlay, setOverlaySearchBar, isEditing, setIsEditing } =
+    useCalendarContext();
 
   return (
     <header className="flex flex-col">
@@ -40,6 +41,7 @@ const Header = () => {
             onClick={() => {
               setOpenAddReservationPanel(false);
               setOverlay(false);
+              setOverlaySearchBar(false);
               setIsEditing(false);
             }}
           >
@@ -53,7 +55,7 @@ const Header = () => {
         </button>
         <button
           className="text-xs text-white p-1"
-          style={{ backgroundColor: formData.selectedStatus.color }}
+          style={{ backgroundColor: formData.selectedStatus?.color }}
         >
           {formData.selectedStatus.name}
         </button>
