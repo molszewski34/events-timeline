@@ -1,15 +1,62 @@
-import React from 'react';
+import { useCallback } from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { Reservation } from '@/app/components/RenderRows/types';
+import useHandleSetFormData from '@/app/hooks/handleSetFormData';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
 const SearchResult = () => {
   const {
-    openSearchBar,
-    searchQuery,
-    setSearchQuery,
     filteredReservations,
-    setFilteredReservations,
+    setIsEditing,
+    setOverlay,
+    setOpenSearchBar,
+    setOverlaySearchBar,
   } = useCalendarContext();
+
+  const {
+    setFormData,
+    formData,
+    setOpenAddReservationPanel,
+    openAddReservationPanel,
+  } = useAddReservationContext();
+
+  const handleSetFormData = useCallback(
+    (query: Reservation) => {
+      setFormData((prevData: FormData) => ({
+        ...prevData,
+        selectedReservationId: query.id,
+        selectedStartDate: query.selected_start_date,
+        selectedEndDate: query.selected_end_date,
+        selectedStatus: query.selected_status,
+        numOfAdults: query.num_of_adults,
+        numOfKids: query.num_of_kids,
+        advancePayment: query.advance_payment,
+        deposit: query.deposit,
+        paymentOnPlace: query.payment_on_place,
+        localTax: query.local_tax,
+        mainGuest: query.main_guest,
+        phone: query.phone,
+        email: query.email,
+        houseNumber: query.house_number,
+        apartmentNumber: query.apartment_number,
+        city: query.city,
+        postCode: query.post_code,
+        country: query.country,
+        passport: query.passport,
+        company: query.company,
+        companyStreet: query.company_street,
+        companyCity: query.company_city,
+        companyPostCode: query.company_post_code,
+        companyCountry: query.company_country,
+        companyNip: query.company_nip,
+        notes: query.notes,
+        passCode: query.pass_code,
+        registration: query.registration,
+        boarding: query.boarding,
+      }));
+    },
+    [setFormData]
+  );
 
   return (
     <main>
@@ -25,7 +72,18 @@ const SearchResult = () => {
           const endDate = new Date(query.selected_end_date);
 
           return (
-            <div key={query.id} className="flex flex-col py-2 px-4 gap-2">
+            <div
+              key={query.id}
+              className="flex flex-col py-2 px-4 gap-2 hover:bg-gray-100"
+              onClick={() => {
+                handleSetFormData(query);
+                setIsEditing(true);
+                setOverlaySearchBar(false);
+                setOpenSearchBar(false);
+                setOpenAddReservationPanel(true);
+                setOverlay(true);
+              }}
+            >
               <div className="flex items-center gap-2">
                 <div
                   className="h-3 w-3 rounded-full"
