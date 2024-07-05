@@ -7,6 +7,7 @@ import './style.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { pl } from 'date-fns/locale';
+import SearchBtn from '../SearchBtn/SearchBtn';
 
 const NavMobile = ({ children }: { children: React.ReactNode }) => {
   const {
@@ -75,15 +76,16 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <nav className="flex justify-between bg-gray-100 items-center shadow-md md:hidden">
-      <div className="flex justify-around bg-gray-100 items-center">
+    <nav className="flex justify-between bg-white items-center shadow-md md:hidden relative z-50">
+      <div className="flex justify-around bg-white items-center h-12">
         <button className="flex justify-around gap-4 p-4">
           <span className="material-icon text-2xl">menu</span>
         </button>
-        <div className="relative">
+        <SearchBtn />
+        <div className="relative ">
           <button
             onClick={handleButtonClick}
-            className="flex gap-2 items-center cursor-pointer bg-gray-100 hover:bg-gray-200 p-4"
+            className="flex gap-6 items-center cursor-pointer bg-white   p-4"
           >
             <div className="flex flex-col text-xs text-left">
               <div className="flex">
@@ -92,14 +94,20 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
               </div>
               <div className="">{endDateFormat[2]}</div>
             </div>
-            <span className="material-icon text-lg">arrow_drop_down</span>
+            <span className=" flex items-center justify-center material-icon text-lg bg-gray-300 h-5 w-5 rounded-sm">
+              expand_more
+            </span>
           </button>
+        </div>
+
+        <div className="absolute top-0 right-0 ">
           {showCalendar && (
             <DatePicker
               selected={selectedDate}
               onChange={handleDateChange}
               locale={pl}
               inline
+              className="mt-6"
             />
           )}
         </div>

@@ -39,9 +39,9 @@ export interface Database {
           post_code: string | null
           registration: string | null
           room_id: string | null
-          selected_end_date: string | null
+          selected_end_date: Date| null
           selected_room: Json | null
-          selected_start_date: string | null
+          selected_start_date: Date 
           selected_status: Json | null
           start_date: string | null
           user_id: string | null
@@ -75,9 +75,9 @@ export interface Database {
           post_code?: string | null
           registration?: string | null
           room_id?: string | null
-          selected_end_date?: string | null
+          selected_end_date?: Date | null
           selected_room?: Json | null
-          selected_start_date?: string | null
+          selected_start_date?: Date 
           selected_status?: string | null
           start_date?: string | null
           user_id?: string | null
@@ -113,7 +113,7 @@ export interface Database {
           room_id?: string | null
           selected_end_date?: string | null
           selected_room?: Json | null
-          selected_start_date?: string | null
+          selected_start_date?: Date 
           selected_status?: string | null
           start_date?: string | null
           user_id?: string | null

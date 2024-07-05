@@ -3,9 +3,21 @@
 import { createContext, useContext, useState } from 'react';
 import { addDays, startOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { pl } from 'date-fns/locale';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { fetchReservations } from '@/app/actions/fetchReservations';
+import useSupabaseBrowser from '@/utils/supabase-browser';
 
 const CalendarContext = createContext<any>(undefined);
-export function CalendarWrapper({ children }: { children: React.ReactNode }) {
+export function CalendarWrapper({
+  children,
+  id,
+}: {
+  children: React.ReactNode;
+  id: string;
+}) {
+  const supabase = useSupabaseBrowser();
+
+  const { data: reservations } = useQuery(fetchReservations(supabase, id));
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -23,6 +35,12 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletingRoom, setIsDeletingRoom] = useState(false);
+  const [openSearchBar, setOpenSearchBar] = useState(false);
+  const [overlaySearchBar, setOverlaySearchBar] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredReservations, setFilteredReservations] = useState(
+    reservations || []
+  );
   return (
     <CalendarContext.Provider
       value={{
@@ -52,6 +70,14 @@ export function CalendarWrapper({ children }: { children: React.ReactNode }) {
         setIsDeleting,
         isDeletingRoom,
         setIsDeletingRoom,
+        openSearchBar,
+        setOpenSearchBar,
+        overlaySearchBar,
+        setOverlaySearchBar,
+        searchQuery,
+        setSearchQuery,
+        filteredReservations,
+        setFilteredReservations,
       }}
     >
       {children}
