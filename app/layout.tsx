@@ -11,6 +11,10 @@ const fontSans = FontSans({
   variable: '--font-sans',
 });
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Sidebar from './components/Sidebar/Sidebar';
+import NavMobile from './components/Navigation/mobile/NavMobile';
+import AuthButton from './components/Navigation/AuthButton/AuthButton';
+import { relative } from 'path';
 // const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -28,11 +32,15 @@ export default function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased bg-gray-100',
+            'min-h-screen bg-background font-sans antialiased bg-gray-100 relative',
             fontSans.variable
           )}
         >
           <CalendarWrapper>
+            <NavMobile>
+              <AuthButton />
+            </NavMobile>
+            <Sidebar />
             <AddRoomWrapper>
               <AddReservationWrapper>{children}</AddReservationWrapper>
             </AddRoomWrapper>
