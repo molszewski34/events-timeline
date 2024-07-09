@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { pl } from 'date-fns/locale';
 import SearchBtn from '../SearchBtn/SearchBtn';
-
+import { useSidebarContext } from '@/app/contexts/Sidebar/SidebarProvider';
 const NavMobile = ({ children }: { children: React.ReactNode }) => {
   const {
     startDate,
@@ -18,6 +18,7 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
     setDaysToShow,
     daysToShow,
   } = useCalendarContext();
+  const { setOpenSidebar } = useSidebarContext();
 
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
@@ -79,7 +80,12 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
     <nav className="flex justify-between bg-white items-center shadow-md md:hidden relative z-50">
       <div className="flex justify-around bg-white items-center h-12">
         <button className="flex justify-around gap-4 p-4">
-          <span className="material-icon text-2xl">menu</span>
+          <span
+            className="material-icon text-2xl"
+            onClick={() => setOpenSidebar(true)}
+          >
+            menu
+          </span>
         </button>
         <SearchBtn />
         <div className="relative ">
