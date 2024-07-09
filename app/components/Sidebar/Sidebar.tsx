@@ -2,27 +2,41 @@
 import React, { useState } from 'react';
 import SidebarHeader from './Header/SidebarHeader';
 import './styles.css';
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+import { useSidebarContext } from '@/app/contexts/Sidebar/SidebarProvider';
+import DropdownMenu from './DropdownMenu/DropdownMenu';
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+const Sidebar = () => {
+  const { openSidebar, setOpenSidebar } = useSidebarContext();
+
+  const reservations = [
+    { href: '/page1', text: 'Page 1' },
+    { href: '/page2', text: 'Page 2' },
+    { href: '/page3', text: 'Page 3' },
+  ];
+  const prices = [
+    { href: '/page4', text: 'Page 1' },
+    { href: '/page5', text: 'Page 2' },
+    { href: '/page6', text: 'Page 3' },
+  ];
 
   return (
     <>
-      <button
-        onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-[1000]"
-      ></button>
-      <main
-        className={`fixed top-0 bottom-0 left-0 z-[100] shadow-md bg-white transition-transform transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-        style={{ width: '250px' }}
-      >
-        <SidebarHeader />
-      </main>
+      {openSidebar && (
+        <main
+          className={`fixed top-0 bottom-0 left-0 z-[100] shadow-md bg-white transition-transform transform  ${
+            openSidebar ? 'translate-x-0' : '-translate-x-full'
+          }`}
+          style={{ width: '250px' }}
+        >
+          <SidebarHeader />
+          <DropdownMenu
+            links={reservations}
+            name={'Rezerwacje'}
+            icon={'calendar_today'}
+          />
+          <DropdownMenu links={prices} name={'Cennik'} icon={'attach_money'} />
+        </main>
+      )}
     </>
   );
 };
