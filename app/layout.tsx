@@ -4,6 +4,7 @@ import './globals.css';
 import { CalendarWrapper } from './contexts/Calendar/CalendarProvider';
 import { AddReservationWrapper } from './contexts/AddReservation/AddReservationProvider';
 import { AddRoomWrapper } from './contexts/AddRoom/AddRoomProvider';
+import { SidebarWrapper } from './contexts/Sidebar/SidebarProvider';
 import { cn } from '@/app/lib/utils';
 import { ReactQueryClientProvider } from './components/ReactQueryClientProvider';
 const fontSans = FontSans({
@@ -37,10 +38,13 @@ export default function RootLayout({
           )}
         >
           <CalendarWrapper>
-            <NavMobile>
-              <AuthButton />
-            </NavMobile>
-            <Sidebar />
+            <SidebarWrapper>
+              <NavMobile>
+                <AuthButton />
+              </NavMobile>
+
+              <Sidebar />
+            </SidebarWrapper>
             <AddRoomWrapper>
               <AddReservationWrapper>{children}</AddReservationWrapper>
             </AddRoomWrapper>
