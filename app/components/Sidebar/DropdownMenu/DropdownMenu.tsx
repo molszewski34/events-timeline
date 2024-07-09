@@ -2,7 +2,7 @@
 import { useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import { useSidebarContext } from '@/app/contexts/Sidebar/SidebarProvider';
 interface DropdownMenuProps {
   links: { href: string; text: string }[];
   name: string;
@@ -11,6 +11,7 @@ interface DropdownMenuProps {
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({ links, name, icon }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setOpenSidebar } = useSidebarContext();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -40,7 +41,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ links, name, icon }) => {
               <Link
                 href={link.href}
                 key={index}
-                className={`py-2 ${isActive ? 'font-bold' : 'text-gray-800'}`}
+                className={`py-2 ${
+                  isActive ? 'font-bold text-green-600' : 'text-gray-800'
+                }`}
+                onClick={() => setOpenSidebar(false)}
               >
                 {link.text}
               </Link>
