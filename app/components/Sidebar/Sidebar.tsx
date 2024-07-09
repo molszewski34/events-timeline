@@ -9,9 +9,9 @@ const Sidebar = () => {
   const { openSidebar, setOpenSidebar } = useSidebarContext();
 
   const reservations = [
-    { href: '/page1', text: 'Page 1' },
-    { href: '/page2', text: 'Page 2' },
-    { href: '/page3', text: 'Page 3' },
+    { href: '/calendar', text: 'Kalendarz' },
+    { href: '/booking', text: 'Rezerwacje' },
+    { href: '/clients', text: 'Klienci' },
   ];
   const prices = [
     { href: '/page4', text: 'Page 1' },
