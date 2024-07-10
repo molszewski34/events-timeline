@@ -4,6 +4,7 @@ import './globals.css';
 import { CalendarWrapper } from './contexts/Calendar/CalendarProvider';
 import { AddReservationWrapper } from './contexts/AddReservation/AddReservationProvider';
 import { AddRoomWrapper } from './contexts/AddRoom/AddRoomProvider';
+import { SidebarWrapper } from './contexts/Sidebar/SidebarProvider';
 import { cn } from '@/app/lib/utils';
 import { ReactQueryClientProvider } from './components/ReactQueryClientProvider';
 const fontSans = FontSans({
@@ -11,6 +12,10 @@ const fontSans = FontSans({
   variable: '--font-sans',
 });
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Sidebar from './components/Sidebar/Sidebar';
+import NavMobile from './components/Navigation/mobile/NavMobile';
+import AuthButton from './components/Navigation/AuthButton/AuthButton';
+import { relative } from 'path';
 // const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -28,11 +33,18 @@ export default function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased bg-gray-100',
+            'min-h-screen bg-background font-sans antialiased bg-gray-100 relative',
             fontSans.variable
           )}
         >
           <CalendarWrapper>
+            <SidebarWrapper>
+              <NavMobile>
+                <AuthButton />
+              </NavMobile>
+
+              <Sidebar />
+            </SidebarWrapper>
             <AddRoomWrapper>
               <AddReservationWrapper>{children}</AddReservationWrapper>
             </AddRoomWrapper>
