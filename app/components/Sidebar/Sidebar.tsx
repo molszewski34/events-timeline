@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   const reservations = [
     { href: '/calendar', text: 'Kalendarz' },
-    { href: '/booking', text: 'Rezerwacje' },
+    { href: '/booking', text: 'Lista rezerwacji' },
     { href: '/clients', text: 'Klienci' },
   ];
   const prices = [
