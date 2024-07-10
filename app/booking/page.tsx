@@ -1,23 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-
+import { format, addMonths, addYears, subMonths, subYears } from 'date-fns';
 export default function Home() {
   const [date, setDate] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [currentDate, setCurrentDate] = useState(new Date());
   useEffect(() => {
-    const now = new Date();
-    const formattedMonth = format(now, 'MMMM');
-    const formattedYear = format(now, 'yyyy');
-    const formattedDate = format(now, 'MMMM yyyy');
+    const formattedMonth = format(currentDate, 'MMM');
+    const formattedYear = format(currentDate, 'yyyy');
+    const formattedDate = format(currentDate, 'MMMM yyyy');
     setMonth(formattedMonth);
     setYear(formattedYear);
     setDate(formattedDate);
-  }, []);
+  }, [currentDate]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -25,6 +23,22 @@ export default function Home() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const incrementMonth = () => {
+    setCurrentDate(addMonths(currentDate, 1));
+  };
+
+  const incrementYear = () => {
+    setCurrentDate(addYears(currentDate, 1));
+  };
+
+  const decrementMonth = () => {
+    setCurrentDate(subMonths(currentDate, 1));
+  };
+
+  const decrementYear = () => {
+    setCurrentDate(subYears(currentDate, 1));
   };
 
   return (
@@ -41,14 +55,28 @@ export default function Home() {
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white   shadow-lg w-1/3 flex flex-col items-center justify-center">
-            <h2 className=" text-2xl bg-green-600 text-white text-center w-full py-4">
-              {month}
-            </h2>
-            <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
+          <div className="bg-white   shadow-lg w-1/3 flex flex-col items-center justify-center ">
+            <div className="flex bg-green-600 text-white text-center w-full py-4 justify-evenly">
+              <button onClick={decrementMonth}>
+                <i>arrow_back_ios</i>
+              </button>
+
+              <h2 className=" text-2xl ">{month}</h2>
+              <button onClick={incrementMonth}>
+                <i>arrow_forward_ios</i>
+              </button>
+            </div>
+            <div className="flex   text-center w-full py-4 justify-evenly items-center">
+              <button onClick={decrementYear}>
+                <i>arrow_back_ios</i>
+              </button>
+              <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
+              <button onClick={incrementYear}>
+                <i>arrow_forward_ios</i>
+              </button>
+            </div>
             <button
               onClick={closeModal}
-              // className="mt-4 inline-flex justify-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               className="py-2 px-3 bg-green-600 text-white rounded-t-full text-4xl"
             >
               <i>check</i>
