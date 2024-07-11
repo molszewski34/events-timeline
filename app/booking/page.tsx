@@ -24,7 +24,7 @@ import DeleteRoomConfirmation from '../components/Rooms/AddRoomPanel/DeleteConfi
 import DeleteConfirmation from '../components/Reservations/AddReservation/DeleteConfirmation/DeleteConfirmation';
 import OverlayDelete from '../components/Reservations/AddReservation/AddReservationPanel/Header/DeleteReservationBtn/OverlayDelete';
 import Overlay from '../components/utils/Overlay';
-
+import './styles.css';
 export default function Home({
   id,
   params,
@@ -117,7 +117,7 @@ export default function Home({
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 mt-6">
-      <div className="p-6 bg-white rounded shadow-md w-full mx-3">
+      <div className="p-6 bg-white rounded shadow-md w-full mx-3 relative">
         <label
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-xs"
           htmlFor="date"
@@ -126,10 +126,39 @@ export default function Home({
           <input type="text" id="date" value={date} readOnly />
           <i>calendar_today</i>
         </label>
+        {isModalOpen && (
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-[180px] flex items-center justify-center z-50 animate-slide-down shadow-md">
+            <div className="w-full bg-white shadow-lg flex flex-col">
+              <div className="flex bg-green-600 text-white text-center w-full py-4 justify-evenly">
+                <button onClick={decrementMonth}>
+                  <i>arrow_back_ios</i>
+                </button>
+                <h2 className="text-2xl">{month}</h2>
+                <button onClick={incrementMonth}>
+                  <i>arrow_forward_ios</i>
+                </button>
+              </div>
+              <div className="flex text-center w-full justify-evenly items-center">
+                <button onClick={decrementYear}>
+                  <i>arrow_back_ios</i>
+                </button>
+                <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
+                <button onClick={incrementYear}>
+                  <i>arrow_forward_ios</i>
+                </button>
+              </div>
+              <button
+                onClick={closeModal}
+                className="py-2 px-3 bg-green-600 text-white rounded-t-full text-4xl w-14 h-14 place-self-center"
+              >
+                <i>check</i>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-      <div className="mt-4">
-        <h3 className="text-lg font-medium">Filtered Reservations</h3>
-        <ul className="mt-2">
+      <div className="mt-4 bg-gray-100 w-full">
+        <ul className="flex flex-col gap-2 mt-2">
           {filteredReservations.length > 0 ? (
             filteredReservations.map((reservation) => {
               const startDate = new Date(reservation.selected_start_date);
@@ -137,7 +166,7 @@ export default function Home({
               return (
                 <div
                   key={reservation.id}
-                  className="flex flex-col py-2 px-4 gap-2 hover:bg-gray-100"
+                  className="flex flex-col py-2 px-4 gap-2 hover:bg-gray-100 bg-white"
                   onClick={() => {
                     handleSetFormData(reservation);
                     setIsEditing(true);
@@ -193,36 +222,7 @@ export default function Home({
           )}
         </ul>
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white shadow-lg w-1/3 flex flex-col items-center justify-center">
-            <div className="flex bg-green-600 text-white text-center w-full py-4 justify-evenly">
-              <button onClick={decrementMonth}>
-                <i>arrow_back_ios</i>
-              </button>
-              <h2 className="text-2xl">{month}</h2>
-              <button onClick={incrementMonth}>
-                <i>arrow_forward_ios</i>
-              </button>
-            </div>
-            <div className="flex text-center w-full py-4 justify-evenly items-center">
-              <button onClick={decrementYear}>
-                <i>arrow_back_ios</i>
-              </button>
-              <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
-              <button onClick={incrementYear}>
-                <i>arrow_forward_ios</i>
-              </button>
-            </div>
-            <button
-              onClick={closeModal}
-              className="py-2 px-3 bg-green-600 text-white rounded-t-full text-4xl"
-            >
-              <i>check</i>
-            </button>
-          </div>
-        </div>
-      )}
+
       <AddReservationPanel />
       <Overlay />
       <OverlayDelete />
