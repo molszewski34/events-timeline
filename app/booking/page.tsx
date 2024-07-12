@@ -44,6 +44,7 @@ export default function Home({
   const [activeTab, setActiveTab] = useState<'Najnowsze' | 'Anulowane'>(
     'Najnowsze'
   );
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const supabase = useSupabaseBrowser();
   const { handleSetFormData } = useHandleSetFormData();
 
@@ -91,6 +92,25 @@ export default function Home({
     }
   }, [currentDate, reservations]);
 
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = reservations.filter((reservation: Reservation) => {
+        return (
+          reservation.main_guest
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          reservation.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          reservation.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          reservation.id.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      });
+
+      setFilteredReservations(filtered);
+    } else {
+      setFilteredReservations(reservations);
+    }
+  }, [searchQuery, reservations]);
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -126,15 +146,31 @@ export default function Home({
   return (
     <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0">
       <div className=" flex flex-col px-2 w-full gap-2">
-        <header className="flex bg-white w-full ">
-          <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold">Lista rezerwacji</p>
-            <div className="bg-gray-300 text-[0.68em] flex items-center py-[0.15em] px-[0.68em] rounded-sm">
-              {filteredReservations.length}
+        <div className="flex justify-between">
+          <header className="flex bg-white w-full ">
+            <div className="flex items-center gap-4">
+              <p className="text-sm font-semibold">Lista rezerwacji</p>
+              <div className="bg-gray-300 text-[0.68em] flex items-center py-[0.15em] px-[0.68em] rounded-sm">
+                {filteredReservations.length}
+              </div>
             </div>
-          </div>
-        </header>
-        <div className=" pb-0 bg-white rounded-t-sm shadow-bottom  w-full  relative">
+          </header>
+          <label
+            className="flex border border-gray-300 rounded-md py-1 px-2 w-3/4 items-center"
+            htmlFor="search"
+          >
+            <i className="text-lg text-gray-500">search</i>
+            <input
+              className="w-full text-sm"
+              type="text"
+              id="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="pb-0 bg-white rounded-t-sm shadow-bottom w-full relative">
           <label
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-xs"
             htmlFor="date"
