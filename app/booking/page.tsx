@@ -124,70 +124,79 @@ export default function Home({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 mt-6 mx-2">
-      <div className="p-2 pb-0 bg-white rounded-t-sm shadow-md w-full mx-3 relative">
-        <label
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-xs"
-          htmlFor="date"
-          onClick={openModal}
-        >
-          <input type="text" id="date" value={date} readOnly />
-          <i>calendar_today</i>
-        </label>
-        <div className="flex justify-center">
-          <button
-            onClick={() => handleTabClick('Najnowsze')}
-            className={`py-2 pt-4 w-full ${
-              activeTab === 'Najnowsze'
-                ? 'text-green-600 border-b-2 border-green-600'
-                : 'text-gray-500'
-            }`}
-          >
-            Najnowsze
-          </button>
-          <button
-            onClick={() => handleTabClick('Anulowane')}
-            className={`py-2 px-4 w-full ${
-              activeTab === 'Anulowane'
-                ? 'text-green-600 border-b-2 border-green-600'
-                : 'text-gray-500'
-            }`}
-          >
-            Anulowane
-          </button>
-        </div>
-        {isModalOpen && (
-          <div className="absolute top-full left-1/2 -translate-x-1/2 w-[180px] flex items-center justify-center z-50 animate-slide-down shadow-md">
-            <div className="w-full bg-white shadow-lg flex flex-col">
-              <div className="flex bg-green-600 text-white text-center w-full py-4 justify-evenly">
-                <button onClick={decrementMonth}>
-                  <i>arrow_back_ios</i>
-                </button>
-                <h2 className="text-2xl">{month}</h2>
-                <button onClick={incrementMonth}>
-                  <i>arrow_forward_ios</i>
-                </button>
-              </div>
-              <div className="flex text-center w-full justify-evenly items-center">
-                <button onClick={decrementYear}>
-                  <i>arrow_back_ios</i>
-                </button>
-                <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
-                <button onClick={incrementYear}>
-                  <i>arrow_forward_ios</i>
-                </button>
-              </div>
-              <button
-                onClick={closeModal}
-                className="py-2 px-3 bg-green-600 text-white rounded-t-full text-4xl w-14 h-14 place-self-center"
-              >
-                <i>check</i>
-              </button>
+    <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0">
+      <div className=" flex flex-col px-2 w-full gap-2">
+        <header className="flex bg-white w-full ">
+          <div className="flex items-center gap-4">
+            <p className="text-sm font-semibold">Lista rezerwacji</p>
+            <div className="bg-gray-300 text-[0.68em] flex items-center py-[0.15em] px-[0.68em] rounded-sm">
+              {filteredReservations.length}
             </div>
           </div>
-        )}
+        </header>
+        <div className=" pb-0 bg-white rounded-t-sm shadow-bottom  w-full  relative">
+          <label
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-xs"
+            htmlFor="date"
+            onClick={openModal}
+          >
+            <input type="text" id="date" value={date} readOnly />
+            <i>calendar_today</i>
+          </label>
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleTabClick('Najnowsze')}
+              className={`py-2 pt-4 w-full ${
+                activeTab === 'Najnowsze'
+                  ? 'text-green-600 border-b-2 border-green-600'
+                  : 'text-gray-500'
+              }`}
+            >
+              Najnowsze
+            </button>
+            <button
+              onClick={() => handleTabClick('Anulowane')}
+              className={`py-2 px-4 w-full ${
+                activeTab === 'Anulowane'
+                  ? 'text-green-600 border-b-2 border-green-600'
+                  : 'text-gray-500'
+              }`}
+            >
+              Anulowane
+            </button>
+          </div>
+          {isModalOpen && (
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[180px] flex items-center justify-center z-50 animate-slide-down shadow-md">
+              <div className="w-full bg-white shadow-lg flex flex-col">
+                <div className="flex bg-green-600 text-white text-center w-full py-4 justify-evenly">
+                  <button onClick={decrementMonth}>
+                    <i>arrow_back_ios</i>
+                  </button>
+                  <h2 className="text-2xl">{month}</h2>
+                  <button onClick={incrementMonth}>
+                    <i>arrow_forward_ios</i>
+                  </button>
+                </div>
+                <div className="flex text-center w-full justify-evenly items-center">
+                  <button onClick={decrementYear}>
+                    <i>arrow_back_ios</i>
+                  </button>
+                  <p className="flex py-4 mt-2 text-xl font-bold">{year}</p>
+                  <button onClick={incrementYear}>
+                    <i>arrow_forward_ios</i>
+                  </button>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="py-2 px-3 bg-green-600 text-white rounded-t-full text-4xl w-14 h-14 place-self-center"
+                >
+                  <i>check</i>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
       <div className="w-full bg-gray-100">
         <ul className="flex flex-col gap-2">
           {filteredReservations.length > 0 ? (
@@ -256,7 +265,10 @@ export default function Home({
                 );
               })
           ) : (
-            <div className="bg-white">Brak rezerwacji w tym miesiącu</div>
+            <div className="bg-white py-6 text-gray-700 font-normal flex flex-col items-center rounded-b-sm border-b  border-t-0 border-gray-300">
+              <i>calendar_today</i>
+              <p>Brak rezerwacji w tym miesiącu</p>
+            </div>
           )}
         </ul>
       </div>
