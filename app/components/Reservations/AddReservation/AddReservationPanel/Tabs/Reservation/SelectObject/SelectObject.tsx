@@ -46,18 +46,23 @@ const SelectObject = ({ id }: { id: string }) => {
     }));
   };
 
+  console.log(formData.selectedRoomId);
+
   return (
     <div className="flex flex-col gap-2">
       <button
-        className="flex items-center gap-2 bg-gray-100 p-1 rounded-sm text-sm"
+        className="flex items-center gap-2 bg-gray-100 p-1 rounded-sm text-sm justify-between"
         onClick={() => setRoomListOpen(!roomListOpen)}
       >
-        <div className="w-8 h-8 rounded-full flex justify-center items-center">
-          <span className="material-icon text-green-500">
-            {formData.selectedRoom?.type_icon}
-          </span>
+        <div className="flex items-center">
+          <div className="w-8 h-8 rounded-full flex justify-center items-center">
+            <span className="material-icon text-green-500">
+              {formData.selectedRoom?.type_icon}
+            </span>
+          </div>
+          {formData.selectedRoom?.name}
         </div>
-        {formData.selectedRoom?.name}
+        <i className="text-lg">arrow_drop_down</i>
       </button>
 
       {foundRoom && (
@@ -70,12 +75,14 @@ const SelectObject = ({ id }: { id: string }) => {
                 setRoomListOpen(false);
               }}
             >
-              <div className="w-8 h-8 rounded-full flex justify-center items-center">
-                <span className="material-icon text-green-500">
-                  {foundRoom.type_icon}
-                </span>
+              <div className="flex justify-between">
+                <div className="w-8 h-8 rounded-full flex justify-center items-center">
+                  <span className="material-icon text-green-500">
+                    {foundRoom.type_icon}
+                  </span>
+                </div>
+                <p> {foundRoom.name}</p>
               </div>
-              {foundRoom.name}
             </button>
           </div>
         </div>
@@ -104,7 +111,6 @@ const SelectObject = ({ id }: { id: string }) => {
                   </div>
                   {room.name}
                 </button>
-                <i>arrow_drop_down</i>
               </div>
             </div>
           ))}
