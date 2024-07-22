@@ -3,13 +3,15 @@ import { Database } from '@/types/supabase';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchReservations } from '@/app/actions/fetchReservations';
 import useSupabaseBrowser from '@/utils/supabase-browser';
+import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 
 type Reservation = Database['public']['Tables']['reservations']['Row'];
 
 export const useReservations = (id: string, currentDate: Date, searchQuery: string) => {
   const supabase = useSupabaseBrowser();
   const { data: reservations, error } = useQuery(fetchReservations(supabase, id));
-  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
+
+  const [filteredReservations, setFilteredReservations] = useState([])
 
   useEffect(() => {
     if (reservations) {
