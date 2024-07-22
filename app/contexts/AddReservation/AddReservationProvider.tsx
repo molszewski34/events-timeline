@@ -5,6 +5,7 @@ import { Room } from '@/app/components/RenderRows/types';
 import { Reservation } from '@/app/components/RenderRows/types';
 import { rooms } from '@/app/data/roomsData';
 import { statuses } from '@/app/components/Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
+import { initialReservationFormData } from './initialReservationFormData';
 export const AddReservation = createContext<any>(undefined);
 export function AddReservationWrapper({
   children,
@@ -28,7 +29,7 @@ export function AddReservationWrapper({
   const [price, setPrice] = useState(0);
   const [tax, setTax] = useState<number>(0);
   const [includedTax, setIncludedTax] = useState(false);
-  // const [selectedRoomId, setSelectedRoomId] = useState('');
+  const [selectedRoomId, setSelectedRoomId] = useState('');
 
   const [selectedButton, setSelectedButton] = useState<{
     room: Room | null;
@@ -38,39 +39,9 @@ export function AddReservationWrapper({
     []
   );
 
-  const [formData, setFormData] = useState<FormData>({
-    selectedReservationId: '',
-    selectedRoomId: '',
-    selectedStartDate: new Date(),
-    selectedEndDate: new Date(),
-    selectedStatus: statuses[0],
-    selectedRoom: rooms[0],
-    numOfAdults: 0,
-    numOfKids: 0,
-    advancePayment: '',
-    deposit: '',
-    paymentOnPlace: '',
-    localTax: 0.085,
-    mainGuest: '',
-    phone: '',
-    email: '',
-    houseNumber: '',
-    apartmentNumber: '',
-    city: '',
-    postCode: '',
-    country: '',
-    passport: '',
-    company: '',
-    company_street: '',
-    company_city: '',
-    company_postCode: '',
-    company_country: '',
-    company_nip: '',
-    notes: '',
-    passCode: '',
-    registration: 'Brak',
-    boarding: '',
-  });
+  const [formData, setFormData] = useState<FormData>(
+    initialReservationFormData
+  );
 
   return (
     <AddReservation.Provider
@@ -107,8 +78,8 @@ export function AddReservationWrapper({
         setIncludedTax,
         formData,
         setFormData,
-        // selectedRoomId,
-        // setSelectedRoomId,
+        selectedRoomId,
+        setSelectedRoomId,
         price,
         setPrice,
         tax,

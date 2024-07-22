@@ -3,11 +3,11 @@ import { Room } from './types';
 export const rooms: Room[] = [
   {
     id: '1',
-    roomName: 'Pokój 1',
+    name: 'Wybierz pokój',
     roomGuests: 2,
     roomPrice: 65,
     roomType: 'Pokój',
-    roomTypeIcon: 'bed',
+    type_icon: 'warning',
     events: [
       {
         title: 'Spotkanie',
