@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useDate } from '../hooks/Booking/useDate';
 import { useReservations } from '../hooks/Booking/useReservations';
-import ReservationList from '../components/Booking/ReservationList';
+import ReservationList from '../components/Booking/ReservationList/ReservationList';
 import SearchInput from '../components/Booking/SearchInput';
 import DateSelectorModal from '../components/Booking/DateSelectorModal';
 import TabSelector from '../components/Booking/TabSelector';
