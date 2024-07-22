@@ -1,14 +1,17 @@
 import { useCallback } from "react";
 import { Reservation } from "@/app/components/RenderRows/types";
 import { useAddReservationContext } from "@/app/contexts/AddReservation/AddReservationProvider";
+import { useCalendarContext } from "@/app/contexts/Calendar/CalendarProvider";
 
 const useHandleSetFormData = () => {
   const {setFormData} = useAddReservationContext()
+
   const handleSetFormData = useCallback(
     (query: Reservation) => {
       setFormData((prevData: FormData) => ({
         ...prevData,
         selectedReservationId: query.id,
+        selectedRoomId: query.room_id,
         selectedStartDate: query.selected_start_date,
         selectedEndDate: query.selected_end_date,
         selectedStatus: query.selected_status,
