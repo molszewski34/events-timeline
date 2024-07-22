@@ -1,0 +1,37 @@
+import { rooms } from '@/app/data/roomsData';
+import { statuses } from '@/app/components/Reservations/AddReservation/AddReservationPanel/Tabs/Reservation/BookingStatus/data';
+
+
+export const initialReservationFormData = {
+    selectedReservationId: '',
+    selectedRoomId: '',
+    selectedStartDate: new Date(),
+    selectedEndDate: new Date(),
+    selectedStatus: statuses[0],
+    selectedRoom: rooms[0],
+    numOfAdults: 0,
+    numOfKids: 0,
+    advancePayment: '',
+    deposit: '',
+    paymentOnPlace: '',
+    localTax: 0.085,
+    mainGuest: '',
+    phone: '',
+    email: '',
+    houseNumber: '',
+    apartmentNumber: '',
+    city: '',
+    postCode: '',
+    country: '',
+    passport: '',
+    company: '',
+    company_street: '',
+    company_city: '',
+    company_postCode: '',
+    company_country: '',
+    company_nip: '',
+    notes: '',
+    passCode: '',
+    registration: 'Brak',
+    boarding: '',
+  }
