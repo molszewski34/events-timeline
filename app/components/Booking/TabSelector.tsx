@@ -12,20 +12,20 @@ const TabSelector: React.FC<TabSelectorProps> = ({
   <div className="flex justify-center">
     <button
       onClick={() => handleTabClick('Najnowsze')}
-      className={`py-2 pt-4 w-full ${
+      className={`py-2 pt-4 w-full text-sm ${
         activeTab === 'Najnowsze'
           ? 'text-green-600 border-b-2 border-green-600'
-          : 'text-gray-500'
+          : 'text-black'
       }`}
     >
       Najnowsze
     </button>
     <button
       onClick={() => handleTabClick('Anulowane')}
-      className={`py-2 px-4 w-full ${
+      className={`py-2 px-4 w-full text-sm ${
         activeTab === 'Anulowane'
           ? 'text-green-600 border-b-2 border-green-600'
-          : 'text-gray-500'
+          : 'text-black'
       }`}
     >
       Anulowane
