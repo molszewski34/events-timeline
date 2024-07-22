@@ -55,8 +55,8 @@ export default function Home({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0">
-      <div className="flex flex-col px-2 w-full gap-2">
+    <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0 py-1">
+      <div className="flex flex-col px-2 w-full gap-4">
         <div className="flex justify-between">
           <header className="flex bg-white w-full">
             <div className="flex items-center gap-4">
@@ -102,7 +102,7 @@ export default function Home({
       <OverlayDelete />
       <DeleteConfirmation />
       <DeleteRoomConfirmation id={params.id} />
-      <SearchBar />
+      <SearchBar id="" />
       <OverlaySearchBar />
     </div>
   );
