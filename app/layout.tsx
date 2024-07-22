@@ -37,7 +37,7 @@ export default function RootLayout({
             fontSans.variable
           )}
         >
-          <CalendarWrapper>
+          <CalendarWrapper id="">
             <SidebarWrapper>
               <NavMobile>
                 <AuthButton />
