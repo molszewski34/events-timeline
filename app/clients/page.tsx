@@ -1,9 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
-
+// import { useReservations } from '../hooks/Booking/useReservations';
 import SearchInput from '../components/Clients/SearchInput';
-const Clients = () => {
+import ClientsList from '../components/Clients/ClientsList';
+import useClients from '../components/Clients/useClients';
+const Clients = ({ id, params }: { params: { id: string }; id: string }) => {
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { filteredReservations, error } = useClients(
+    id,
+
+    searchQuery
+  );
+
+  console.log(searchQuery);
   return (
     <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0 py-1">
       <div className="flex flex-col px-2 w-full gap-4">
@@ -18,6 +28,7 @@ const Clients = () => {
             setSearchQuery={setSearchQuery}
           />
         </div>
+        <ClientsList filteredReservations={filteredReservations} />
       </div>
     </div>
   );
