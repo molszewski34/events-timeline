@@ -6,32 +6,29 @@ import useSupabaseBrowser from '@/utils/supabase-browser';
 
 type Reservation = Database['public']['Tables']['reservations']['Row'];
 const useClients = (id: string, searchQuery: string) => {
-    const supabase = useSupabaseBrowser();
+  const supabase = useSupabaseBrowser();
   const { data: reservations, error } = useQuery(fetchReservations(supabase, id));
 
-  const [filteredReservations, setFilteredReservations] = useState([])
-  
-  console.log(filteredReservations)
+  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
+
+  console.log(filteredReservations);
 
   useEffect(() => {
     if (reservations) {
+      const searched = reservations.filter((reservation) => 
+        reservation.main_guest.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reservation.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reservation.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reservation.id.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
+      const sorted = searched.sort((a, b) => a.main_guest.localeCompare(b.main_guest));
 
-   
-        const searched = reservations.filter((reservation) => 
-          reservation.main_guest.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          reservation.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          reservation.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          reservation.id.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setFilteredReservations(searched);
-      
-
+      setFilteredReservations(sorted);
     }
   }, [reservations, searchQuery]);
 
   return { filteredReservations, error };
-
 }
 
-export default useClients
+export default useClients;
