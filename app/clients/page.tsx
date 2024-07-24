@@ -6,10 +6,11 @@ import ClientsList from '../components/Clients/ClientsList';
 import useClients from '../components/Clients/useClients';
 const Clients = ({ id, params }: { params: { id: string }; id: string }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAscending, setIsAscending] = useState(true);
 
   const { filteredReservations, error } = useClients(
     id,
-
+    // isAscending,
     searchQuery
   );
 
@@ -28,7 +29,11 @@ const Clients = ({ id, params }: { params: { id: string }; id: string }) => {
             setSearchQuery={setSearchQuery}
           />
         </div>
-        <ClientsList filteredReservations={filteredReservations} />
+        <ClientsList
+          filteredReservations={filteredReservations}
+          isAscending={isAscending}
+          setIsAscending={setIsAscending}
+        />
       </div>
     </div>
   );
