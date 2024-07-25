@@ -1,9 +1,19 @@
 import React from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+import { differenceInDays, parseISO } from 'date-fns';
 
-const ClientDetails = ({ openDetails, setOpenDetails }) => {
+const ClientDetails = ({
+  openDetails,
+  setOpenDetails,
+  selectedReservation,
+}) => {
   console.log(openDetails);
   const { setOverlay } = useCalendarContext();
+
+  const startDate = parseISO(selectedReservation.selected_start_date);
+  const endDate = parseISO(selectedReservation.selected_end_date);
+  const dayDifference = differenceInDays(endDate, startDate);
+
   return (
     <>
       {openDetails && (
@@ -43,15 +53,19 @@ const ClientDetails = ({ openDetails, setOpenDetails }) => {
                 <div className="flex flex-col text-gray-500 font-light mt-4">
                   <div className="flex">
                     <i className="grow-0 min-w-32">subdirectory_arrow_right</i>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow">
+                      {selectedReservation.selected_start_date}
+                    </p>
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">subdirectory_arrow_left</i>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow">
+                      {selectedReservation.selected_end_date}
+                    </p>
                   </div>
                   <div className="flex">
                     <p className="grow-0 min-w-32">Ilość dni</p>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow">{dayDifference}</p>
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">calendar_today</i>
@@ -63,7 +77,7 @@ const ClientDetails = ({ openDetails, setOpenDetails }) => {
                   </div>
                   <div className="flex">
                     <p className="grow-0 min-w-32">ID</p>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow"> {selectedReservation.id}</p>
                   </div>
                 </div>
               </div>
