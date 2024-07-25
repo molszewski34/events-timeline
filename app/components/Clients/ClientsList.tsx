@@ -1,15 +1,22 @@
-import React, { useMemo } from 'react';
+'use client';
+import React, { useMemo, useState } from 'react';
 import { Reservation } from '../RenderRows/types';
+import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
+
 interface ClientsListProps {
   filteredReservations: Reservation[];
   isAscending: boolean;
   setIsAscending: (isAscending: boolean) => void;
+  setOpenDetails: (openDetails: boolean) => void;
+  setSelectedReservation: (reservation: Reservation | null) => void;
 }
 
 const ClientsList: React.FC<ClientsListProps> = ({
   filteredReservations,
   isAscending,
   setIsAscending,
+  setOpenDetails,
+  setSelectedReservation,
 }) => {
   // Sorting function
   const sortedReservations = useMemo(() => {
@@ -23,6 +30,8 @@ const ClientsList: React.FC<ClientsListProps> = ({
       return 0;
     });
   }, [filteredReservations, isAscending]);
+
+  const { setOverlay } = useCalendarContext();
 
   return (
     <table className="flex flex-col overflow-x-scroll">
@@ -59,8 +68,18 @@ const ClientsList: React.FC<ClientsListProps> = ({
             <td className="text-center font-light border-r min-w-14 h-10">
               {index + 1}
             </td>
-            <td className="text-center flex px-5 flex-nowrap min-w-[250px] h-10">
+            <td className="text-center flex px-5 flex-nowrap min-w-[250px] h-10 justify-between items-center">
               {reservation.main_guest}
+              <button
+                className="material-icons bg-[#cecece] text-[#404040] text-[20px] p-1 rounded-sm"
+                onClick={() => {
+                  setOverlay(true);
+                  setOpenDetails(true);
+                  setSelectedReservation(reservation);
+                }}
+              >
+                calendar_today
+              </button>
             </td>
             <td className="px-5 min-w-[250px] h-10">{reservation.phone}</td>
             <td className="px-5 min-w-[250px] h-10">{reservation.email}</td>
