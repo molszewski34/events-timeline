@@ -77,11 +77,11 @@ const ClientDetails = ({
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">calendar_today</i>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow">{selectedReservation.created_at}</p>
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">attach_money</i>
-                    <p className="grow">2024-06-28</p>
+                    <p className="grow">--</p>
                   </div>
                   <div className="flex">
                     <p className="grow-0 min-w-32">ID</p>
