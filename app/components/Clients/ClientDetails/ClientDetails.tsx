@@ -10,9 +10,15 @@ const ClientDetails = ({
   console.log(openDetails);
   const { setOverlay } = useCalendarContext();
 
-  const startDate = parseISO(selectedReservation.selected_start_date);
-  const endDate = parseISO(selectedReservation.selected_end_date);
-  const dayDifference = differenceInDays(endDate, startDate);
+  // Check if selectedReservation and its dates are defined
+  const startDate = selectedReservation
+    ? parseISO(selectedReservation.selected_start_date)
+    : null;
+  const endDate = selectedReservation
+    ? parseISO(selectedReservation.selected_end_date)
+    : null;
+  const dayDifference =
+    startDate && endDate ? differenceInDays(endDate, startDate) : null;
 
   return (
     <>
@@ -54,18 +60,20 @@ const ClientDetails = ({
                   <div className="flex">
                     <i className="grow-0 min-w-32">subdirectory_arrow_right</i>
                     <p className="grow">
-                      {selectedReservation.selected_start_date}
+                      {selectedReservation?.selected_start_date}
                     </p>
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">subdirectory_arrow_left</i>
                     <p className="grow">
-                      {selectedReservation.selected_end_date}
+                      {selectedReservation?.selected_end_date}
                     </p>
                   </div>
                   <div className="flex">
                     <p className="grow-0 min-w-32">Ilość dni</p>
-                    <p className="grow">{dayDifference}</p>
+                    <p className="grow">
+                      {dayDifference !== null ? dayDifference : 'N/A'}
+                    </p>
                   </div>
                   <div className="flex">
                     <i className="grow-0 min-w-32">calendar_today</i>
@@ -77,7 +85,7 @@ const ClientDetails = ({
                   </div>
                   <div className="flex">
                     <p className="grow-0 min-w-32">ID</p>
-                    <p className="grow"> {selectedReservation.id}</p>
+                    <p className="grow">{selectedReservation?.id}</p>
                   </div>
                 </div>
               </div>
