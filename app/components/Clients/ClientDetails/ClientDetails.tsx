@@ -1,16 +1,29 @@
 import React from 'react';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { differenceInDays, parseISO } from 'date-fns';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { fetchRooms } from '@/app/actions/fetchRoom';
+import useSupabaseBrowser from '@/utils/supabase-browser';
+import { Database } from '@/types/supabase';
 
 const ClientDetails = ({
   openDetails,
   setOpenDetails,
   selectedReservation,
+  id,
 }) => {
-  console.log(openDetails);
   const { setOverlay } = useCalendarContext();
 
-  // Check if selectedReservation and its dates are defined
+  const supabase = useSupabaseBrowser();
+  const { data: rooms } = useQuery(fetchRooms(supabase, id));
+  type Room = Database['public']['Tables']['rooms']['Row'];
+
+  const selectedRoom = rooms?.find(
+    (room: Room) => room.id === selectedReservation.room_id
+  );
+
+  console.log(selectedReservation.id);
+
   const startDate = selectedReservation
     ? parseISO(selectedReservation.selected_start_date)
     : null;
@@ -49,7 +62,9 @@ const ClientDetails = ({
                 <div className="flex gap-4 items-start">
                   <div className="flex justify-between w-full">
                     <div className="flex flex-col text-sm">
-                      <b>Gość</b> <b>Pokój 1</b>
+                      <b>Gość</b>
+                      <b>Pokój: {selectedRoom?.name || 'N/A'}</b>{' '}
+                      {/* Display room name */}
                     </div>
                     <button className="material-icon text-gray-400 text-lg">
                       edit
