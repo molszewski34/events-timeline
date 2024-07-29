@@ -21,8 +21,11 @@ export async function addReservation(formData: FormData) {
     return { success: false, error: 'User not logged in' };
   }
 
+  console.log(formData)
+
   const {
     selectedRoomId,
+    created_at,
     selectedStartDate,
     selectedEndDate,
     selectedStatus,
@@ -56,6 +59,7 @@ export async function addReservation(formData: FormData) {
   const { data, error } = await supabase.from('reservations').insert([
     {
       room_id: selectedRoomId,
+      created_at: created_at,
       selected_start_date: selectedStartDate,
       selected_end_date: selectedEndDate,
       selected_status: selectedStatus,

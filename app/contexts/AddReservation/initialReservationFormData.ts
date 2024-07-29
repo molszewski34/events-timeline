@@ -5,6 +5,7 @@ import { statuses } from '@/app/components/Reservations/AddReservation/AddReserv
 export const initialReservationFormData = {
     selectedReservationId: '',
     selectedRoomId: '',
+    created_at: '',
     selectedStartDate: new Date(),
     selectedEndDate: new Date(),
     selectedStatus: statuses[0],
@@ -14,6 +15,7 @@ export const initialReservationFormData = {
     advancePayment: '',
     deposit: '',
     paymentOnPlace: '',
+    price: 0,
     localTax: 0.085,
     mainGuest: '',
     phone: '',

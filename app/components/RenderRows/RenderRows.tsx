@@ -230,6 +230,7 @@ export default function RenderRows({ id }: { id: string }) {
               ...prevData,
               numOfAdults: room.num_of_persons,
               selectedRoomId: room.id,
+              created_at: new Date(currentDateTimestamp).toISOString(),
             }));
           }}
           onTouchStart={() => {
