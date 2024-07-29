@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { FormData } from '@/app/contexts/AddReservation/types';
 
 const Price = () => {
   const {
@@ -9,6 +10,7 @@ const Price = () => {
     localTax,
     includedTax,
     formData,
+    setFormData,
     price,
     setPrice,
     tax,
@@ -21,7 +23,11 @@ const Price = () => {
     if (includedTax) {
       finalPrice += tax;
     }
-    setPrice(finalPrice);
+    setFormData((prevFormData: FormData) => ({
+      ...prevFormData,
+      price: finalPrice,
+    }));
+    // setPrice(finalPrice);
   }, [
     daysBetween,
     totalNumOfGuests,
