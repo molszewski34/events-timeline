@@ -6,6 +6,7 @@ import ClientsList from '../components/Clients/ClientsList';
 import useClients from '../components/Clients/useClients';
 import Overlay from '../components/utils/Overlay';
 import ClientDetails from '../components/Clients/ClientDetails/ClientDetails';
+import AddReservationPanel from '../components/Reservations/AddReservation/AddReservationPanel/AddReservationPanel';
 
 const Clients = ({ id, params }: { params: { id: string }; id: string }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,6 +51,7 @@ const Clients = ({ id, params }: { params: { id: string }; id: string }) => {
         setSelectedReservation={setSelectedReservation}
       />
       <Overlay />
+      <AddReservationPanel />
     </div>
   );
 };

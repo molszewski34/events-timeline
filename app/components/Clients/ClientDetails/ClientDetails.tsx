@@ -5,6 +5,8 @@ import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { Database } from '@/types/supabase';
+import useHandleSetFormData from '@/app/hooks/SearchResults/handleSetFormData';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
 const ClientDetails = ({
   openDetails,
@@ -12,7 +14,10 @@ const ClientDetails = ({
   selectedReservation,
   id,
 }) => {
-  const { setOverlay } = useCalendarContext();
+  const { setIsEditing, setOverlay, setOpenSearchBar, setOverlaySearchBar } =
+    useCalendarContext();
+
+  const { setOpenAddReservationPanel } = useAddReservationContext();
 
   const supabase = useSupabaseBrowser();
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
@@ -23,6 +28,8 @@ const ClientDetails = ({
   );
 
   console.log(selectedReservation.id);
+
+  const { handleSetFormData } = useHandleSetFormData();
 
   const startDate = selectedReservation
     ? parseISO(selectedReservation.selected_start_date)
@@ -37,9 +44,11 @@ const ClientDetails = ({
     <>
       {openDetails && (
         <main className="fixed inset-0 flex flex-col items-center justify-center z-[99] pt-0 px-4 pb-5 ">
-          <div className=" bg-white fixed  w-[95vw] max-w-[95vh] p-4 shadow-lg rounded-md">
+          <div className=" bg-white fixed  w-[90vw] max-w-[90vh] p-4 shadow-lg rounded-md">
             <div className="flex  justify-between pb-3">
-              <p className="text-lg font-semibold">Gość</p>
+              <p className="text-lg font-semibold">
+                {selectedReservation.main_guest}
+              </p>
               <button
                 className="material-icon text-lg text-gray-500"
                 onClick={() => {
@@ -62,11 +71,21 @@ const ClientDetails = ({
                 <div className="flex gap-4 items-start">
                   <div className="flex justify-between w-full">
                     <div className="flex flex-col text-sm">
-                      <b>Gość</b>
+                      <b>{selectedReservation.main_guest}</b>
                       <b>Pokój: {selectedRoom?.name || 'N/A'}</b>{' '}
-                      {/* Display room name */}
                     </div>
-                    <button className="material-icon text-gray-400 text-lg">
+                    <button
+                      className="material-icon text-gray-400 text-lg"
+                      onClick={() => {
+                        handleSetFormData(selectedReservation);
+                        setIsEditing(true);
+                        setOverlaySearchBar(false);
+                        setOpenSearchBar(false);
+                        setOpenAddReservationPanel(true);
+                        setOverlay(true);
+                        setOpenDetails(false);
+                      }}
+                    >
                       edit
                     </button>
                   </div>
