@@ -11,11 +11,32 @@ export function PriceConfigurationWrapper({
   children: React.ReactNode;
 }) {
   const [isReminding, setIsReminding] = useState(true);
+  const [partialOccupancyPrice, setPartialOccupancyPrice] = useState(false);
+  const [weekendPrice, setWeekendPrice] = useState(false);
+  const [stayDuration, setStayDuration] = useState(false);
+  const [childPrice, setChildPrice] = useState(false);
+  const [mealPrice, setMealPrice] = useState(false);
+  const [localTaxAmount, setLocalTaxAmount] = useState(false);
+  const [bookingRestrictions, setBookingRestrictions] = useState(false);
   return (
     <PriceConfiguration.Provider
       value={{
         isReminding,
         setIsReminding,
+        partialOccupancyPrice,
+        setPartialOccupancyPrice,
+        weekendPrice,
+        setWeekendPrice,
+        stayDuration,
+        setStayDuration,
+        childPrice,
+        setChildPrice,
+        mealPrice,
+        setMealPrice,
+        localTaxAmount,
+        setLocalTaxAmount,
+        bookingRestrictions,
+        setBookingRestrictions,
       }}
     >
       {children}
