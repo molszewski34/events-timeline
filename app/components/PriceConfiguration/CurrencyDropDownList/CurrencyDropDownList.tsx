@@ -8,7 +8,7 @@ const CurrencyDropdownList = () => {
   return (
     <div className="flex flex-col gap-2 ">
       <div className="flex flex-col">
-        <label className="text-sm">Ustaw walutę cennika:</label>
+        <label className="text-sm text-gray-600">Ustaw walutę cennika:</label>
         <button
           className={`flex items-center gap-2  px-2 rounded-sm border  justify-between ${
             countriesListOpen ? 'border-green-600' : 'border-gray-200'
