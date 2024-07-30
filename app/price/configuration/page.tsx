@@ -3,6 +3,9 @@ import React from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import CurrencyDropdownList from '@/app/components/PriceConfiguration/CurrencyDropDownList/CurrencyDropDownList';
 import ToggleSwitchButtonsPanel from '@/app/components/PriceConfiguration/ToggleSwitchButtonsPanel/ToggleSwitchButtonsPanel';
+import SectionHeader from '@/app/components/utils/SectionHeader';
+import Preview from '@/app/components/PriceConfiguration/Preview/Preview';
+
 const Page = () => {
   const { isReminding } = usePriceConfigurationContext();
   return (
@@ -24,11 +27,12 @@ const Page = () => {
                 </p>
               </div>
             )}
-            <header className="text-gray-500 text-sm font-semibold border-b border-gray-200 pb-2">
-              Waluta
-            </header>
+
+            <SectionHeader title="Waluta" />
             <CurrencyDropdownList />
+            <SectionHeader title="Preferencje" />
             <ToggleSwitchButtonsPanel />
+            <Preview />
           </div>
         </div>
       </div>
