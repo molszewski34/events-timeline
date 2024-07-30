@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SectionHeader from '../../Headers/SectionHeader';
+import SectionHeader from '../../../../utils/SectionHeader';
 import { roomColors } from './colorsList';
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 

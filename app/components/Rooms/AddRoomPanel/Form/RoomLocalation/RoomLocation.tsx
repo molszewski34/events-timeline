@@ -1,5 +1,5 @@
 import React from 'react';
-import SectionHeader from '../../Headers/SectionHeader';
+import SectionHeader from '../../../../utils/SectionHeader';
 import CountriesList from './CountriesList/CountriesList';
 import Field from '../Field/Field';
 
