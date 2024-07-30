@@ -2,6 +2,7 @@
 import React from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import CurrencyDropdownList from '@/app/components/PriceConfiguration/CurrencyDropDownList/CurrencyDropDownList';
+import ToggleSwitchButtonsPanel from '@/app/components/PriceConfiguration/ToggleSwitchButtonsPanel/ToggleSwitchButtonsPanel';
 const Page = () => {
   const { isReminding } = usePriceConfigurationContext();
   return (
@@ -27,6 +28,7 @@ const Page = () => {
               Waluta
             </header>
             <CurrencyDropdownList />
+            <ToggleSwitchButtonsPanel />
           </div>
         </div>
       </div>
