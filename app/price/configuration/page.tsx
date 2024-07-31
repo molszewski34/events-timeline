@@ -5,6 +5,7 @@ import CurrencyDropdownList from '@/app/components/PriceConfiguration/CurrencyDr
 import ToggleSwitchButtonsPanel from '@/app/components/PriceConfiguration/ToggleSwitchButtonsPanel/ToggleSwitchButtonsPanel';
 import SectionHeader from '@/app/components/utils/SectionHeader';
 import Preview from '@/app/components/PriceConfiguration/Preview/Preview';
+import SubmitBtn from '@/app/components/PriceConfiguration/SubmitBtn/SubmitBtn';
 
 const Page = () => {
   const { isReminding } = usePriceConfigurationContext();
@@ -33,6 +34,7 @@ const Page = () => {
             <SectionHeader title="Preferencje" />
             <ToggleSwitchButtonsPanel />
             <Preview />
+            <SubmitBtn />
           </div>
         </div>
       </div>
