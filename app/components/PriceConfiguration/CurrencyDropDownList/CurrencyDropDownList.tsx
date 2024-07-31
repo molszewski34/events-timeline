@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { currency_codes } from './data';
+import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
 const CurrencyDropdownList = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   const [countriesListOpen, setCountriesListOpen] = useState(false);
-
+  const { selectedCurrency, setSelectedCurrency } =
+    usePriceConfigurationContext();
   return (
     <div className="flex flex-col gap-2 ">
       <div className="flex flex-col">

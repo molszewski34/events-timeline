@@ -18,6 +18,7 @@ export function PriceConfigurationWrapper({
   const [mealPrice, setMealPrice] = useState(false);
   const [localTaxAmount, setLocalTaxAmount] = useState(false);
   const [bookingRestrictions, setBookingRestrictions] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   return (
     <PriceConfiguration.Provider
       value={{
@@ -37,6 +38,8 @@ export function PriceConfigurationWrapper({
         setLocalTaxAmount,
         bookingRestrictions,
         setBookingRestrictions,
+        selectedCurrency,
+        setSelectedCurrency,
       }}
     >
       {children}
