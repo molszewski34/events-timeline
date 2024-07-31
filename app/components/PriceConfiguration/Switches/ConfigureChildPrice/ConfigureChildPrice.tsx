@@ -93,7 +93,16 @@ const ConfigureChildPrice = () => {
           </div>
         </div>
       </div>
-      <button>Dodaj kolejny przedział wiekowy</button>
+      <button
+        className={`flex gap-2 text-sm justify-center items-center ${
+          selectedMinAge === null || selectedMaxAge === null
+            ? 'text-gray-400'
+            : 'text-green-500'
+        }`}
+        disabled={selectedMinAge === null || selectedMaxAge === null}
+      >
+        <i className="text-lg">add</i> Dodaj kolejny przedział wiekowy
+      </button>
     </div>
   );
 };
