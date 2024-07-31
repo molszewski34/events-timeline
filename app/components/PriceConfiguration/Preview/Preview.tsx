@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
+import Header from './Header';
+import PriceSection from './PriceSection';
 
 const Preview = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { selectedCurrency, partialOccupancyPrice, weekendPrice } =
     usePriceConfigurationContext();
 
+  // Example prices with two decimal places
   const standardPrice = 80.0;
   const standardWeekendPrice = 100.0;
   const standardSinglePrice = 60.0;
@@ -13,15 +16,7 @@ const Preview = () => {
 
   return (
     <div className="flex flex-col">
-      <header className="flex justify-between bg-gray-100 p-2">
-        <p className="text-sm">Podgląd</p>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-center material-icon text-2xl bg-gray-300 w-5 h-5 rounded-sm"
-        >
-          {isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
-        </button>
-      </header>
+      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
       {isOpen && (
         <div className="flex flex-col p-2 border-2 border-gray-100 mt-2 cursor-not-allowed w-full max-w-[370px] place-self-center">
           <header>
@@ -31,86 +26,25 @@ const Preview = () => {
             </div>
           </header>
           {partialOccupancyPrice && (
-            <div className="flex flex-col border-b border-gray-300 pb-4">
-              <header className="text-sm text-gray-500">
-                Osoba dorosła (x2)
-              </header>
-              <div className="flex justify-between mt-2 gap-2">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs text-gray-500 font-medium"
-                      htmlFor="standard"
-                    >
-                      Standard
-                    </label>
-                    <input
-                      className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
-                      readOnly
-                      type="text"
-                      defaultValue={standardPrice.toFixed(2)}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs text-gray-500 font-medium"
-                      htmlFor="standard_weekend"
-                    >
-                      Standard Weekend
-                    </label>
-                    <input
-                      className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
-                      readOnly
-                      type="text"
-                      defaultValue={standardWeekendPrice.toFixed(2)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PriceSection
+              title="Osoba dorosła (x2)"
+              prices={[
+                { label: 'Standard', price: standardPrice },
+                { label: 'Standard Weekend', price: standardWeekendPrice },
+              ]}
+            />
           )}
           {weekendPrice && (
-            <div className="flex flex-col border-b border-gray-300 pb-4">
-              <header className="text-sm text-gray-500">
-                Osoba dorosła (x1)
-              </header>
-              <div className="flex justify-between mt-2">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs text-gray-500 font-medium"
-                      htmlFor="standard"
-                    >
-                      Standard
-                    </label>
-                    <input
-                      className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
-                      type="text"
-                      readOnly
-                      defaultValue={standardSinglePrice.toFixed(2)}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-xs text-gray-500 font-medium"
-                      htmlFor="standard_weekend"
-                    >
-                      Standard Weekend
-                    </label>
-                    <input
-                      className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
-                      type="text"
-                      readOnly
-                      defaultValue={standardSingleWeekendPrice.toFixed(2)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PriceSection
+              title="Osoba dorosła (x1)"
+              prices={[
+                { label: 'Standard', price: standardSinglePrice },
+                {
+                  label: 'Standard Weekend',
+                  price: standardSingleWeekendPrice,
+                },
+              ]}
+            />
           )}
         </div>
       )}
