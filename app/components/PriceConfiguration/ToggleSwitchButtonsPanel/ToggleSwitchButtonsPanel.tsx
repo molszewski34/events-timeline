@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ToggleSwitchComponent from '../ToggleSwitchButton/ToggleSwitchButton';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
+import ChooseStayDuration from '../Switches/ChooseStayDuration/ChooseStayDuration';
 
 const ToggleSwitchButtonsPanel = () => {
   const {
@@ -55,6 +56,7 @@ const ToggleSwitchButtonsPanel = () => {
         onToggle={handleChooseStayDuration}
         question="Wybierz czy korzystasz z krótkiego lub długiego pobytu"
       />
+      <ChooseStayDuration />
       <ToggleSwitchComponent
         onToggle={handleConfigureChildPrice}
         question="Wybierz czy chcesz skonfigurować cenę dla dzieci"
