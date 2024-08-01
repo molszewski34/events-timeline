@@ -4,14 +4,10 @@ const ToggleSwitchComponent = ({ question, onToggle }) => {
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {
-    setIsToggled(!isToggled);
+    const newToggledState = !isToggled;
+    setIsToggled(newToggledState);
+    onToggle(newToggledState);
   };
-
-  useEffect(() => {
-    if (isToggled) {
-      onToggle(true);
-    }
-  }, [isToggled, onToggle]);
 
   return (
     <div className="flex flex-col  gap-2 text-sm text-gray-600">
