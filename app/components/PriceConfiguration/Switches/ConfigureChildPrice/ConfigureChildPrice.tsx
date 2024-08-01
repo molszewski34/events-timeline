@@ -78,7 +78,7 @@ const ConfigureChildPrice = () => {
                           setMinAgeListOpen(null);
                         }}
                       >
-                        {age}
+                        {age} lat
                       </button>
                     </div>
                   ))}
@@ -92,10 +92,12 @@ const ConfigureChildPrice = () => {
                 maxAgeListOpen === index
                   ? 'border-green-600'
                   : 'border-gray-200'
-              }`}
+              } ${range.minAge === null ? 'cursor-not-allowed' : ''}`}
               onClick={() =>
+                range.minAge !== null &&
                 setMaxAgeListOpen(maxAgeListOpen === index ? null : index)
               }
+              disabled={range.minAge === null}
             >
               <div className="flex gap-2 py-2 text-xs text-gray-600">
                 {range.maxAge !== null ? `${range.maxAge} lat` : 'Wybierz wiek'}
@@ -121,7 +123,7 @@ const ConfigureChildPrice = () => {
                           setMaxAgeListOpen(null);
                         }}
                       >
-                        {age}
+                        {age} lat
                       </button>
                     </div>
                   ))}
