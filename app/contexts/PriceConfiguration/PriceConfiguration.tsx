@@ -19,6 +19,11 @@ export function PriceConfigurationWrapper({
   const [localTaxAmount, setLocalTaxAmount] = useState(false);
   const [bookingRestrictions, setBookingRestrictions] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('EUR');
+  const [selectedMinAge, setSelectedMinAge] = useState(null);
+  const [selectedMaxAge, setSelectedMaxAge] = useState(null);
+  const [addCostToAdult, setAddCostToAdult] = useState(false);
+  const [localTaxForChild, setLocalTaxForChild] = useState('');
+
   return (
     <PriceConfiguration.Provider
       value={{
@@ -40,6 +45,14 @@ export function PriceConfigurationWrapper({
         setBookingRestrictions,
         selectedCurrency,
         setSelectedCurrency,
+        selectedMinAge,
+        setSelectedMinAge,
+        selectedMaxAge,
+        setSelectedMaxAge,
+        addCostToAdult,
+        setAddCostToAdult,
+        localTaxForChild,
+        setLocalTaxForChild,
       }}
     >
       {children}
