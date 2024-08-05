@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import ToggleSwitchComponent from '../ToggleSwitchButton/ToggleSwitchButton';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import ChooseStayDuration from '../Switches/ChooseStayDuration/ChooseStayDuration';
+import ConfigureChildPrice from '../Switches/ConfigureChildPrice/ConfigureChildPrice';
+import ConfigureMealPrice from '../Switches/ConfigureMealPrice/ConfigureMealPrice';
+import ConfigureLocalTaxAmount from '../Switches/ConfigureLocalTaxAmount/ConfigureLocalTaxAmount';
 
 const ToggleSwitchButtonsPanel = () => {
   const {
@@ -61,14 +64,17 @@ const ToggleSwitchButtonsPanel = () => {
         onToggle={handleConfigureChildPrice}
         question="Wybierz czy chcesz skonfigurować cenę dla dzieci"
       />
+      <ConfigureChildPrice />
       <ToggleSwitchComponent
         onToggle={handleConfigureMealPrice}
         question="Wybierz czy chcesz skonfigurować cenę za wyżywienie"
       />
+      <ConfigureMealPrice />
       <ToggleSwitchComponent
         onToggle={handleConfigureLocalTaxAmount}
         question="Wybierz czy chcesz skonfigurować kwotę podatku lokalnego"
       />
+      <ConfigureLocalTaxAmount />
       <ToggleSwitchComponent
         onToggle={handleConfigureBookingRestrictions}
         question="Wybierz czy chcesz skonfigurować ograniczenia rezerwacji"
