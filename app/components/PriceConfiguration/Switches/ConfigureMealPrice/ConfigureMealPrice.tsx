@@ -1,41 +1,59 @@
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FocusEvent } from 'react';
 
-const ConfigureMealPrice = () => {
+interface PricesState {
+  bb: string;
+  hb: string;
+  fb: string;
+}
+
+interface IncludedState {
+  bb: boolean;
+  hb: boolean;
+  fb: boolean;
+}
+
+const ConfigureMealPrice: React.FC = () => {
   const { selectedCurrency, mealPrice } = usePriceConfigurationContext();
 
-  const [prices, setPrices] = useState({
+  const [prices, setPrices] = useState<PricesState>({
     bb: '',
     hb: '',
     fb: '',
   });
 
-  const [included, setIncluded] = useState({
+  const [included, setIncluded] = useState<IncludedState>({
     bb: false,
     hb: false,
     fb: false,
   });
 
-  const [focusedField, setFocusedField] = useState(null);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  const handlePriceChange = (e, mealType) => {
+  const handlePriceChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    mealType: keyof PricesState
+  ) => {
     const value = e.target.value;
-    if (!isNaN(value) && value.length <= 6) {
-      setPrices({
-        ...prices,
+    if (!isNaN(Number(value)) && value.length <= 6) {
+      setPrices((prevPrices) => ({
+        ...prevPrices,
         [mealType]: parseFloat(value).toFixed(2),
-      });
+      }));
     }
   };
 
-  const handleCheckboxChange = (e, mealType) => {
-    setIncluded({
-      ...included,
+  const handleCheckboxChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    mealType: keyof IncludedState
+  ) => {
+    setIncluded((prevIncluded) => ({
+      ...prevIncluded,
       [mealType]: e.target.checked,
-    });
+    }));
   };
 
-  const handleFocus = (mealType) => {
+  const handleFocus = (mealType: keyof PricesState) => {
     setFocusedField(mealType);
   };
 
@@ -49,10 +67,10 @@ const ConfigureMealPrice = () => {
         <div className="flex flex-col p-3 border-2 border-gray-200 rounded-sm mt-3 gap-2">
           {[
             { label: 'BB - śniadanie', mealType: 'bb' },
-            { label: 'HB - śniadanie,obiadkolacja', mealType: 'hb' },
+            { label: 'HB - śniadanie, obiadkolacja', mealType: 'hb' },
             { label: 'FB - śniadanie, obiad, kolacja', mealType: 'fb' },
           ].map(({ label, mealType }) => (
-            <div key={mealType} className="flex flex-col ">
+            <div key={mealType} className="flex flex-col">
               <label className="mb-2 text-sm text-gray-600">{label}</label>
               <div className="flex flex-col">
                 <div

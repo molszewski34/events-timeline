@@ -2,37 +2,41 @@ import React, { useState } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
 const ConfigureChildPrice = () => {
-  const [minAgeListOpen, setMinAgeListOpen] = useState(null);
-  const [maxAgeListOpen, setMaxAgeListOpen] = useState(null);
-  const [ageRanges, setAgeRanges] = useState([{ minAge: null, maxAge: null }]);
+  const [minAgeListOpen, setMinAgeListOpen] = useState<number | null>(null);
+  const [maxAgeListOpen, setMaxAgeListOpen] = useState<number | null>(null);
+  const [ageRanges, setAgeRanges] = useState<
+    { minAge: number | null; maxAge: number | null }[]
+  >([{ minAge: null, maxAge: null }]);
   const { childPrice } = usePriceConfigurationContext();
   const ageRange = Array.from({ length: 18 }, (_, index) => index);
 
   const handleAddAgeRange = () => {
     const lastMaxAge = ageRanges[ageRanges.length - 1].maxAge;
-    setAgeRanges([...ageRanges, { minAge: lastMaxAge + 1, maxAge: null }]);
+    setAgeRanges([
+      ...ageRanges,
+      { minAge: (lastMaxAge ?? -1) + 1, maxAge: null },
+    ]);
   };
 
-  const handleRemoveAgeRange = (index) => {
-    const newAgeRanges = ageRanges.filter((_, i) => i !== index);
-    setAgeRanges(newAgeRanges);
+  const handleRemoveAgeRange = (index: number) => {
+    setAgeRanges(ageRanges.filter((_, i) => i !== index));
   };
 
-  const handleMinAgeChange = (index, age) => {
+  const handleMinAgeChange = (index: number, age: number) => {
     const newAgeRanges = ageRanges.map((range, i) =>
       i === index ? { ...range, minAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const handleMaxAgeChange = (index, age) => {
+  const handleMaxAgeChange = (index: number, age: number) => {
     const newAgeRanges = ageRanges.map((range, i) =>
       i === index ? { ...range, maxAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const getAvailableMinAge = (index) => {
+  const getAvailableMinAge = (index: number) => {
     if (index === 0) return 0;
     const prevMaxAge = ageRanges[index - 1].maxAge;
     return prevMaxAge !== null ? prevMaxAge + 1 : 0;
@@ -120,7 +124,7 @@ const ConfigureChildPrice = () => {
                     }`}
                   >
                     {ageRange
-                      .filter((age) => age > range.minAge)
+                      .filter((age) => age > (range.minAge ?? -1))
                       .map((age) => (
                         <div key={age}>
                           <button

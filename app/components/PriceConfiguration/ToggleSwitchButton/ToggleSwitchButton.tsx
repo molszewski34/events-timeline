@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const ToggleSwitchComponent = ({ question, onToggle }) => {
+interface ToggleSwitchComponentProps {
+  question: string;
+  onToggle: (toggled: boolean) => void;
+}
+
+const ToggleSwitchComponent: React.FC<ToggleSwitchComponentProps> = ({
+  question,
+  onToggle,
+}) => {
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {
@@ -10,7 +18,7 @@ const ToggleSwitchComponent = ({ question, onToggle }) => {
   };
 
   return (
-    <div className="flex flex-col  gap-2 text-sm text-gray-600">
+    <div className="flex flex-col gap-2 text-sm text-gray-600">
       <h1 className={isToggled ? 'text-green-600' : ''}>{question}</h1>
       <div className="flex gap-2">
         <label className="relative inline-block w-8 h-5">
