@@ -41,10 +41,6 @@ const ToggleSwitchButtonsPanel = () => {
     setLocalTaxAmount(value);
   };
 
-  const handleConfigureBookingRestrictions = (value: boolean) => {
-    setBookingRestrictions(value);
-  };
-
   return (
     <div className="">
       <ToggleSwitchComponent
@@ -75,10 +71,6 @@ const ToggleSwitchButtonsPanel = () => {
         question="Wybierz czy chcesz skonfigurować kwotę podatku lokalnego"
       />
       <ConfigureLocalTaxAmount />
-      <ToggleSwitchComponent
-        onToggle={handleConfigureBookingRestrictions}
-        question="Wybierz czy chcesz skonfigurować ograniczenia rezerwacji"
-      />
     </div>
   );
 };
