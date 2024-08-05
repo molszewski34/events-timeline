@@ -1,5 +1,5 @@
 import React from 'react';
-import SectionHeader from '../Headers/SectionHeader';
+import SectionHeader from '../../../utils/SectionHeader';
 import BasicInformations from './BasicInformations/BasicInformations';
 import Persons from './Persons/Persons';
 import Beds from './Beds/Beds';

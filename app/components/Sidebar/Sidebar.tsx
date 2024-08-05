@@ -14,9 +14,9 @@ const Sidebar = () => {
     { href: '/clients', text: 'Klienci' },
   ];
   const prices = [
-    { href: '/page4', text: 'Page 1' },
-    { href: '/page5', text: 'Page 2' },
-    { href: '/page6', text: 'Page 3' },
+    { href: '/price/configuration', text: 'Ustaw ceny' },
+    { href: '/price/configuration', text: 'Konfiguracja' },
+    { href: '/price/additional', text: 'Usługi dodatkowe' },
   ];
 
   return (
