@@ -23,7 +23,7 @@ const CurrencyDropdownList = () => {
         </button>
         <div className="flex flex-col gap-2 text-xs mt-2 relative ">
           <div
-            className={`h-[300px] overflow-y-scroll absolute w-full border py-1 ${
+            className={`h-[300px] overflow-y-scroll absolute z-50 w-full border py-1 ${
               countriesListOpen ? '' : 'hidden overflow-hidden'
             }`}
           >
