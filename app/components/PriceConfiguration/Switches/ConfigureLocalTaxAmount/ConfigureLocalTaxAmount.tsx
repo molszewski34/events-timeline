@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import ToggleSwitchComponent from '../../ToggleSwitchButton/ToggleSwitchButton';
 
-const ConfigureLocalTaxAmount = () => {
+interface AgeRange {
+  localTaxForChild: string | null;
+  minAge: number | null;
+  maxAge: number | null;
+}
+
+const ConfigureLocalTaxAmount: React.FC = () => {
   const { selectedCurrency, setAddCostToAdult, localTaxAmount } =
     usePriceConfigurationContext();
 
@@ -10,9 +16,9 @@ const ConfigureLocalTaxAmount = () => {
     setAddCostToAdult(value);
   };
 
-  const [minAgeListOpen, setMinAgeListOpen] = useState(null);
-  const [maxAgeListOpen, setMaxAgeListOpen] = useState(null);
-  const [ageRanges, setAgeRanges] = useState([
+  const [minAgeListOpen, setMinAgeListOpen] = useState<number | null>(null);
+  const [maxAgeListOpen, setMaxAgeListOpen] = useState<number | null>(null);
+  const [ageRanges, setAgeRanges] = useState<AgeRange[]>([
     { localTaxForChild: null, minAge: null, maxAge: null },
   ]);
 
@@ -24,37 +30,37 @@ const ConfigureLocalTaxAmount = () => {
     const lastMaxAge = ageRanges[ageRanges.length - 1].maxAge;
     setAgeRanges([
       ...ageRanges,
-      { localTaxForChild: null, minAge: lastMaxAge + 1, maxAge: null },
+      { localTaxForChild: null, minAge: (lastMaxAge ?? 0) + 1, maxAge: null },
     ]);
   };
 
-  const handleRemoveAgeRange = (index) => {
+  const handleRemoveAgeRange = (index: number) => {
     const newAgeRanges = ageRanges.filter((_, i) => i !== index);
     setAgeRanges(newAgeRanges);
   };
 
-  const handleMinAgeChange = (index, age) => {
+  const handleMinAgeChange = (index: number, age: number) => {
     const newAgeRanges = ageRanges.map((range, i) =>
       i === index ? { ...range, minAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const handleMaxAgeChange = (index, age) => {
+  const handleMaxAgeChange = (index: number, age: number) => {
     const newAgeRanges = ageRanges.map((range, i) =>
       i === index ? { ...range, maxAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const handleLocalTaxForChildChange = (index, value) => {
+  const handleLocalTaxForChildChange = (index: number, value: string) => {
     const newAgeRanges = ageRanges.map((range, i) =>
       i === index ? { ...range, localTaxForChild: value } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const getAvailableMinAge = (index) => {
+  const getAvailableMinAge = (index: number): number => {
     if (index === 0) return 0;
     const prevMaxAge = ageRanges[index - 1].maxAge;
     return prevMaxAge !== null ? prevMaxAge + 1 : 0;
@@ -205,7 +211,7 @@ const ConfigureLocalTaxAmount = () => {
                             }`}
                           >
                             {ageRange
-                              .filter((age) => age > range.minAge)
+                              .filter((age) => age > (range.minAge ?? 0))
                               .map((age) => (
                                 <div key={age}>
                                   <button
