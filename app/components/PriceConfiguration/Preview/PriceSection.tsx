@@ -3,7 +3,7 @@ import PriceInput from './PriceInput';
 
 interface Price {
   label: string;
-  subLabel?: number;
+  subLabel?: number | string;
   price: number;
 }
 
