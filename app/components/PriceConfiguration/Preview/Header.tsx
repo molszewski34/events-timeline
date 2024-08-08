@@ -6,7 +6,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen }) => (
-  <header className="flex justify-between bg-gray-100 p-2">
+  <header className="flex justify-between bg-gray-100 p-2 w-full">
     <p className="text-sm">Podgląd</p>
     <button
       onClick={() => setIsOpen(!isOpen)}
