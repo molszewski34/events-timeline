@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
 const ConfigureChildPrice = () => {
-  const [minAgeListOpen, setMinAgeListOpen] = useState<number | null>(null);
-  const [maxAgeListOpen, setMaxAgeListOpen] = useState<number | null>(null);
-  const [ageRanges, setAgeRanges] = useState<
-    { minAge: number | null; maxAge: number | null }[]
-  >([{ minAge: null, maxAge: null }]);
-  const { childPrice } = usePriceConfigurationContext();
+  const {
+    childPrice,
+    minAgeListOpen,
+    setMinAgeListOpen,
+    maxAgeListOpen,
+    setMaxAgeListOpen,
+    ageRanges,
+    setAgeRanges,
+  } = usePriceConfigurationContext();
   const ageRange = Array.from({ length: 18 }, (_, index) => index);
 
   const handleAddAgeRange = () => {
