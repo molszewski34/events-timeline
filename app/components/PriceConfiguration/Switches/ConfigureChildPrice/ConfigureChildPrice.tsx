@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
-const ConfigureChildPrice = () => {
+interface AgeRange {
+  minAge: number | null;
+  maxAge: number | null;
+}
+
+const ConfigureChildPrice: React.FC = () => {
   const {
     childPrice,
     minAgeListOpen,
@@ -11,37 +16,35 @@ const ConfigureChildPrice = () => {
     ageRanges,
     setAgeRanges,
   } = usePriceConfigurationContext();
-  const ageRange = Array.from({ length: 18 }, (_, index) => index);
+
+  const ageRange: number[] = Array.from({ length: 18 }, (_, index) => index);
 
   const handleAddAgeRange = () => {
-    const lastMaxAge = ageRanges[ageRanges.length - 1].maxAge;
-    setAgeRanges([
-      ...ageRanges,
-      { minAge: (lastMaxAge ?? -1) + 1, maxAge: null },
-    ]);
+    const lastMaxAge = ageRanges[ageRanges.length - 1]?.maxAge ?? -1;
+    setAgeRanges([...ageRanges, { minAge: lastMaxAge + 1, maxAge: null }]);
   };
 
   const handleRemoveAgeRange = (index: number) => {
-    setAgeRanges(ageRanges.filter((_, i) => i !== index));
+    setAgeRanges(ageRanges.filter((_: unknown, i: number) => i !== index));
   };
 
   const handleMinAgeChange = (index: number, age: number) => {
-    const newAgeRanges = ageRanges.map((range, i) =>
+    const newAgeRanges = ageRanges.map((range: AgeRange, i: number) =>
       i === index ? { ...range, minAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
   const handleMaxAgeChange = (index: number, age: number) => {
-    const newAgeRanges = ageRanges.map((range, i) =>
+    const newAgeRanges = ageRanges.map((range: AgeRange, i: number) =>
       i === index ? { ...range, maxAge: age } : range
     );
     setAgeRanges(newAgeRanges);
   };
 
-  const getAvailableMinAge = (index: number) => {
+  const getAvailableMinAge = (index: number): number => {
     if (index === 0) return 0;
-    const prevMaxAge = ageRanges[index - 1].maxAge;
+    const prevMaxAge = ageRanges[index - 1]?.maxAge;
     return prevMaxAge !== null ? prevMaxAge + 1 : 0;
   };
 
@@ -49,7 +52,7 @@ const ConfigureChildPrice = () => {
     <>
       {childPrice && (
         <div className="flex flex-col border border-gray-200 py-2 px-4 mt-2 w-full">
-          {ageRanges.map((range, index) => (
+          {ageRanges.map((range: AgeRange, index: number) => (
             <div
               key={index}
               className={`flex gap-2 w-full mb-2 ${index === 0 ? 'pr-8' : ''}`}
@@ -81,7 +84,7 @@ const ConfigureChildPrice = () => {
                   >
                     {ageRange
                       .filter((age) => age >= getAvailableMinAge(index))
-                      .map((age) => (
+                      .map((age: number) => (
                         <div key={age}>
                           <button
                             className={`flex items-center gap-2 hover:bg-slate-200 p-2 rounded-sm w-full text-sm ${
@@ -127,8 +130,8 @@ const ConfigureChildPrice = () => {
                     }`}
                   >
                     {ageRange
-                      .filter((age) => age > (range.minAge ?? -1))
-                      .map((age) => (
+                      .filter((age: number) => age > (range.minAge ?? -1))
+                      .map((age: number) => (
                         <div key={age}>
                           <button
                             className={`flex items-center gap-2 hover:bg-slate-200 p-2 rounded-sm w-full text-sm ${
@@ -159,14 +162,16 @@ const ConfigureChildPrice = () => {
           <button
             className={`flex gap-2 text-sm justify-center items-center ${
               ageRanges.some(
-                (range) => range.minAge === null || range.maxAge === null
+                (range: AgeRange) =>
+                  range.minAge === null || range.maxAge === null
               )
                 ? 'text-gray-300'
                 : 'text-green-500'
             }`}
             onClick={handleAddAgeRange}
             disabled={ageRanges.some(
-              (range) => range.minAge === null || range.maxAge === null
+              (range: AgeRange) =>
+                range.minAge === null || range.maxAge === null
             )}
           >
             <i className="text-lg">add</i> Dodaj kolejny przedział wiekowy
