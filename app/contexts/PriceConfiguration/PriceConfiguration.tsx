@@ -23,7 +23,13 @@ export function PriceConfigurationWrapper({
   const [selectedMaxAge, setSelectedMaxAge] = useState(null);
   const [addCostToAdult, setAddCostToAdult] = useState(false);
   const [localTaxForChild, setLocalTaxForChild] = useState('');
-
+  const [minAgeListOpen, setMinAgeListOpen] = useState<number | null>(null);
+  const [maxAgeListOpen, setMaxAgeListOpen] = useState<number | null>(null);
+  const [ageRanges, setAgeRanges] = useState<
+    { minAge: number | null; maxAge: number | null }[]
+  >([{ minAge: null, maxAge: null }]);
+  const [shortStayMax, setShortStayMax] = useState<number>(0);
+  const [shortStayMin, setShortStayMin] = useState<number>(0);
   return (
     <PriceConfiguration.Provider
       value={{
@@ -53,6 +59,16 @@ export function PriceConfigurationWrapper({
         setAddCostToAdult,
         localTaxForChild,
         setLocalTaxForChild,
+        minAgeListOpen,
+        setMinAgeListOpen,
+        maxAgeListOpen,
+        setMaxAgeListOpen,
+        ageRanges,
+        setAgeRanges,
+        shortStayMax,
+        setShortStayMax,
+        shortStayMin,
+        setShortStayMin,
       }}
     >
       {children}
