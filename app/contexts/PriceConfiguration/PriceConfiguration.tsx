@@ -28,8 +28,8 @@ export function PriceConfigurationWrapper({
   const [ageRanges, setAgeRanges] = useState<
     { minAge: number | null; maxAge: number | null }[]
   >([{ minAge: null, maxAge: null }]);
-  const [shortStayMax, setShortStayMax] = useState<number>(0);
-  const [shortStayMin, setShortStayMin] = useState<number>(0);
+  const [longStay, setLongStay] = useState<number>(0);
+  const [shortStay, setShortStay] = useState<number>(0);
   return (
     <PriceConfiguration.Provider
       value={{
@@ -65,10 +65,10 @@ export function PriceConfigurationWrapper({
         setMaxAgeListOpen,
         ageRanges,
         setAgeRanges,
-        shortStayMax,
-        setShortStayMax,
-        shortStayMin,
-        setShortStayMin,
+        longStay,
+        setLongStay,
+        shortStay,
+        setShortStay,
       }}
     >
       {children}
