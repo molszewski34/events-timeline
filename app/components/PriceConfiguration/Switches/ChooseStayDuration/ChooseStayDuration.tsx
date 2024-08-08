@@ -2,21 +2,16 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
 const ChooseStayDuration: React.FC = () => {
-  const {
-    stayDuration,
-    shortStayMax,
-    setShortStayMax,
-    shortStayMin,
-    setShortStayMin,
-  } = usePriceConfigurationContext();
+  const { stayDuration, shortStay, setShortStay, longStay, setLongStay } =
+    usePriceConfigurationContext();
 
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
     if (
-      shortStayMax !== '' &&
-      shortStayMin !== '' &&
-      Number(shortStayMax) > Number(shortStayMin)
+      longStay !== '' &&
+      shortStay !== '' &&
+      Number(longStay) < Number(shortStay)
     ) {
       setError(
         'Liczba dni krótkiego pobytu nie może być dłuższa niż liczba dni długiego pobytu'
@@ -24,7 +19,7 @@ const ChooseStayDuration: React.FC = () => {
     } else {
       setError('');
     }
-  }, [shortStayMax, shortStayMin]);
+  }, [longStay, shortStay]);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -46,27 +41,27 @@ const ChooseStayDuration: React.FC = () => {
             } mt-2 rounded-sm`}
           >
             <div className="flex flex-col gap-2 text-gray-700">
-              <label className="text-sm" htmlFor="shortStayMax">
-                Do ilu dni trwa krótki pobyt
-              </label>
-              <input
-                id="shortStayMax"
-                className="flex border border-gray-200 p-1 text-sm rounded-sm"
-                type="text"
-                value={shortStayMax}
-                onChange={(e) => handleInputChange(e, setShortStayMax)}
-              />
-            </div>
-            <div className="flex flex-col gap-2 text-gray-700">
-              <label className="text-sm" htmlFor="shortStayMin">
+              <label className="text-sm" htmlFor="longStay">
                 Od ilu dni trwa krótki pobyt
               </label>
               <input
-                id="shortStayMin"
+                id="shortStay"
                 className="flex border border-gray-200 p-1 text-sm rounded-sm"
                 type="text"
-                value={shortStayMin}
-                onChange={(e) => handleInputChange(e, setShortStayMin)}
+                value={shortStay}
+                onChange={(e) => handleInputChange(e, setShortStay)}
+              />
+            </div>
+            <div className="flex flex-col gap-2 text-gray-700">
+              <label className="text-sm" htmlFor="shortStay">
+                Od ilu dni trwa długi pobyt
+              </label>
+              <input
+                id="shortStay"
+                className="flex border border-gray-200 p-1 text-sm rounded-sm"
+                type="text"
+                value={longStay}
+                onChange={(e) => handleInputChange(e, setLongStay)}
               />
             </div>
           </div>
