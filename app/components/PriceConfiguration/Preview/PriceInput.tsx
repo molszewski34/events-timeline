@@ -3,7 +3,7 @@ import React from 'react';
 interface PriceInputProps {
   label: string;
   price: number;
-  subLabel?: number;
+  subLabel?: number | string;
 }
 
 const PriceInput: React.FC<PriceInputProps> = ({ label, price, subLabel }) => (
@@ -13,9 +13,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ label, price, subLabel }) => (
         {label}
       </label>
       {subLabel !== undefined && (
-        <span className="text-xs text-gray-500 font-medium">
-          {`(do ${subLabel})`}
-        </span>
+        <span className="text-xs text-gray-500 font-medium">{subLabel}</span>
       )}
       <input
         className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
