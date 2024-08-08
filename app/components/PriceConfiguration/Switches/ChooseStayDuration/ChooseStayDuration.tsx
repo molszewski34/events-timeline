@@ -2,9 +2,14 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 
 const ChooseStayDuration: React.FC = () => {
-  const { stayDuration } = usePriceConfigurationContext();
-  const [shortStayMax, setShortStayMax] = useState<string>('0');
-  const [shortStayMin, setShortStayMin] = useState<string>('0');
+  const {
+    stayDuration,
+    shortStayMax,
+    setShortStayMax,
+    shortStayMin,
+    setShortStayMin,
+  } = usePriceConfigurationContext();
+
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
