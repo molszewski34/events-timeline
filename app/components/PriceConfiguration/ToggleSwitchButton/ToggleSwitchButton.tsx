@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 interface ToggleSwitchComponentProps {
   question: string;
   onToggle: (toggled: boolean) => void;
+  checked: boolean;
 }
 
 const ToggleSwitchComponent: React.FC<ToggleSwitchComponentProps> = ({
