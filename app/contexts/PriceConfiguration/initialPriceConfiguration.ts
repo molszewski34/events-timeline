@@ -16,4 +16,16 @@ export const initialPriceConfiguration = {
     ageRanges: [{ minAge: null, maxAge: null }],
     longStay: 0,
     shortStay: 0,
-}
+    mealPrices: {
+      bb: '',
+      hb: '',
+      fb: '',
+    },
+    mealIncluded: {
+      bb: false,
+      hb: false,
+      fb: false,
+    },
+    focusedField: null,
+  };
+  
