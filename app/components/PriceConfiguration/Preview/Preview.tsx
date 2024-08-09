@@ -12,6 +12,7 @@ type ChildAge = {
 const Preview = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
+    settings,
     selectedCurrency,
     partialOccupancyPrice,
     weekendPrice,
@@ -47,7 +48,9 @@ const Preview = () => {
           </header>
           <div className="flex flex-col">
             <PriceSection
-              title={partialOccupancyPrice ? 'Osoba dorosła (x2)' : 'Cena'}
+              title={
+                settings.partialOccupancyPrice ? 'Osoba dorosła (x2)' : 'Cena'
+              }
               prices={[
                 { label: 'Standard', price: standardPrice, subLabel: '' },
                 ...(weekendPrice
@@ -73,9 +76,11 @@ const Preview = () => {
                   : []),
               ]}
             />
-            {partialOccupancyPrice && (
+            {settings.partialOccupancyPrice && (
               <PriceSection
-                title={partialOccupancyPrice ? 'Osoba dorosła (x1)' : 'Cena'}
+                title={
+                  settings.partialOccupancyPrice ? 'Osoba dorosła (x1)' : 'Cena'
+                }
                 prices={[
                   { label: 'Standard', price: standardPrice },
                   ...(weekendPrice
@@ -109,41 +114,45 @@ const Preview = () => {
             )}
           </div>
           <>
-            {ageRanges.map((childAge: ChildAge) => (
-              <PriceSection
-                key={`${childAge.minAge}-${childAge.maxAge}`}
-                title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
-                prices={[
-                  { label: 'Standard', price: standardPrice, subLabel: '' },
-                  ...(weekendPrice
-                    ? [
-                        {
-                          label: 'Standard Weekend',
-                          price: standardWeekendPrice,
-                        },
-                      ]
-                    : []),
-                  ...(stayDuration
-                    ? [
-                        {
-                          label: 'Długi pobyt',
-                          price: standardWeekendPrice,
-                          subLabel: `od ${longStay}`,
-                        },
-                      ]
-                    : []),
-                  ...(stayDuration
-                    ? [
-                        {
-                          label: 'Krótki pobyt',
-                          price: standardWeekendPrice,
-                          subLabel: `do ${shortStay}`,
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            ))}
+            {childPrice && (
+              <>
+                {ageRanges.map((childAge: ChildAge) => (
+                  <PriceSection
+                    key={`${childAge.minAge}-${childAge.maxAge}`}
+                    title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
+                    prices={[
+                      { label: 'Standard', price: standardPrice, subLabel: '' },
+                      ...(weekendPrice
+                        ? [
+                            {
+                              label: 'Standard Weekend',
+                              price: standardWeekendPrice,
+                            },
+                          ]
+                        : []),
+                      ...(stayDuration
+                        ? [
+                            {
+                              label: 'Długi pobyt',
+                              price: standardWeekendPrice,
+                              subLabel: `od ${longStay}`,
+                            },
+                          ]
+                        : []),
+                      ...(stayDuration
+                        ? [
+                            {
+                              label: 'Krótki pobyt',
+                              price: standardWeekendPrice,
+                              subLabel: `do ${shortStay}`,
+                            },
+                          ]
+                        : []),
+                    ]}
+                  />
+                ))}
+              </>
+            )}
           </>
         </div>
       )}
