@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { createContext, useContext, useState } from 'react';
+import { initialPriceConfiguration } from './initialPriceConfiguration';
 
 const PriceConfiguration = createContext<any>(undefined);
 
@@ -11,6 +12,7 @@ export function PriceConfigurationWrapper({
   children: React.ReactNode;
 }) {
   const [isReminding, setIsReminding] = useState(true);
+  const [priceSettings, setPriceSettings] = useState(initialPriceConfiguration);
   const [partialOccupancyPrice, setPartialOccupancyPrice] = useState(false);
   const [weekendPrice, setWeekendPrice] = useState(false);
   const [stayDuration, setStayDuration] = useState(false);
@@ -69,6 +71,8 @@ export function PriceConfigurationWrapper({
         setLongStay,
         shortStay,
         setShortStay,
+        priceSettings,
+        setPriceSettings,
       }}
     >
       {children}
