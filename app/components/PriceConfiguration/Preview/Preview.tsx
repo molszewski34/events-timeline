@@ -9,30 +9,16 @@ type ChildAge = {
   maxAge: number;
 };
 
+const standardPrice = 80.0;
+const standardWeekendPrice = 100.0;
+const standardSinglePrice = 60.0;
+const standardSingleWeekendPrice = 80.0;
+const standardChildPrice = 0.0;
+const standardWeekendChildPrice = 0.0;
+
 const Preview = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {
-    selectedCurrency,
-    partialOccupancyPrice,
-    weekendPrice,
-    childPrice,
-    ageRanges,
-    stayDuration,
-    longStay,
-    setLongStay,
-    shortStay,
-    setShortStay,
-  } = usePriceConfigurationContext();
-
-  console.log(ageRanges); // Ensure this has a value
-
-  // Example prices with two decimal places
-  const standardPrice = 80.0;
-  const standardWeekendPrice = 100.0;
-  const standardSinglePrice = 60.0;
-  const standardSingleWeekendPrice = 80.0;
-  const standardChildPrice = 0.0;
-  const standardWeekendChildPrice = 0.0;
+  const { priceSettings } = usePriceConfigurationContext();
 
   return (
     <div className="flex flex-col items-center">
@@ -42,65 +28,87 @@ const Preview = () => {
           <header>
             <div className="flex gap-2 text-sm font-semibold mb-3">
               <p> Wpisz ceny w walucie:</p>{' '}
-              <span className="text-green-600">{selectedCurrency}</span>
+              <span className="text-green-600">
+                {priceSettings.selectedCurrency}
+              </span>
             </div>
           </header>
           <div className="flex flex-col">
             <PriceSection
-              title={partialOccupancyPrice ? 'Osoba dorosła (x2)' : 'Cena'}
+              title={
+                priceSettings.partialOccupancyPrice
+                  ? 'Osoba dorosła (x2)'
+                  : 'Cena'
+              }
               prices={[
-                { label: 'Standard', price: standardPrice, subLabel: '' },
-                ...(weekendPrice
-                  ? [{ label: 'Standard Weekend', price: standardWeekendPrice }]
-                  : []),
-                ...(stayDuration
+                {
+                  label: 'Standard',
+                  price: standardPrice ?? 0,
+                  subLabel: '',
+                },
+                ...(priceSettings.weekendPrice
                   ? [
                       {
-                        label: 'Długi pobyt',
-                        price: standardWeekendPrice,
-                        subLabel: `od ${longStay}`,
+                        label: 'Standard Weekend',
+                        price: standardWeekendPrice ?? 0,
                       },
                     ]
                   : []),
-                ...(stayDuration
+                ...(priceSettings.stayDuration
+                  ? [
+                      {
+                        label: 'Długi pobyt',
+                        price: priceSettings.longStayPrice ?? 0,
+                        subLabel: `od ${priceSettings.longStay}`,
+                      },
+                    ]
+                  : []),
+                ...(priceSettings.stayDuration
                   ? [
                       {
                         label: 'Krótki pobyt',
-                        price: standardWeekendPrice,
-                        subLabel: `do ${shortStay}`,
+                        price: priceSettings.shortStayPrice ?? 0,
+                        subLabel: `do ${priceSettings.shortStay}`,
                       },
                     ]
                   : []),
               ]}
             />
-            {partialOccupancyPrice && (
+            {priceSettings.partialOccupancyPrice && (
               <PriceSection
-                title={partialOccupancyPrice ? 'Osoba dorosła (x1)' : 'Cena'}
+                title={
+                  priceSettings.partialOccupancyPrice
+                    ? 'Osoba dorosła (x1)'
+                    : 'Cena'
+                }
                 prices={[
-                  { label: 'Standard', price: standardPrice },
-                  ...(weekendPrice
+                  {
+                    label: 'Standard',
+                    price: standardSinglePrice ?? 0,
+                  },
+                  ...(priceSettings.weekendPrice
                     ? [
                         {
                           label: 'Standard Weekend',
-                          price: standardWeekendPrice,
+                          price: standardSingleWeekendPrice ?? 0,
                         },
                       ]
                     : []),
-                  ...(stayDuration
+                  ...(priceSettings.stayDuration
                     ? [
                         {
                           label: 'Długi pobyt ',
-                          price: standardWeekendPrice,
-                          subLabel: `od ${longStay}`,
+                          price: priceSettings.longStaySinglePrice ?? 0,
+                          subLabel: `od ${priceSettings.longStay}`,
                         },
                       ]
                     : []),
-                  ...(stayDuration
+                  ...(priceSettings.stayDuration
                     ? [
                         {
                           label: 'Krótki pobyt',
-                          price: standardWeekendPrice,
-                          subLabel: `do ${shortStay}`,
+                          price: priceSettings.shortStaySinglePrice ?? 0,
+                          subLabel: `do ${priceSettings.shortStay}`,
                         },
                       ]
                     : []),
@@ -109,41 +117,49 @@ const Preview = () => {
             )}
           </div>
           <>
-            {ageRanges.map((childAge: ChildAge) => (
-              <PriceSection
-                key={`${childAge.minAge}-${childAge.maxAge}`}
-                title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
-                prices={[
-                  { label: 'Standard', price: standardPrice, subLabel: '' },
-                  ...(weekendPrice
-                    ? [
-                        {
-                          label: 'Standard Weekend',
-                          price: standardWeekendPrice,
-                        },
-                      ]
-                    : []),
-                  ...(stayDuration
-                    ? [
-                        {
-                          label: 'Długi pobyt',
-                          price: standardWeekendPrice,
-                          subLabel: `od ${longStay}`,
-                        },
-                      ]
-                    : []),
-                  ...(stayDuration
-                    ? [
-                        {
-                          label: 'Krótki pobyt',
-                          price: standardWeekendPrice,
-                          subLabel: `do ${shortStay}`,
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            ))}
+            {priceSettings.childPrice && (
+              <>
+                {priceSettings.ageRanges.map((childAge: ChildAge) => (
+                  <PriceSection
+                    key={`${childAge.minAge}-${childAge.maxAge}`}
+                    title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
+                    prices={[
+                      {
+                        label: 'Standard',
+                        price: standardChildPrice ?? 0,
+                        subLabel: '',
+                      },
+                      ...(priceSettings.weekendPrice
+                        ? [
+                            {
+                              label: 'Standard Weekend',
+                              price: standardWeekendChildPrice ?? 0,
+                            },
+                          ]
+                        : []),
+                      ...(priceSettings.stayDuration
+                        ? [
+                            {
+                              label: 'Długi pobyt',
+                              price: priceSettings.longStayChildPrice ?? 0,
+                              subLabel: `od ${priceSettings.longStay}`,
+                            },
+                          ]
+                        : []),
+                      ...(priceSettings.stayDuration
+                        ? [
+                            {
+                              label: 'Krótki pobyt',
+                              price: priceSettings.shortStayChildPrice ?? 0,
+                              subLabel: `do ${priceSettings.shortStay}`,
+                            },
+                          ]
+                        : []),
+                    ]}
+                  />
+                ))}
+              </>
+            )}
           </>
         </div>
       )}

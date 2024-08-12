@@ -1,69 +1,61 @@
+import React, { ChangeEvent } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
-import React, { useState, ChangeEvent, FocusEvent } from 'react';
-
-interface PricesState {
-  bb: string;
-  hb: string;
-  fb: string;
-}
-
-interface IncludedState {
-  bb: boolean;
-  hb: boolean;
-  fb: boolean;
-}
+import {
+  PriceConfiguration,
+  MealPrices,
+  MealIncluded,
+  MealType,
+} from '@/app/contexts/PriceConfiguration/types';
 
 const ConfigureMealPrice: React.FC = () => {
-  const { selectedCurrency, mealPrice } = usePriceConfigurationContext();
-
-  const [prices, setPrices] = useState<PricesState>({
-    bb: '',
-    hb: '',
-    fb: '',
-  });
-
-  const [included, setIncluded] = useState<IncludedState>({
-    bb: false,
-    hb: false,
-    fb: false,
-  });
-
-  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const { priceSettings, setPriceSettings } = usePriceConfigurationContext();
 
   const handlePriceChange = (
     e: ChangeEvent<HTMLInputElement>,
-    mealType: keyof PricesState
+    mealType: MealType
   ) => {
     const value = e.target.value;
     if (!isNaN(Number(value)) && value.length <= 6) {
-      setPrices((prevPrices) => ({
-        ...prevPrices,
-        [mealType]: parseFloat(value).toFixed(2),
+      setPriceSettings((prevSettings: PriceConfiguration) => ({
+        ...prevSettings,
+        mealPrices: {
+          ...prevSettings.mealPrices,
+          [mealType]: parseFloat(value).toFixed(2),
+        },
       }));
     }
   };
 
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
-    mealType: keyof IncludedState
+    mealType: MealType
   ) => {
-    setIncluded((prevIncluded) => ({
-      ...prevIncluded,
-      [mealType]: e.target.checked,
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      mealIncluded: {
+        ...prevSettings.mealIncluded,
+        [mealType]: e.target.checked,
+      },
     }));
   };
 
-  const handleFocus = (mealType: keyof PricesState) => {
-    setFocusedField(mealType);
+  const handleFocus = (mealType: MealType) => {
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      focusedField: mealType,
+    }));
   };
 
   const handleBlur = () => {
-    setFocusedField(null);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      focusedField: null,
+    }));
   };
 
   return (
     <>
-      {mealPrice && (
+      {priceSettings.mealPrices && (
         <div className="flex flex-col p-3 border-2 border-gray-200 rounded-sm mt-3 gap-2">
           {[
             { label: 'BB - śniadanie', mealType: 'bb' },
@@ -75,14 +67,14 @@ const ConfigureMealPrice: React.FC = () => {
               <div className="flex flex-col">
                 <div
                   className={`flex items-center border px-1 rounded-sm ${
-                    focusedField === mealType
+                    priceSettings.focusedField === mealType
                       ? 'border-green-600'
                       : 'border-gray-200'
                   }`}
                 >
                   <input
                     type="text"
-                    value={prices[mealType]}
+                    value={priceSettings.mealPrices[mealType]}
                     onChange={(e) => handlePriceChange(e, mealType)}
                     onFocus={() => handleFocus(mealType)}
                     onBlur={handleBlur}
@@ -90,13 +82,13 @@ const ConfigureMealPrice: React.FC = () => {
                     placeholder="0.00"
                   />
                   <span className="text-sm text-gray-400">
-                    {selectedCurrency}
+                    {priceSettings.selectedCurrency}
                   </span>
                 </div>
                 <label className="flex items-center text-sm text-gray-600">
                   <input
                     type="checkbox"
-                    checked={included[mealType]}
+                    checked={priceSettings.mealIncluded[mealType]}
                     onChange={(e) => handleCheckboxChange(e, mealType)}
                     className="mr-2 accent-green-600 bg-gray-200"
                   />

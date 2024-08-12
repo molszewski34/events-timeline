@@ -5,9 +5,11 @@ import ChooseStayDuration from '../Switches/ChooseStayDuration/ChooseStayDuratio
 import ConfigureChildPrice from '../Switches/ConfigureChildPrice/ConfigureChildPrice';
 import ConfigureMealPrice from '../Switches/ConfigureMealPrice/ConfigureMealPrice';
 import ConfigureLocalTaxAmount from '../Switches/ConfigureLocalTaxAmount/ConfigureLocalTaxAmount';
+import { PriceConfiguration } from '@/app/contexts/PriceConfiguration/types';
 
 const ToggleSwitchButtonsPanel = () => {
   const {
+    setPriceSettings,
     setPartialOccupancyPrice,
     setWeekendPrice,
     setStayDuration,
@@ -18,27 +20,45 @@ const ToggleSwitchButtonsPanel = () => {
   } = usePriceConfigurationContext();
 
   const handleConfigurePartialOccupancyPrice = (value: boolean) => {
-    setPartialOccupancyPrice(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      partialOccupancyPrice: value,
+    }));
   };
 
   const handleConfigureWeekendPrice = (value: boolean) => {
-    setWeekendPrice(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      weekendPrice: value,
+    }));
   };
 
   const handleChooseStayDuration = (value: boolean) => {
-    setStayDuration(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      stayDuration: value,
+    }));
   };
 
   const handleConfigureChildPrice = (value: boolean) => {
-    setChildPrice(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      childPrice: value,
+    }));
   };
 
   const handleConfigureMealPrice = (value: boolean) => {
-    setMealPrice(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      mealPrice: value,
+    }));
   };
 
   const handleConfigureLocalTaxAmount = (value: boolean) => {
-    setLocalTaxAmount(value);
+    setPriceSettings((prevSettings: PriceConfiguration) => ({
+      ...prevSettings,
+      localTaxAmount: value,
+    }));
   };
 
   return (
