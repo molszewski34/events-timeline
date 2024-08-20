@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ToggleSwitchComponentProps {
   question: string;
   onToggle: (toggled: boolean) => void;
-  checked: boolean;
+  checked?: boolean; // Dodano props `checked`
 }
 
 const ToggleSwitchComponent: React.FC<ToggleSwitchComponentProps> = ({
   question,
   onToggle,
+  checked = false, // Ustawienie wartości domyślnej dla `checked`
 }) => {
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState(checked);
+
+  useEffect(() => {
+    setIsToggled(checked);
+  }, [checked]);
 
   const handleToggle = () => {
     const newToggledState = !isToggled;

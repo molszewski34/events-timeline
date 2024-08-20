@@ -6,9 +6,12 @@ import ConfigureChildPrice from '../Switches/ConfigureChildPrice/ConfigureChildP
 import ConfigureMealPrice from '../Switches/ConfigureMealPrice/ConfigureMealPrice';
 import ConfigureLocalTaxAmount from '../Switches/ConfigureLocalTaxAmount/ConfigureLocalTaxAmount';
 import { PriceConfiguration } from '@/app/contexts/PriceConfiguration/types';
-
-const ToggleSwitchButtonsPanel = () => {
+import { PriceConfigurationProps } from '../types/PriceSettings';
+const ToggleSwitchButtonsPanel: React.FC<PriceConfigurationProps> = ({
+  data,
+}) => {
   const {
+    priceSettings,
     setPriceSettings,
     setPartialOccupancyPrice,
     setWeekendPrice,
@@ -66,29 +69,35 @@ const ToggleSwitchButtonsPanel = () => {
       <ToggleSwitchComponent
         onToggle={handleConfigurePartialOccupancyPrice}
         question="Wybierz czy chcesz skonfigurować cenę dla niepełnego obłożenia"
+        checked={priceSettings.partialOccupancyPrice}
       />
       <ToggleSwitchComponent
         onToggle={handleConfigureWeekendPrice}
         question="Wybierz, jeśli chcesz skonfigurować cenę na weekend"
+        checked={priceSettings.weekendPrice}
       />
       <ToggleSwitchComponent
         onToggle={handleChooseStayDuration}
         question="Wybierz czy korzystasz z krótkiego lub długiego pobytu"
+        checked={priceSettings.stayDuration}
       />
       <ChooseStayDuration />
       <ToggleSwitchComponent
         onToggle={handleConfigureChildPrice}
         question="Wybierz czy chcesz skonfigurować cenę dla dzieci"
+        checked={priceSettings.childPrice}
       />
       <ConfigureChildPrice />
       <ToggleSwitchComponent
         onToggle={handleConfigureMealPrice}
         question="Wybierz czy chcesz skonfigurować cenę za wyżywienie"
+        checked={priceSettings.mealPrice}
       />
       <ConfigureMealPrice />
       <ToggleSwitchComponent
         onToggle={handleConfigureLocalTaxAmount}
         question="Wybierz czy chcesz skonfigurować kwotę podatku lokalnego"
+        checked={priceSettings.localTaxAmount}
       />
       <ConfigureLocalTaxAmount />
     </div>
