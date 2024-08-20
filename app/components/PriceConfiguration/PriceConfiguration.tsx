@@ -1,15 +1,43 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import CurrencyDropdownList from '@/app/components/PriceConfiguration/CurrencyDropDownList/CurrencyDropDownList';
 import ToggleSwitchButtonsPanel from '@/app/components/PriceConfiguration/ToggleSwitchButtonsPanel/ToggleSwitchButtonsPanel';
 import SectionHeader from '@/app/components/utils/SectionHeader';
 import Preview from '@/app/components/PriceConfiguration/Preview/Preview';
 import SubmitBtn from '@/app/components/PriceConfiguration/SubmitBtn/SubmitBtn';
+import { PriceConfigurationProps } from './types/PriceSettings';
 
-const PriceConfiguration = ({ data }) => {
-  const { isReminding } = usePriceConfigurationContext();
+const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
+  const { isReminding, setPriceSettings } = usePriceConfigurationContext();
+
+  useEffect(() => {
+    if (data) {
+      setPriceSettings({
+        partialOccupancyPrice: data.partial_occupancy_price,
+        weekendPrice: data.weekend_price,
+        stayDuration: data.stay_duration,
+        childPrice: data.child_price,
+        mealPrice: data.meal_price,
+        localTaxAmount: data.local_tax_amount,
+        bookingRestrictions: data.booking_restrictions,
+        selectedCurrency: data.selected_currency,
+        selectedMinAge: data.selected_min_age,
+        selectedMaxAge: data.selected_max_age,
+        addCostToAdult: data.add_cost_to_adult,
+        localTaxForChild: data.local_tax_for_child,
+        minAgeListOpen: data.min_age_list_open,
+        maxAgeListOpen: data.max_age_list_open,
+        ageRanges: data.age_ranges,
+        longStay: data.long_stay,
+        shortStay: data.short_stay,
+        mealPrices: data.meal_prices,
+        mealIncluded: data.meal_included,
+        focusedField: data.focused_field,
+      });
+    }
+  }, [data]);
 
   return (
     <div className="flex flex-col items-center justify-center bg-white mt-6 mx-2 border border-gray-300 border-b-0 py-1 rounded-md relative">
@@ -34,7 +62,7 @@ const PriceConfiguration = ({ data }) => {
             <CurrencyDropdownList />
             <SectionHeader title="Preferencje" />
             <ToggleSwitchButtonsPanel data={data} />
-            <Preview />
+            <Preview data={data} />
             <SubmitBtn />
           </div>
         </div>
