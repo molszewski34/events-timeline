@@ -1,4 +1,5 @@
 export interface PriceSettings {
+    isReminding: boolean;
     partial_occupancy_price: boolean;
     weekend_price: boolean;
     stay_duration: boolean;
