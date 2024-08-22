@@ -1,4 +1,6 @@
 export interface PriceConfiguration {
+    id: string;
+    isReminding: boolean;
     partialOccupancyPrice: boolean;
     weekendPrice: boolean;
     stayDuration: boolean;
@@ -16,7 +18,9 @@ export interface PriceConfiguration {
     ageRanges: { minAge: number | null; maxAge: number | null }[];
     longStay: number;
     shortStay: number;
-
+    mealPrices: JSON
+    mealIncluded: JSON
+    focusedField: JSON
 }
 
 export type MealType = 'bb' | 'hb' | 'fb';
