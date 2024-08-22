@@ -1,4 +1,5 @@
 export const initialPriceConfiguration = {
+    isReminding: true,
     partialOccupancyPrice: false,
     weekendPrice: false,
     stayDuration: false,
