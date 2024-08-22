@@ -10,11 +10,13 @@ import SubmitBtn from '@/app/components/PriceConfiguration/SubmitBtn/SubmitBtn';
 import { PriceConfigurationProps } from './types/PriceSettings';
 
 const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
-  const { isReminding, setPriceSettings } = usePriceConfigurationContext();
+  const { priceSettings, setPriceSettings } = usePriceConfigurationContext();
 
   useEffect(() => {
     if (data) {
       setPriceSettings({
+        id: data.id,
+        isReminding: data.isReminding,
         partialOccupancyPrice: data.partial_occupancy_price,
         weekendPrice: data.weekend_price,
         stayDuration: data.stay_duration,
@@ -50,7 +52,7 @@ const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
           </header>
 
           <div className="flex flex-col gap-3">
-            {isReminding && (
+            {priceSettings.isReminding && (
               <div className="flex gap-3 items-center bg-[#fdecea] rounded-sm py-2 px-4 w-full mt-2">
                 <i className="text-red-400 text-2xl">error</i>
                 <p className="text-red-900 text-sm font-normal">
