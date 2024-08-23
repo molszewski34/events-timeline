@@ -5,7 +5,8 @@ export interface PriceSettings {
     stay_duration: boolean;
     child_price: boolean;
     meal_price: boolean;
-    local_tax_amount: boolean;
+    local_tax: boolean;
+    local_tax_amount: number;
     booking_restrictions: boolean;
     selected_currency: string;
     selected_min_age: number | null;

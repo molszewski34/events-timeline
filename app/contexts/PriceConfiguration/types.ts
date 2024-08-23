@@ -6,7 +6,8 @@ export interface PriceConfiguration {
     stayDuration: boolean;
     childPrice: boolean;
     mealPrice: boolean;
-    localTaxAmount: boolean;
+    localTax: boolean;
+    localTaxAmount: number;
     bookingRestrictions: boolean;
     selectedCurrency: string;
     selectedMinAge: number | null;

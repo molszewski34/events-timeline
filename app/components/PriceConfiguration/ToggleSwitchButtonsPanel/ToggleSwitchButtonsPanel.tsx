@@ -60,7 +60,7 @@ const ToggleSwitchButtonsPanel: React.FC<PriceConfigurationProps> = ({
   const handleConfigureLocalTaxAmount = (value: boolean) => {
     setPriceSettings((prevSettings: PriceConfiguration) => ({
       ...prevSettings,
-      localTaxAmount: value,
+      localTax: value,
     }));
   };
 
@@ -97,7 +97,7 @@ const ToggleSwitchButtonsPanel: React.FC<PriceConfigurationProps> = ({
       <ToggleSwitchComponent
         onToggle={handleConfigureLocalTaxAmount}
         question="Wybierz czy chcesz skonfigurować kwotę podatku lokalnego"
-        checked={priceSettings.localTaxAmount}
+        checked={priceSettings.localTax}
       />
       <ConfigureLocalTaxAmount />
     </div>
