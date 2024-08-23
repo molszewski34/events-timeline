@@ -9,7 +9,9 @@ import Preview from '@/app/components/PriceConfiguration/Preview/Preview';
 import SubmitBtn from '@/app/components/PriceConfiguration/SubmitBtn/SubmitBtn';
 import { PriceConfigurationProps } from './types/PriceSettings';
 
-const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
+const PriceConfigurationWrapper: React.FC<PriceConfigurationProps> = ({
+  data,
+}) => {
   const { priceSettings, setPriceSettings } = usePriceConfigurationContext();
 
   useEffect(() => {
@@ -22,6 +24,7 @@ const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
         stayDuration: data.stay_duration,
         childPrice: data.child_price,
         mealPrice: data.meal_price,
+        localTax: data.local_tax,
         localTaxAmount: data.local_tax_amount,
         bookingRestrictions: data.booking_restrictions,
         selectedCurrency: data.selected_currency,
@@ -73,4 +76,4 @@ const PriceConfiguration: React.FC<PriceConfigurationProps> = ({ data }) => {
   );
 };
 
-export default PriceConfiguration;
+export default PriceConfigurationWrapper;
