@@ -119,45 +119,49 @@ const Preview = () => {
           <>
             {priceSettings.childPrice && (
               <>
-                {priceSettings.ageRanges.map((childAge: ChildAge) => (
-                  <PriceSection
-                    key={`${childAge.minAge}-${childAge.maxAge}`}
-                    title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
-                    prices={[
-                      {
-                        label: 'Standard',
-                        price: standardChildPrice ?? 0,
-                        subLabel: '',
-                      },
-                      ...(priceSettings.weekendPrice
-                        ? [
-                            {
-                              label: 'Standard Weekend',
-                              price: standardWeekendChildPrice ?? 0,
-                            },
-                          ]
-                        : []),
-                      ...(priceSettings.stayDuration
-                        ? [
-                            {
-                              label: 'Długi pobyt',
-                              price: priceSettings.longStayChildPrice ?? 0,
-                              subLabel: `od ${priceSettings.longStay}`,
-                            },
-                          ]
-                        : []),
-                      ...(priceSettings.stayDuration
-                        ? [
-                            {
-                              label: 'Krótki pobyt',
-                              price: priceSettings.shortStayChildPrice ?? 0,
-                              subLabel: `do ${priceSettings.shortStay}`,
-                            },
-                          ]
-                        : []),
-                    ]}
-                  />
-                ))}
+                {priceSettings.ageRanges.map(
+                  (childAge: ChildAge) =>
+                    childAge.minAge !== null &&
+                    childAge.maxAge !== null && (
+                      <PriceSection
+                        key={`${childAge.minAge}-${childAge.maxAge}`}
+                        title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
+                        prices={[
+                          {
+                            label: 'Standard',
+                            price: standardChildPrice ?? 0,
+                            subLabel: '',
+                          },
+                          ...(priceSettings.weekendPrice
+                            ? [
+                                {
+                                  label: 'Standard Weekend',
+                                  price: standardWeekendChildPrice ?? 0,
+                                },
+                              ]
+                            : []),
+                          ...(priceSettings.stayDuration
+                            ? [
+                                {
+                                  label: 'Długi pobyt',
+                                  price: priceSettings.longStayChildPrice ?? 0,
+                                  subLabel: `od ${priceSettings.longStay}`,
+                                },
+                              ]
+                            : []),
+                          ...(priceSettings.stayDuration
+                            ? [
+                                {
+                                  label: 'Krótki pobyt',
+                                  price: priceSettings.shortStayChildPrice ?? 0,
+                                  subLabel: `do ${priceSettings.shortStay}`,
+                                },
+                              ]
+                            : []),
+                        ]}
+                      />
+                    )
+                )}
               </>
             )}
           </>
