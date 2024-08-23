@@ -1,5 +1,5 @@
 import React from 'react';
-import PriceConfiguration from '@/app/components/PriceConfiguration/PriceConfiguration';
+import PriceConfigurationWrapper from '@/app/components/PriceConfiguration/PriceConfigurationWrapper';
 import { getPriceSettings } from '@/app/components/PriceConfiguration/utils/getPriceSettings';
 
 const Page = async () => {
@@ -11,7 +11,7 @@ const Page = async () => {
 
   return (
     <div>
-      <PriceConfiguration data={data} />
+      <PriceConfigurationWrapper data={data} />
     </div>
   );
 };
