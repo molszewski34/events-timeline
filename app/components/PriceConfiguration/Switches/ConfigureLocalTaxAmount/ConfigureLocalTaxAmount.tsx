@@ -28,7 +28,7 @@ const ConfigureLocalTaxAmount: React.FC = () => {
 
   return (
     <>
-      {priceSettings.localTaxAmount && (
+      {priceSettings.localTax && (
         <div className="flex flex-col p-3 border-2 border-gray-200 rounded-sm mt-3 gap-2">
           <AdultTaxInput selectedCurrency={priceSettings.selectedCurrency} />
           <div className="flex flex-col gap-1">

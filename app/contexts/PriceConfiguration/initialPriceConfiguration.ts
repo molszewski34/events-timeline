@@ -1,10 +1,12 @@
 export const initialPriceConfiguration = {
+    isReminding: true,
     partialOccupancyPrice: false,
     weekendPrice: false,
     stayDuration: false,
     childPrice: false,
     mealPrice: false,
-    localTaxAmount: false,
+    localTax: false,
+    localTaxAmount: 0,
     bookingRestrictions: false,
     selectedCurrency: 'EUR',
     selectedMinAge: null,

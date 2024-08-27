@@ -27,7 +27,7 @@ const CurrencyDropdownList: React.FC = () => {
           onClick={() => setCountriesListOpen(!countriesListOpen)}
         >
           <div className="flex gap-2 py-2 text-xs">
-            {selectedCurrency || 'EUR'}
+            {priceSettings.selectedCurrency || 'EUR'}
           </div>
           <i className="text-xl">arrow_drop_down</i>
         </button>

@@ -5,7 +5,7 @@ import './styles.css';
 import { useSidebarContext } from '@/app/contexts/Sidebar/SidebarProvider';
 import DropdownMenu from './DropdownMenu/DropdownMenu';
 
-const Sidebar = () => {
+const Sidebar = ({ data }) => {
   const { openSidebar, setOpenSidebar } = useSidebarContext();
 
   const reservations = [
@@ -14,10 +14,15 @@ const Sidebar = () => {
     { href: '/clients', text: 'Klienci' },
   ];
   const prices = [
-    { href: '/price/configuration', text: 'Ustaw ceny' },
+    {
+      href: data.isReminding ? '/price/set' : '/price/configuration',
+      text: 'Ustaw ceny',
+    },
     { href: '/price/configuration', text: 'Konfiguracja' },
     { href: '/price/additional', text: 'Usługi dodatkowe' },
   ];
+
+  console.log(data);
 
   return (
     <>
