@@ -2,7 +2,13 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import {
   addDays,
   differenceInDays,
@@ -18,7 +24,6 @@ import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReser
 import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import { fetchReservations } from '@/app/actions/fetchReservations';
-import { FetchedRooms, Reservation } from './types';
 import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
@@ -26,6 +31,9 @@ import Button from '../Reservations/AddReservation/Button/Button';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { Database } from '@/types/supabase';
+
+// Memoized Button Component
+const MemoizedButton = React.memo(Button);
 
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
@@ -55,26 +63,23 @@ export default function RenderRows({ id }: { id: string }) {
     setFormData,
     selectedButton,
     setSelectedButton,
-    fetchedReservations,
-    setFetchedReservations,
     setOpenAddReservationPanel,
   } = useAddReservationContext();
 
-  const { fetchedRooms, setFetchedRooms } = useAddRoomContext();
+  const { setFetchedRooms } = useAddRoomContext();
 
-  const [loading, setLoading] = useState(true);
   const originalFormDataRef = useRef<FormData | null>(null);
 
+  // Set start and end of week on component mount
   useEffect(() => {
     const today = new Date();
     const startOfWeekDate = startOfWeek(today);
     const endOfWeekDate = endOfWeek(today);
     setStartDate(startOfWeekDate);
     setEndDate(endOfWeekDate);
-  }, []);
+  }, [setStartDate, setEndDate]);
 
   const dateFormat = 'EEEEEE dd';
-  const days: JSX.Element[] = [];
 
   const handleButtonClick = (room: Room, timestamp: number) => {
     setSelectedButton({ room, timestamp });
@@ -91,8 +96,8 @@ export default function RenderRows({ id }: { id: string }) {
   };
 
   const handlers: SwipeableHandlers = useSwipeable({
-    onSwipedLeft: () => handleNextWeek(),
-    onSwipedRight: () => handlePrevWeek(),
+    onSwipedLeft: handleNextWeek,
+    onSwipedRight: handlePrevWeek,
     trackMouse: true,
   });
 
@@ -157,135 +162,145 @@ export default function RenderRows({ id }: { id: string }) {
       setFormData(originalFormDataRef.current);
       originalFormDataRef.current = null;
     }
-  }, [isEditing, handleSetFormData]);
+  }, [isEditing, selectedButton, reservations, formData, handleSetFormData]);
 
-  let currentDateIterator = startDate;
-  while (currentDateIterator <= endDate) {
-    const words = format(currentDateIterator, dateFormat).split(' ');
-    const isWeekendDay = isWeekend(currentDateIterator);
-    days.push(
-      <div
-        key={currentDateIterator.toString()}
-        className={`w-[50px] h-[50px] px-[15px] flex flex-col text-sm text-center justify-between ${
-          isToday(currentDateIterator) ? 'today' : ''
-        } ${isSameDay(currentDateIterator, currentDate) ? 'bg-gray-00' : ''} ${
-          isWeekendDay
-            ? 'bg-gray-300 border border-white border-t-2 border-t-black py-[3px] font-bold'
-            : 'py-[5px]'
-        }`}
-        {...(currentDateIterator === currentDate
-          ? { 'aria-current': 'date' }
-          : {})}
-      >
-        <div className="text-sm" style={{ fontSize: 'small' }}>
-          {words[0]}
-        </div>
-        <div className="text-lg" style={{ fontSize: 'large' }}>
-          {words[1]}
-        </div>
-      </div>
-    );
-    currentDateIterator = addDays(currentDateIterator, 1);
-  }
-
-  const rows = rooms?.map((room: Room) => {
-    const days: JSX.Element[] = [];
-    currentDateIterator = startDate;
-
-    const roomReservations = reservations?.filter(
-      (reservation: Reservation) => reservation.room_id === room.id
-    );
-
+  // Memoized day rendering
+  const days = useMemo(() => {
+    const daysArray: JSX.Element[] = [];
+    let currentDateIterator = startDate;
     while (currentDateIterator <= endDate) {
-      const currentDateTimestamp = currentDateIterator.getTime();
-      let eventDuration = '';
-      let eventOverlaySize = '';
-      let duration = 1;
-
-      const reservation = roomReservations?.find((res: Reservation) =>
-        isSameDay(new Date(res.selected_start_date), currentDateIterator)
-      );
-
-      if (reservation) {
-        const start = new Date(reservation.selected_start_date);
-        const end = new Date(reservation.selected_end_date);
-        const daysDifference = differenceInDays(end, start);
-        duration = daysDifference + 1;
-        eventDuration = `(${daysDifference + 1} dni)`;
-        eventOverlaySize = `${(daysDifference + 1) * 50}px`;
-      }
-
-      days.push(
-        <span
-          key={`${room.id}-${currentDateIterator.toString()}`}
-          className={
-            ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
-          }
-          style={{ overflow: 'visible' }}
-          onMouseEnter={() => {
-            handleButtonClick(room, currentDateTimestamp);
-            setSelectedStartDate(currentDateTimestamp);
-            setSelectedEndDate(currentDateTimestamp);
-            setFormData((prevData: FormData) => ({
-              ...prevData,
-              numOfAdults: room.num_of_persons,
-              selectedRoomId: room.id,
-              created_at: new Date(currentDateTimestamp).toISOString(),
-            }));
-          }}
-          onTouchStart={() => {
-            handleButtonClick(room, currentDateTimestamp);
-            setSelectedStartDate(currentDateTimestamp);
-            setSelectedEndDate(currentDateTimestamp);
-          }}
+      const words = format(currentDateIterator, dateFormat).split(' ');
+      const isWeekendDay = isWeekend(currentDateIterator);
+      daysArray.push(
+        <div
+          key={currentDateIterator.toString()}
+          className={`w-[50px] h-[50px] px-[15px] flex flex-col text-sm text-center justify-between ${
+            isToday(currentDateIterator) ? 'today' : ''
+          } ${
+            isSameDay(currentDateIterator, currentDate) ? 'bg-gray-00' : ''
+          } ${
+            isWeekendDay
+              ? 'bg-gray-300 border border-white border-t-2 border-t-black py-[3px] font-bold'
+              : 'py-[5px]'
+          }`}
+          {...(currentDateIterator === currentDate
+            ? { 'aria-current': 'date' }
+            : {})}
         >
-          {selectedButton &&
-            selectedButton.room &&
-            selectedButton.room.id === room.id &&
-            selectedButton.timestamp === currentDateTimestamp && <Button />}
-
-          {reservation && (
-            <button
-              className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40]  "
-              style={{
-                width: eventOverlaySize,
-                backgroundColor: reservation?.selected_status?.color,
-              }}
-              onClick={() => {
-                if (typeof setIsEditing === 'function') {
-                  setIsEditing(true);
-                } else {
-                  console.error('setIsEditing is not a function');
-                }
-                setOpenAddReservationPanel(true);
-                setOverlay(true);
-              }}
-            >
-              {duration < 3 ? (
-                reservation?.main_guest
-                  .match(/(\b\S)?/g)
-                  .join('')
-                  .toUpperCase()
-              ) : (
-                <p>
-                  {reservation.main_guest
-                    ? reservation.main_guest
-                    : 'Brak Nazwy'}
-                </p>
-              )}
-            </button>
-          )}
-        </span>
+          <div className="text-sm" style={{ fontSize: 'small' }}>
+            {words[0]}
+          </div>
+          <div className="text-lg" style={{ fontSize: 'large' }}>
+            {words[1]}
+          </div>
+        </div>
       );
       currentDateIterator = addDays(currentDateIterator, 1);
     }
+    return daysArray;
+  }, [startDate, endDate, currentDate]);
 
-    return (
-      <div key={room.id} className="flex ">
-        {days}
-      </div>
-    );
-  });
+  // Memoized rows rendering
+  const rows = useMemo(() => {
+    return rooms?.map((room: Room) => {
+      const days: JSX.Element[] = [];
+      let currentDateIterator = startDate;
+
+      const roomReservations = reservations?.filter(
+        (reservation: Reservation) => reservation.room_id === room.id
+      );
+
+      while (currentDateIterator <= endDate) {
+        const currentDateTimestamp = currentDateIterator.getTime();
+        let eventDuration = '';
+        let eventOverlaySize = '';
+        let duration = 1;
+
+        const reservation = roomReservations?.find((res: Reservation) =>
+          isSameDay(new Date(res.selected_start_date), currentDateIterator)
+        );
+
+        if (reservation) {
+          const start = new Date(reservation.selected_start_date);
+          const end = new Date(reservation.selected_end_date);
+          const daysDifference = differenceInDays(end, start);
+          duration = daysDifference + 1;
+          eventDuration = `(${daysDifference + 1} dni)`;
+          eventOverlaySize = `${(daysDifference + 1) * 50}px`;
+        }
+
+        days.push(
+          <span
+            key={`${room.id}-${currentDateIterator.toString()}`}
+            className={
+              ' flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white '
+            }
+            style={{ overflow: 'visible' }}
+            onMouseEnter={() => {
+              handleButtonClick(room, currentDateTimestamp);
+              setSelectedStartDate(currentDateTimestamp);
+              setSelectedEndDate(currentDateTimestamp);
+              setFormData((prevData: FormData) => ({
+                ...prevData,
+                numOfAdults: room.num_of_persons,
+                selectedRoomId: room.id,
+                created_at: new Date(currentDateTimestamp).toISOString(),
+              }));
+            }}
+            onTouchStart={() => {
+              handleButtonClick(room, currentDateTimestamp);
+              setSelectedStartDate(currentDateTimestamp);
+              setSelectedEndDate(currentDateTimestamp);
+            }}
+          >
+            {selectedButton &&
+              selectedButton.room &&
+              selectedButton.room.id === room.id &&
+              selectedButton.timestamp === currentDateTimestamp && (
+                <MemoizedButton />
+              )}
+
+            {reservation && (
+              <button
+                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300  border border-slate-50 text-gray-700 text-sm font-semibold z-[40]  "
+                style={{
+                  width: eventOverlaySize,
+                  backgroundColor: reservation?.selected_status?.color,
+                }}
+                onClick={() => {
+                  setIsEditing?.(true);
+                  setOpenAddReservationPanel(true);
+                  setOverlay(true);
+                }}
+              >
+                {duration < 3
+                  ? reservation?.main_guest
+                      .match(/(\b\S)?/g)
+                      .join('')
+                      .toUpperCase()
+                  : reservation.main_guest
+                  ? reservation.main_guest
+                  : 'Brak Nazwy'}
+              </button>
+            )}
+          </span>
+        );
+        currentDateIterator = addDays(currentDateIterator, 1);
+      }
+
+      return (
+        <div key={room.id} className="flex ">
+          {days}
+        </div>
+      );
+    });
+  }, [rooms, reservations, startDate, endDate, selectedButton]);
+
+  useEffect(() => {
+    if (rooms) {
+      setFetchedRooms(rooms);
+    }
+  }, [rooms, setFetchedRooms]);
 
   useEffect(() => {
     const handleResize = () => {
