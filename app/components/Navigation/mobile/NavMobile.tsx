@@ -9,6 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { pl } from 'date-fns/locale';
 import SearchBtn from '../SearchBtn/SearchBtn';
 import { useSidebarContext } from '@/app/contexts/Sidebar/SidebarProvider';
+import { usePathname } from 'next/navigation';
 const NavMobile = ({ children }: { children: React.ReactNode }) => {
   const {
     startDate,
@@ -19,6 +20,11 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
     daysToShow,
   } = useCalendarContext();
   const { setOpenSidebar } = useSidebarContext();
+
+  const pathname = usePathname();
+
+  const hideNavbar =
+    pathname === '/price/configuration' || pathname === '/register';
 
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
@@ -88,24 +94,25 @@ const NavMobile = ({ children }: { children: React.ReactNode }) => {
           </span>
         </button>
         <SearchBtn />
-        <div className="relative ">
-          <button
-            onClick={handleButtonClick}
-            className="flex gap-6 items-center cursor-pointer bg-white   p-4"
-          >
-            <div className="flex flex-col text-xs text-left">
-              <div className="flex">
-                {formattedStartDate}
-                {`${endDateFormat[0]} ${endDateFormat[1]}`}
+        {!hideNavbar && (
+          <div className="relative ">
+            <button
+              onClick={handleButtonClick}
+              className="flex gap-6 items-center cursor-pointer bg-white   p-4"
+            >
+              <div className="flex flex-col text-xs text-left">
+                <div className="flex">
+                  {formattedStartDate}
+                  {`${endDateFormat[0]} ${endDateFormat[1]}`}
+                </div>
+                <div className="">{endDateFormat[2]}</div>
               </div>
-              <div className="">{endDateFormat[2]}</div>
-            </div>
-            <span className=" flex items-center justify-center material-icon text-lg bg-gray-300 h-5 w-5 rounded-sm">
-              expand_more
-            </span>
-          </button>
-        </div>
-
+              <span className=" flex items-center justify-center material-icon text-lg bg-gray-300 h-5 w-5 rounded-sm">
+                expand_more
+              </span>
+            </button>
+          </div>
+        )}
         <div className="absolute top-0 right-0 ">
           {showCalendar && (
             <DatePicker
