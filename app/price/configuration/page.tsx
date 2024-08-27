@@ -6,7 +6,7 @@ const Page = async () => {
   const { data, error } = await getPriceSettings();
 
   if (error) {
-    return <div>Error loading price settings</div>;
+    return <div>Błąd podczas łądowania danych</div>;
   }
 
   return (
