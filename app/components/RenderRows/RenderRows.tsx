@@ -1,7 +1,4 @@
-// @ts-nocheck
-
 'use client';
-
 import React, {
   useState,
   useEffect,
@@ -25,14 +22,13 @@ import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import { fetchReservations } from '@/app/actions/fetchReservations';
 import { FormData } from '@/app/contexts/AddReservation/types';
-import { useSwipeable, SwipeableHandlers } from 'react-swipeable';
+import { useSwipeable } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
 import Button from '../Reservations/AddReservation/Button/Button';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { Database } from '@/types/supabase';
 
-// Memoized Button Component
 const MemoizedButton = React.memo(Button);
 
 export default function RenderRows({ id }: { id: string }) {
@@ -66,6 +62,11 @@ export default function RenderRows({ id }: { id: string }) {
 
   const { setFetchedRooms } = useAddRoomContext();
   const originalFormDataRef = useRef<FormData | null>(null);
+
+  const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
+    null
+  );
+  const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const today = new Date();
@@ -149,7 +150,7 @@ export default function RenderRows({ id }: { id: string }) {
             isWeekendDay
               ? 'bg-gray-300 border border-white border-t-2 border-t-black py-[3px] font-bold'
               : 'py-[5px]'
-          }`}
+          } ${hoveredColumnIndex === index ? 'bg-green-200' : ''}`}
           aria-current={isCurrentDate ? 'date' : undefined}
         >
           <div className="text-sm">{formattedDate[0]}</div>
@@ -157,7 +158,7 @@ export default function RenderRows({ id }: { id: string }) {
         </div>
       );
     });
-  }, [startDate, endDate, currentDate]);
+  }, [startDate, endDate, currentDate, hoveredColumnIndex]);
 
   const rows = useMemo(() => {
     return rooms?.map((room) => {
@@ -182,10 +183,17 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className="flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white"
+            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white ${
+              hoveredColumnIndex === index ? 'bg-gray-200' : ''
+            }`}
             style={{ overflow: 'visible' }}
-            onMouseEnter={() => handleButtonClick(room, currentDateTimestamp)}
+            onMouseEnter={() => {
+              handleButtonClick(room, currentDateTimestamp);
+              setHoveredColumnIndex(index);
+            }}
             onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
+            // onMouseEnter={() => setHoveredColumnIndex(index)}
+            onMouseLeave={() => setHoveredColumnIndex(null)}
           >
             {selectedButton?.room?.id === room.id &&
               selectedButton.timestamp === currentDateTimestamp && (
@@ -233,6 +241,7 @@ export default function RenderRows({ id }: { id: string }) {
     setIsEditing,
     setOpenAddReservationPanel,
     setOverlay,
+    hoveredColumnIndex,
   ]);
 
   useEffect(() => {
