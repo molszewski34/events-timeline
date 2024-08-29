@@ -144,24 +144,30 @@ export default function RenderRows({ id }: { id: string }) {
       return (
         <div
           key={currentDateIterator.toString()}
-          className={`w-[50px] h-[50px] px-[15px] flex flex-col text-sm text-center justify-between ${
+          className={`w-[50px]   flex flex-col text-xs text-center justify-between bg-white border border-gray-200 gap-0 font-bold py-1  ${
             isToday(currentDateIterator) ? 'today' : ''
-          } ${isCurrentDate ? 'bg-gray-00' : ''} ${
+          } ${isCurrentDate ? 'bg-gray-200 text-green-600' : ''} ${
             isWeekendDay
-              ? 'bg-gray-300 border border-white border-t-2 border-t-black py-[3px] font-bold'
-              : 'py-[5px]'
-          } ${hoveredColumnIndex === index ? 'bg-green-200' : ''}`}
+              ? 'bg-gray-300  border-gray-200 border-x-2   font-bold'
+              : ''
+          } `}
           aria-current={isCurrentDate ? 'date' : undefined}
         >
-          <div className="text-sm">{formattedDate[0]}</div>
-          <div className="text-lg">{formattedDate[1]}</div>
+          <div
+            className={`text-xs ${
+              isCurrentDate ? 'text-green-600 ' : 'text-gray-400'
+            }`}
+          >
+            {formattedDate[0]}
+          </div>
+          <div className="text-xs">{formattedDate[1]}</div>
         </div>
       );
     });
   }, [startDate, endDate, currentDate, hoveredColumnIndex]);
 
   const rows = useMemo(() => {
-    return rooms?.map((room) => {
+    return rooms?.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
       const roomReservations = reservations?.filter(
         (res) => res.room_id === room.id
@@ -183,17 +189,22 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] bg-gray-100 border border-white ${
-              hoveredColumnIndex === index ? 'bg-gray-200' : ''
+            className={`flex flex-col flex-wrap relative w-[50px] h-[50px]  border border-gray-200 ${
+              hoveredColumnIndex === index || hoveredRowIndex === roomIndex
+                ? 'bg-black opacity-10'
+                : 'bg-white'
             }`}
             style={{ overflow: 'visible' }}
             onMouseEnter={() => {
               handleButtonClick(room, currentDateTimestamp);
               setHoveredColumnIndex(index);
+              setHoveredRowIndex(roomIndex);
             }}
             onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
-            // onMouseEnter={() => setHoveredColumnIndex(index)}
-            onMouseLeave={() => setHoveredColumnIndex(null)}
+            onMouseLeave={() => {
+              setHoveredColumnIndex(null);
+              setHoveredRowIndex(null);
+            }}
           >
             {selectedButton?.room?.id === room.id &&
               selectedButton.timestamp === currentDateTimestamp && (
@@ -242,6 +253,7 @@ export default function RenderRows({ id }: { id: string }) {
     setOpenAddReservationPanel,
     setOverlay,
     hoveredColumnIndex,
+    hoveredRowIndex,
   ]);
 
   useEffect(() => {
