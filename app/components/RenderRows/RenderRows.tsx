@@ -144,18 +144,18 @@ export default function RenderRows({ id }: { id: string }) {
       return (
         <div
           key={currentDateIterator.toString()}
-          className={`w-[50px]   flex flex-col text-xs text-center justify-between bg-white border border-gray-200 gap-0 font-bold py-1  ${
-            isToday(currentDateIterator) ? 'today' : ''
-          } ${isCurrentDate ? 'bg-gray-200 text-green-600' : ''} ${
+          className={` w-[50px] flex flex-col text-xs text-center justify-between border bg-white border-gray-200 gap-0 font-bold py-1 
+   
+           ${isCurrentDate ? ' text-green-600' : ''} ${
             isWeekendDay
-              ? 'bg-gray-300  border-gray-200 border-x-2   font-bold'
+              ? 'bg-gray-300 border-gray-200 border-x-2 font-bold'
               : ''
           } `}
-          aria-current={isCurrentDate ? 'date' : undefined}
+          // aria-current={isCurrentDate ? 'date' : undefined}
         >
           <div
             className={`text-xs ${
-              isCurrentDate ? 'text-green-600 ' : 'text-gray-400'
+              isCurrentDate ? 'text-green-600' : 'text-gray-400'
             }`}
           >
             {formattedDate[0]}
@@ -164,7 +164,7 @@ export default function RenderRows({ id }: { id: string }) {
         </div>
       );
     });
-  }, [startDate, endDate, currentDate, hoveredColumnIndex]);
+  }, [startDate, endDate, currentDate]);
 
   const rows = useMemo(() => {
     return rooms?.map((room, roomIndex) => {
@@ -189,12 +189,7 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[50px] h-[50px]  border border-gray-200 ${
-              hoveredColumnIndex === index || hoveredRowIndex === roomIndex
-                ? 'bg-black opacity-10'
-                : 'bg-white'
-            }`}
-            style={{ overflow: 'visible' }}
+            className="flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200"
             onMouseEnter={() => {
               handleButtonClick(room, currentDateTimestamp);
               setHoveredColumnIndex(index);
@@ -237,7 +232,15 @@ export default function RenderRows({ id }: { id: string }) {
       });
 
       return (
-        <div key={room.id} className="flex">
+        <div key={room.id} className="flex relative">
+          {hoveredColumnIndex !== null && hoveredRowIndex === roomIndex && (
+            <div
+              className="absolute inset-0 bg-black opacity-10 pointer-events-none"
+              style={{
+                zIndex: 10,
+              }}
+            />
+          )}
           {roomDays}
         </div>
       );
@@ -249,11 +252,11 @@ export default function RenderRows({ id }: { id: string }) {
     endDate,
     selectedButton,
     handleButtonClick,
+    hoveredColumnIndex,
+    hoveredRowIndex,
     setIsEditing,
     setOpenAddReservationPanel,
     setOverlay,
-    hoveredColumnIndex,
-    hoveredRowIndex,
   ]);
 
   useEffect(() => {
@@ -280,7 +283,21 @@ export default function RenderRows({ id }: { id: string }) {
   return (
     <div {...handlers} className="flex flex-col relative overflow-hidden">
       <LeftPanel id={id} />
-      <div className="flex">{days}</div>
+      <div className="flex relative">
+        {days}
+        {hoveredColumnIndex !== null && (
+          <div
+            className="absolute bg-black opacity-10 pointer-events-none"
+            style={{
+              width: '50px',
+              height: `${(rooms?.length + 1) * 50}px`,
+              top: '42px',
+              left: `${hoveredColumnIndex * 50}px`,
+              zIndex: 10,
+            }}
+          />
+        )}
+      </div>
       <div className="flex flex-col">{rows}</div>
     </div>
   );
