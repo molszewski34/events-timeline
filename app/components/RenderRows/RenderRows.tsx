@@ -175,6 +175,8 @@ export default function RenderRows({ id }: { id: string }) {
 
       const roomDays = Array.from({ length: totalDays }, (_, index) => {
         const currentDateIterator = addDays(startDate, index);
+        const isWeekendDay = isWeekend(currentDateIterator);
+        const isCurrentDay = isToday(currentDateIterator);
         const currentDateTimestamp = currentDateIterator.getTime();
         let reservation = roomReservations?.find((res) =>
           isSameDay(new Date(res.selected_start_date), currentDateIterator)
@@ -189,7 +191,9 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className="flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200"
+            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 ${
+              isWeekendDay ? 'bg-[#ebedef]' : ''
+            } ${isCurrentDay ? 'bg-[#d9f2e3]' : ''} `}
             onMouseEnter={() => {
               handleButtonClick(room, currentDateTimestamp);
               setHoveredColumnIndex(index);
