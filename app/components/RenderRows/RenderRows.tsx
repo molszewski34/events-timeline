@@ -144,14 +144,13 @@ export default function RenderRows({ id }: { id: string }) {
       return (
         <div
           key={currentDateIterator.toString()}
-          className={` w-[50px] flex flex-col text-xs text-center justify-between border bg-white border-gray-200 gap-0 font-bold py-1 
-   
-           ${isCurrentDate ? ' text-green-600' : ''} ${
+          className={`w-[50px] flex flex-col text-xs text-center justify-between border bg-white border-gray-200 gap-0 font-bold py-1
+            ${index === 1 ? 'border-l-4 border-l-green-600' : ''}  
+            ${isCurrentDate ? 'text-green-600' : ''} ${
             isWeekendDay
               ? 'bg-gray-300 border-gray-200 border-x-2 font-bold'
               : ''
-          } `}
-          // aria-current={isCurrentDate ? 'date' : undefined}
+          }`}
         >
           <div
             className={`text-xs ${
@@ -191,7 +190,7 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 ${
+            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 bg-white ${
               isWeekendDay ? 'bg-[#ebedef]' : ''
             } ${isCurrentDay ? 'bg-[#d9f2e3]' : ''} `}
             onMouseEnter={() => {
@@ -287,7 +286,7 @@ export default function RenderRows({ id }: { id: string }) {
   return (
     <div {...handlers} className="flex flex-col relative overflow-hidden">
       <LeftPanel id={id} />
-      <div className="flex relative">
+      <div className="flex relative ml-[50px]">
         {days}
         {hoveredColumnIndex !== null && (
           <div
