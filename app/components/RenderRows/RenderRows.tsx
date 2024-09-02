@@ -70,8 +70,9 @@ export default function RenderRows({ id }: { id: string }) {
 
   useEffect(() => {
     const today = new Date();
-    setStartDate(startOfWeek(today));
-    setEndDate(endOfWeek(today));
+    const monday = startOfWeek(today, { weekStartsOn: 1 }); //
+    setStartDate(monday);
+    setEndDate(endOfWeek(monday, { weekStartsOn: 1 })); //
   }, [setStartDate, setEndDate]);
 
   const dateFormat = 'EEEEEE dd';
