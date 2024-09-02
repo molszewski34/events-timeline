@@ -159,7 +159,7 @@ export default function RenderRows({ id }: { id: string }) {
         <div
           key={currentDateIterator.toString()}
           className={`w-[50px] flex flex-col text-xs text-center justify-between border bg-white border-gray-200 gap-0 font-bold py-1
-            ${index === 1 ? 'border-l-4 border-l-green-600' : ''}  
+            ${index === 0 ? 'border-l-4 border-l-green-600' : ''}  
             ${isCurrentDate ? 'text-green-600' : ''} ${
             isWeekendDay
               ? 'bg-gray-300 border-gray-200 border-x-2 font-bold'
@@ -297,10 +297,10 @@ export default function RenderRows({ id }: { id: string }) {
   }, [startDate, setDaysToShow, setEndDate]);
 
   return (
-    <div {...handlers} className="flex flex-col relative overflow-hidden">
+    <div {...handlers} className="flex relative overflow-hidden">
       <LeftPanel id={id} />
-      <div className="flex relative ">
-        {days}
+      <div className="flex flex-col flex-1 relative">
+        <div className="flex">{days}</div>
         {hoveredColumnIndex !== null && (
           <div
             className="absolute bg-black opacity-10 pointer-events-none"
@@ -313,8 +313,8 @@ export default function RenderRows({ id }: { id: string }) {
             }}
           />
         )}
+        {rows}
       </div>
-      <div className="flex flex-col">{rows}</div>
     </div>
   );
 }
