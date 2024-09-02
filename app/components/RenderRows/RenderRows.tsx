@@ -35,7 +35,7 @@ export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
-
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
   const {
     currentDate,
     daysToShow,
@@ -133,6 +133,20 @@ export default function RenderRows({ id }: { id: string }) {
     }
   }, [isEditing, selectedButton, reservations, formData, handleSetFormData]);
 
+  const handleMouseEnter = useCallback(
+    (room, timestamp) => {
+      setSelectedButton({ room, timestamp });
+      setIsButtonVisible(true);
+    },
+    [setSelectedButton]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setIsButtonVisible(false);
+    setHoveredColumnIndex(null);
+    setHoveredRowIndex(null);
+  }, []);
+
   const days = useMemo(() => {
     const totalDays = differenceInDays(endDate, startDate) + 1;
     return Array.from({ length: totalDays }, (_, index) => {
@@ -177,6 +191,7 @@ export default function RenderRows({ id }: { id: string }) {
         const isWeekendDay = isWeekend(currentDateIterator);
         const isCurrentDay = isToday(currentDateIterator);
         const currentDateTimestamp = currentDateIterator.getTime();
+
         let reservation = roomReservations?.find((res) =>
           isSameDay(new Date(res.selected_start_date), currentDateIterator)
         );
@@ -190,21 +205,19 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 bg-white ${
+            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 ${
               isWeekendDay ? 'bg-[#ebedef]' : ''
             } ${isCurrentDay ? 'bg-[#d9f2e3]' : ''} `}
             onMouseEnter={() => {
-              handleButtonClick(room, currentDateTimestamp);
+              handleMouseEnter(room, currentDateTimestamp);
               setHoveredColumnIndex(index);
               setHoveredRowIndex(roomIndex);
             }}
             onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
-            onMouseLeave={() => {
-              setHoveredColumnIndex(null);
-              setHoveredRowIndex(null);
-            }}
+            onMouseLeave={handleMouseLeave}
           >
-            {selectedButton?.room?.id === room.id &&
+            {isButtonVisible &&
+              selectedButton?.room?.id === room.id &&
               selectedButton.timestamp === currentDateTimestamp && (
                 <MemoizedButton />
               )}
@@ -286,7 +299,7 @@ export default function RenderRows({ id }: { id: string }) {
   return (
     <div {...handlers} className="flex flex-col relative overflow-hidden">
       <LeftPanel id={id} />
-      <div className="flex relative ml-[50px]">
+      <div className="flex relative ">
         {days}
         {hoveredColumnIndex !== null && (
           <div
