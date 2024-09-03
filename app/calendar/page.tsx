@@ -41,16 +41,18 @@ export default async function Calendar({ params }: { params: { id: string } }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="calendar overflow-hidden m-3">
+      <div className="calendar overflow-hidden m-3 relative">
         <div className=""></div>
-        <div className="flex ">
+        <div className="flex overflow-visible">
           <div className="flex flex-col">
             <RenderRows id={params.id} />
           </div>
         </div>
         <Footer />
         <AddReservationPanel />
-        <AddRoomPanel />
+        <div className="">
+          <AddRoomPanel />
+        </div>
         <Overlay />
         <OverlayDelete />
         <DeleteConfirmation />
