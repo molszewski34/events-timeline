@@ -28,6 +28,7 @@ import Button from '../Reservations/AddReservation/Button/Button';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { Database } from '@/types/supabase';
+import { pl } from 'date-fns/locale';
 
 const MemoizedButton = React.memo(Button);
 
@@ -149,32 +150,36 @@ export default function RenderRows({ id }: { id: string }) {
   }, []);
 
   const days = useMemo(() => {
+    const dayNames = ['PN', 'WT', 'ŚR', 'CZ', 'PT', 'SB', 'ND'];
+
     const totalDays = differenceInDays(endDate, startDate) + 1;
     return Array.from({ length: totalDays }, (_, index) => {
       const currentDateIterator = addDays(startDate, index);
-      const formattedDate = format(currentDateIterator, dateFormat).split(' ');
+      const dayOfWeek = currentDateIterator.getDay();
+      const customDayName = dayNames[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
+      const dayNumber = format(currentDateIterator, 'd', { locale: pl });
       const isWeekendDay = isWeekend(currentDateIterator);
       const isCurrentDate = isSameDay(currentDateIterator, currentDate);
 
       return (
         <div
           key={currentDateIterator.toString()}
-          className={`w-[50px] flex flex-col text-xs text-center justify-between border bg-white border-gray-200 gap-0 font-bold py-1
-            ${index === 0 ? 'border-l-4 border-l-green-600' : ''}  
+          className={`w-[44px] h-[37px] flex flex-col text-xs text-center justify-center border-collapse bg-white font-bold py-1
+            ${index === 0 ? 'border-l-4 border-l-green-600' : 'border-l'}  
             ${isCurrentDate ? 'text-green-600' : ''} ${
             isWeekendDay
-              ? 'bg-gray-300 border-gray-200 border-x-2 font-bold'
-              : ''
+              ? 'bg-gray-300 border-gray-200 border-x font-bold'
+              : 'border-gray-200'
           }`}
         >
           <div
-            className={`text-xs ${
-              isCurrentDate ? 'text-green-600' : 'text-gray-400'
+            className={`text-[10px] leading-none ${
+              isCurrentDate ? 'text-green-600' : 'text-gray-500'
             }`}
           >
-            {formattedDate[0]}
+            {customDayName}
           </div>
-          <div className="text-xs">{formattedDate[1]}</div>
+          <div className="text-[12px] leading-none">{dayNumber}</div>
         </div>
       );
     });
@@ -206,9 +211,11 @@ export default function RenderRows({ id }: { id: string }) {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[50px] h-[50px] border border-gray-200 ${
-              isWeekendDay ? 'bg-[#ebedef]' : ''
-            } ${isCurrentDay ? 'bg-[#d9f2e3]' : ''} `}
+            className={`flex flex-col flex-wrap relative w-[44px] h-[48px] 
+              ${index === 0 ? 'border-l border-t' : 'border-t border-l'} 
+              border-gray-200 ${isWeekendDay ? 'bg-[#ebedef]' : ''} ${
+              isCurrentDay ? 'bg-[#d9f2e3]' : ''
+            }`}
             onMouseEnter={() => {
               handleMouseEnter(room, currentDateTimestamp);
               setHoveredColumnIndex(index);
@@ -225,7 +232,7 @@ export default function RenderRows({ id }: { id: string }) {
 
             {reservation && (
               <button
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 border border-slate-50 text-gray-700 text-sm font-semibold z-[40]"
+                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 text-gray-700 text-sm font-semibold z-[40] border border-slate-50"
                 style={{
                   width: `${duration * 50}px`,
                   backgroundColor: reservation.selected_status?.color,
@@ -300,21 +307,21 @@ export default function RenderRows({ id }: { id: string }) {
   return (
     <div {...handlers} className="flex relative overflow-hidden">
       <LeftPanel id={id} />
-      <div className="flex flex-col flex-1 relative">
-        <div className="flex">{days}</div>
+      <div className="flex flex-col flex-1 relative border-collapse">
+        <div className="flex border-collapse">{days}</div>
         {hoveredColumnIndex !== null && (
           <div
             className="absolute bg-black opacity-10 pointer-events-none"
             style={{
-              width: '50px',
-              height: `${(rooms?.length + 1) * 50}px`,
-              top: '42px',
-              left: `${hoveredColumnIndex * 50}px`,
+              width: '44px',
+              height: `${(rooms?.length + 1) * 44}px`,
+              top: '37px',
+              left: `${hoveredColumnIndex * 44}px`,
               zIndex: 10,
             }}
           />
         )}
-        {rows}
+        <div className="bg-white ">{rows}</div>
       </div>
     </div>
   );
