@@ -10,7 +10,7 @@ const Button = () => {
         setOpenAddReservationPanel(true);
         setOverlay(true);
       }}
-      className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 w-[50px] h-[50px] bg-white skew-x-[-35deg] z-[40] shadow-sm"
+      className="absolute flex justify-center items-center top-1 bottom-0 left-5 right-0 w-[40px] h-[40px]  bg-white skew-x-[-35deg] z-[40] shadow-sm"
     >
       +
     </div>

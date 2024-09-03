@@ -48,13 +48,13 @@ const LeftPanel = ({ id }: { id: string }) => {
     setRoomFormData(newRoomFormData);
   };
   return (
-    <div className="fixed   bg-white z-[50] min-w-[100px] flex flex-col">
-      <div className="h-[50px] text-xs text-left p-2 border-2 border-l-0 text-gray-500">
+    <div className="bg-white z-[50] w-[100px] flex flex-col">
+      <div className="h-[37px] text-xs text-left p-2 border-2 border-l-0 text-gray-500 items-center flex">
         <i className="material-icons text-2xl">filter_alt</i>
       </div>
       {rooms?.map((room: Room) => (
         <button
-          className="h-[50px] text-xs text-left p-2 shadow-sm border-r-2 gap-1"
+          className="h-[48px] text-xs text-left p-2 shadow-sm gap-1"
           onClick={() => {
             setIsEditing(true);
             setOpenAddRoom(true);
