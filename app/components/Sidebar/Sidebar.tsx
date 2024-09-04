@@ -15,7 +15,7 @@ const Sidebar = ({ data }) => {
   ];
   const prices = [
     {
-      href: data.isReminding ? '/price/set' : '/price/configuration',
+      href: data.isReminding ? '/price/configuration' : '/price/set',
       text: 'Ustaw ceny',
     },
     { href: '/price/configuration', text: 'Konfiguracja' },
