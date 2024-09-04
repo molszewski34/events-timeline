@@ -24,19 +24,26 @@ import { fetchReservations } from '@/app/actions/fetchReservations';
 import { FormData } from '@/app/contexts/AddReservation/types';
 import { useSwipeable } from 'react-swipeable';
 import LeftPanel from '../LeftPanel/LeftPanel';
-import Button from '../Reservations/AddReservation/Button/Button';
+import AddReservationBtn from '../Reservations/AddReservation/Button/AddReservationBtn';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { Database } from '@/types/supabase';
 import { pl } from 'date-fns/locale';
-
-const MemoizedButton = React.memo(Button);
+import { usePathname } from 'next/navigation';
+import SetPriceBtn from '../SetPrice/SetPriceBtn/SetPriceBtn';
 
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
   const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+  const pathname = usePathname();
+
+  const MemoizedButton = React.memo(
+    pathname === 'calendar' ? AddReservationBtn : SetPriceBtn
+  );
+
   const {
     currentDate,
     daysToShow,
