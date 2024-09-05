@@ -37,6 +37,7 @@ export interface FormData {
   registration: string;
   boarding: string;
   passCode: string;
+  currentDateTimestamp: number | null
 }
 
 export interface SelectedStatus {
