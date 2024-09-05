@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from 'react';
 export const SetPrice = createContext<any>(undefined);
 
 export function SetPriceWrapper({ children }: { children: React.ReactNode }) {
-  const [openSetPricePanel, setOpenSetPricePanel] = useState(false);
+  const [openSetPricePanel, setOpenSetPricePanel] = useState(true);
 
   return (
     <SetPrice.Provider value={{ openSetPricePanel, setOpenSetPricePanel }}>
@@ -13,6 +13,6 @@ export function SetPriceWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function SetPriceContext() {
+export function useSetPriceContext() {
   return useContext(SetPrice);
 }
