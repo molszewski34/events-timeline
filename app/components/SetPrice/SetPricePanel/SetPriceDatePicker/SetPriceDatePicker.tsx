@@ -1,38 +1,82 @@
-import React, { useState } from 'react';
-import './styles.css';
+import React, { useState, useEffect } from 'react';
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 function SetPriceDatePicker() {
-  // Pobierz dzisiejszą datę w formacie YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
+  const {
+    setSelectedStartDate,
+    setSelectedEndDate,
+    priceFormData,
+    setPriceFormData,
+  } = useSetPriceContext();
 
-  // Ustawienie stanu dla obu inputów
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+  useEffect(() => {
+    if (priceFormData.currentDateTimestamp) {
+      const date = new Date(priceFormData.currentDateTimestamp);
+      setPriceFormData((prevData: any) => ({
+        ...prevData,
+        selectedStartDate: date,
+        selectedEndDate: date,
+      }));
+    }
+  }, [priceFormData.currentDateTimestamp, setPriceFormData]);
+
+  const handleStartDateChange = (date: Date | [Date, Date] | null) => {
+    if (date instanceof Date) {
+      setPriceFormData((prevData: any) => ({
+        ...prevData,
+        selectedStartDate: date,
+      }));
+      setSelectedStartDate(date);
+    }
+  };
+
+  const handleEndDateChange = (date: Date | [Date, Date] | null) => {
+    if (date instanceof Date) {
+      setPriceFormData((prevData: any) => ({
+        ...prevData,
+        selectedEndDate: date,
+      }));
+      setSelectedEndDate(date);
+    }
+  };
 
   return (
-    <div className="flex justify-between gap-4">
-      <div className="flex flex-col gap-2 w-full ">
-        <label className="text-sm text-gray-600" htmlFor="start-date">
-          Od
-        </label>
-        <input
-          className="border border-gray-300 rounded-sm text-sx p-2"
-          id="start-date"
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
+    <div className="flex justify-around mt-2 gap-2">
+      <div className="flex flex-col gap-2 w-full">
+        <label className="text-sm">Od</label>
+        <div className="relative w-full">
+          <DatePicker
+            className={'w-full border border-gray-200 p-2 text-xs pr-10'}
+            dateFormat="yyyy-MM-dd h:mm"
+            selected={priceFormData.selectedStartDate}
+            onChange={handleStartDateChange}
+            showTimeInput
+            timeInputLabel="Czas:"
+            data-testid="start-date-picker"
+          />
+          <span className="material-icons absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm">
+            calendar_today
+          </span>
+        </div>
       </div>
-      <div className="flex flex-col gap-2 w-full ">
-        <label className="text-sm text-gray-600" htmlFor="end-date">
-          Do
-        </label>
-        <input
-          className="border border-gray-300 rounded-sm text-sx p-2"
-          id="end-date"
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+
+      <div className="flex flex-col gap-2 w-full">
+        <label className="text-sm">Od</label>
+        <div className="relative w-full">
+          <DatePicker
+            className={'w-full border border-gray-200 p-2 text-xs pr-10'}
+            dateFormat="yyyy-MM-dd h:mm"
+            selected={priceFormData.selectedEndDate}
+            onChange={handleEndDateChange}
+            showTimeInput
+            timeInputLabel="Czas:"
+            data-testid="start-date-picker"
+          />
+          <span className="material-icons absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm">
+            calendar_today
+          </span>
+        </div>
       </div>
     </div>
   );
