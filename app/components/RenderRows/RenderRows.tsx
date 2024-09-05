@@ -41,7 +41,7 @@ export default function RenderRows({ id }: { id: string }) {
   const pathname = usePathname();
 
   const MemoizedButton = React.memo(
-    pathname === 'calendar' ? AddReservationBtn : SetPriceBtn
+    pathname === '/calendar' ? AddReservationBtn : SetPriceBtn
   );
 
   const {
@@ -58,9 +58,6 @@ export default function RenderRows({ id }: { id: string }) {
   } = useCalendarContext();
 
   const {
-    setSelectedStartDate,
-    setSelectedEndDate,
-    setSelectedRoomId,
     formData,
     setFormData,
     selectedButton,
@@ -146,6 +143,10 @@ export default function RenderRows({ id }: { id: string }) {
     (room, timestamp) => {
       setSelectedButton({ room, timestamp });
       setIsButtonVisible(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        currentDateTimestamp: timestamp,
+      }));
     },
     [setSelectedButton]
   );
