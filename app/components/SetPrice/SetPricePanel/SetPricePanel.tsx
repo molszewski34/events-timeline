@@ -2,10 +2,11 @@
 
 import React from 'react';
 import SetPriceHeader from './SetPriceHeader/SetPriceHeader';
-import { SetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import SetPriceDatePickerSection from './SetPriceDatePickerSection/SetPriceDatePickerSection';
 
 const SetPricePanel = () => {
-  const { openSetPricePanel, setOpenSetPricePanel } = SetPriceContext();
+  const { openSetPricePanel, setOpenSetPricePanel } = useSetPriceContext();
 
   return (
     <main
@@ -14,6 +15,7 @@ const SetPricePanel = () => {
     >
       <div className="relative flex flex-col gap-2">
         <SetPriceHeader />
+        <SetPriceDatePickerSection />
       </div>
     </main>
   );
