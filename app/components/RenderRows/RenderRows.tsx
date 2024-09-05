@@ -31,7 +31,7 @@ import { Database } from '@/types/supabase';
 import { pl } from 'date-fns/locale';
 import { usePathname } from 'next/navigation';
 import SetPriceBtn from '../SetPrice/SetPriceBtn/SetPriceBtn';
-
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
@@ -64,6 +64,8 @@ export default function RenderRows({ id }: { id: string }) {
     setSelectedButton,
     setOpenAddReservationPanel,
   } = useAddReservationContext();
+
+  const { setPriceFormData } = useSetPriceContext();
 
   const { setFetchedRooms } = useAddRoomContext();
   const originalFormDataRef = useRef<FormData | null>(null);
@@ -144,6 +146,10 @@ export default function RenderRows({ id }: { id: string }) {
       setSelectedButton({ room, timestamp });
       setIsButtonVisible(true);
       setFormData((prevData) => ({
+        ...prevData,
+        currentDateTimestamp: timestamp,
+      }));
+      setPriceFormData((prevData) => ({
         ...prevData,
         currentDateTimestamp: timestamp,
       }));
