@@ -5,45 +5,45 @@ import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 const SetPriceDatePickerSection = () => {
   const { priceFormData, setPriceFormData } = useSetPriceContext();
   const [datePickers, setDatePickers] = useState([
-    { id: Date.now(), default: true },
+    { id: Date.now(), isDefault: true },
   ]);
+  const [disabledRanges, setDisabledRanges] = useState([]);
+
+  const updateDisabledRanges = (pickers) => {
+    const ranges = pickers
+      .filter(({ startDate, endDate }) => startDate && endDate)
+      .map(({ startDate, endDate }) => ({
+        start: startDate,
+        end: endDate,
+      }));
+    setDisabledRanges(ranges);
+  };
 
   const addDatePicker = () => {
-    setDatePickers((prevPickers) => [
-      ...prevPickers,
-      { id: Date.now(), default: false },
-    ]);
+    const newPickers = [...datePickers, { id: Date.now(), isDefault: false }];
+    setDatePickers(newPickers);
+    updateDisabledRanges(newPickers);
   };
 
   const removeDatePicker = (id) => {
-    setDatePickers((prevPickers) =>
-      prevPickers.filter((picker) => picker.id !== id)
-    );
-    setPriceFormData((prevData) => {
-      const newData = { ...prevData };
-      Object.keys(prevData).forEach((key) => {
-        if (
-          key.startsWith(`startDate_${id}`) ||
-          key.startsWith(`endDate_${id}`)
-        ) {
-          delete newData[key];
-        }
-      });
-      return newData;
-    });
+    const newPickers = datePickers.filter((picker) => picker.id !== id);
+    setDatePickers(newPickers);
+    updateDisabledRanges(newPickers);
   };
 
-  const handleDateChange = (id, startDate, endDate) => {
-    setDatePickers((prevPickers) =>
-      prevPickers.map((picker) =>
-        picker.id === id ? { ...picker, startDate, endDate } : picker
-      )
+  const handleDateChange = (id, newStartDate, newEndDate) => {
+    const newPickers = datePickers.map((picker) =>
+      picker.id === id
+        ? { ...picker, startDate: newStartDate, endDate: newEndDate }
+        : picker
     );
+    setDatePickers(newPickers);
+    updateDisabledRanges(newPickers);
 
     setPriceFormData((prevData) => ({
       ...prevData,
-      [`startDate_${id}`]: startDate,
-      [`endDate_${id}`]: endDate,
+      selectedStartDate: newStartDate,
+      selectedEndDate: newEndDate,
     }));
   };
 
@@ -52,19 +52,19 @@ const SetPriceDatePickerSection = () => {
       <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
         <h1 className="text-gray-500">Wybierz Termin</h1>
       </header>
-      {datePickers.map(({ id, startDate, endDate, default: isDefault }) => (
+      {datePickers.map(({ id, isDefault }) => (
         <SetPriceDatePicker
           key={id}
           startDate={priceFormData.selectedStartDate}
           endDate={priceFormData.selectedEndDate}
-          onDateChange={(startDate, endDate) =>
-            handleDateChange(id, startDate, endDate)
+          onDateChange={(newStartDate, newEndDate) =>
+            handleDateChange(id, newStartDate, newEndDate)
           }
           onRemove={() => removeDatePicker(id)}
           isDefault={isDefault}
+          disabledRanges={disabledRanges}
         />
       ))}
-
       <button
         type="button"
         onClick={addDatePicker}
