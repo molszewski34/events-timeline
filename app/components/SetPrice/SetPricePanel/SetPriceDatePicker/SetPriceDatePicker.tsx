@@ -8,6 +8,7 @@ const SetPriceDatePicker = ({
   onDateChange,
   onRemove,
   isDefault,
+  disabledRanges,
 }) => {
   const handleStartDateChange = (date) => {
     onDateChange(date, endDate);
@@ -25,11 +26,20 @@ const SetPriceDatePicker = ({
           <DatePicker
             className={'w-full border border-gray-200 p-2 text-xs pr-10'}
             dateFormat="yyyy-MM-dd h:mm"
-            selected={startDate}
+            selected={startDate || null}
             onChange={handleStartDateChange}
             showTimeInput
             timeInputLabel="Czas:"
             data-testid="start-date-picker"
+            excludeDates={disabledRanges.flatMap(({ start, end }) => {
+              const dates = [];
+              let currentDate = new Date(start);
+              while (currentDate <= end) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+              }
+              return dates;
+            })}
           />
           <span className="material-icons absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm">
             calendar_today
@@ -43,17 +53,27 @@ const SetPriceDatePicker = ({
           <DatePicker
             className={'w-full border border-gray-200 p-2 text-xs pr-10'}
             dateFormat="yyyy-MM-dd h:mm"
-            selected={endDate}
+            selected={endDate || null} // Use the endDate from context or null if not set
             onChange={handleEndDateChange}
             showTimeInput
             timeInputLabel="Czas:"
             data-testid="end-date-picker"
+            excludeDates={disabledRanges.flatMap(({ start, end }) => {
+              const dates = [];
+              let currentDate = new Date(start);
+              while (currentDate <= end) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+              }
+              return dates;
+            })}
           />
           <span className="material-icons absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm">
             calendar_today
           </span>
         </div>
       </div>
+
       {!isDefault && (
         <button
           type="button"
