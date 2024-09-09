@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
@@ -11,6 +11,28 @@ const RoomSelector = ({ id }: { id: string }) => {
 
   const { priceFormData, setPriceFormData } = useSetPriceContext();
 
+  const [selectedRooms, setSelectedRooms] = useState([priceFormData.room]);
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      const sameCapacityRooms =
+        rooms?.filter(
+          (room) => room.num_of_persons === priceFormData.room.num_of_persons
+        ) || [];
+      setSelectedRooms(sameCapacityRooms);
+    } else {
+      setSelectedRooms([priceFormData.room]);
+    }
+  };
+
+  const handleRemoveRoom = (roomId: string) => {
+    setSelectedRooms((prevRooms) =>
+      prevRooms.filter((room) => room.id !== roomId)
+    );
+  };
+
+  console.log(rooms);
+
   return (
     <div className="flex flex-col gap-2">
       {/* Header */}
@@ -20,23 +42,32 @@ const RoomSelector = ({ id }: { id: string }) => {
 
       {/* Checkbox with label */}
       <div className="flex flex-col mb-4 gap-3">
-        <label className="flex  items-center text-xs">
-          <input type="checkbox" className="mr-2" />
+        <label className="flex items-center text-xs">
+          <input
+            type="checkbox"
+            className="mr-2"
+            onChange={handleCheckboxChange}
+          />
           Zaznacz pokoje o tej samej pojemności
         </label>
-        <div className="flex ml-3">
-          <button className="flex gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded">
-            {priceFormData.room.name}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="15px"
-              viewBox="0 -960 960 960"
-              width="15px"
-              fill="#fff"
+        <div className="flex gap-1 ml-3">
+          {selectedRooms.map((room) => (
+            <button
+              className="flex gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded"
+              onClick={() => handleRemoveRoom(room.id)}
             >
-              <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          </button>
+              {room.name}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="15px"
+                viewBox="0 -960 960 960"
+                width="15px"
+                fill="#fff"
+              >
+                <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+              </svg>
+            </button>
+          ))}
         </div>
       </div>
 
