@@ -4,6 +4,7 @@ import React from 'react';
 import SetPriceHeader from './SetPriceHeader/SetPriceHeader';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import SetPriceDatePickerSection from './SetPriceDatePickerSection/SetPriceDatePickerSection';
+import RoomSelector from '../SetRoom/SetRoom';
 
 const SetPricePanel = () => {
   const { openSetPricePanel, setOpenSetPricePanel } = useSetPriceContext();
@@ -16,6 +17,7 @@ const SetPricePanel = () => {
       <div className="relative flex flex-col gap-2">
         <SetPriceHeader />
         <SetPriceDatePickerSection />
+        <RoomSelector id="id" />
       </div>
     </main>
   );
