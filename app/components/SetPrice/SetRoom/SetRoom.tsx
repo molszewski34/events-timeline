@@ -50,11 +50,11 @@ const RoomSelector = ({ id }: { id: string }) => {
 
       {/* Checkbox with label */}
       <div className="flex flex-col mb-4 gap-3">
-        <label className="flex items-center text-xs">
+        <label className="flex items-center gap-2 text-xs">
           <input
             type="checkbox"
-            className="mr-2"
             onChange={handleCheckboxChange}
+            disabled={selectedRooms.length === 0}
           />
           Zaznacz pokoje o tej samej pojemności
         </label>
