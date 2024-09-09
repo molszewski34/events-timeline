@@ -152,6 +152,7 @@ export default function RenderRows({ id }: { id: string }) {
       setPriceFormData((prevData) => ({
         ...prevData,
         currentDateTimestamp: timestamp,
+        room: room,
       }));
     },
     [setSelectedButton]
