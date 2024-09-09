@@ -74,7 +74,7 @@ const SetPriceDatePicker = ({
         </div>
       </div>
 
-      {!isDefault && (
+      {!isDefault ? (
         <button
           type="button"
           onClick={onRemove}
@@ -83,6 +83,8 @@ const SetPriceDatePicker = ({
         >
           <span className="material-icons text-xl">delete</span>
         </button>
+      ) : (
+        <div className="w-10 h-[62px] pb-1"></div>
       )}
     </div>
   );
