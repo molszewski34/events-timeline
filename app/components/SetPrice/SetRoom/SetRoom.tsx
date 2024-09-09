@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
@@ -11,15 +11,23 @@ const RoomSelector = ({ id }: { id: string }) => {
 
   const { priceFormData, setPriceFormData } = useSetPriceContext();
 
-  const [selectedRooms, setSelectedRooms] = useState([priceFormData.room]);
+  const [selectedRooms, setSelectedRooms] = useState([]);
+
+  useEffect(() => {
+    setSelectedRooms([priceFormData.room]);
+  }, [priceFormData.room]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (selectedRooms.length === 0) return;
+
     if (e.target.checked) {
       const sameCapacityRooms =
         rooms?.filter(
-          (room) => room.num_of_persons === priceFormData.room.num_of_persons
+          (room) =>
+            room.num_of_persons === priceFormData.room.num_of_persons &&
+            !selectedRooms.some((selectedRoom) => selectedRoom.id === room.id)
         ) || [];
-      setSelectedRooms(sameCapacityRooms);
+      setSelectedRooms((prevRooms) => [...prevRooms, ...sameCapacityRooms]);
     } else {
       setSelectedRooms([priceFormData.room]);
     }
