@@ -5,7 +5,7 @@ import { initialSetPriceData } from './initialSetPriceData';
 export const SetPrice = createContext<any>(undefined);
 
 export function SetPriceWrapper({ children }: { children: React.ReactNode }) {
-  const [openSetPricePanel, setOpenSetPricePanel] = useState(true);
+  const [openSetPricePanel, setOpenSetPricePanel] = useState(false);
   const [priceFormData, setPriceFormData] = useState(initialSetPriceData);
 
   return (
