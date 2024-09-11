@@ -2,89 +2,112 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
-import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import NextRoom from './NextRoom/NextRoom';
+
 const RoomSelector = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
 
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
 
   const { priceFormData, setPriceFormData } = useSetPriceContext();
-
-  const [selectedRooms, setSelectedRooms] = useState([]);
+  const [isNextRoomVisible, setIsNextRoomVisible] = useState(false);
 
   useEffect(() => {
-    setSelectedRooms([priceFormData.room]);
-  }, [priceFormData.room]);
+    setPriceFormData((prev) => ({
+      ...prev,
+      selectedRooms: [priceFormData.room],
+    }));
+  }, [priceFormData.room, setPriceFormData]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (selectedRooms.length === 0) return;
+    if (priceFormData.selectedRooms.length === 0) return;
 
     if (e.target.checked) {
       const sameCapacityRooms =
         rooms?.filter(
           (room) =>
             room.num_of_persons === priceFormData.room.num_of_persons &&
-            !selectedRooms.some((selectedRoom) => selectedRoom.id === room.id)
+            !priceFormData.selectedRooms.some(
+              (selectedRoom) => selectedRoom.id === room.id
+            )
         ) || [];
-      setSelectedRooms((prevRooms) => [...prevRooms, ...sameCapacityRooms]);
+
+      setPriceFormData((prev) => ({
+        ...prev,
+        selectedRooms: [...prev.selectedRooms, ...sameCapacityRooms],
+      }));
     } else {
-      setSelectedRooms([priceFormData.room]);
+      setPriceFormData((prev) => ({
+        ...prev,
+        selectedRooms: [priceFormData.room],
+      }));
     }
   };
 
   const handleRemoveRoom = (roomId: string) => {
-    setSelectedRooms((prevRooms) =>
-      prevRooms.filter((room) => room.id !== roomId)
-    );
+    setPriceFormData((prev) => ({
+      ...prev,
+      selectedRooms: prev.selectedRooms.filter((room) => room.id !== roomId),
+    }));
   };
 
-  console.log(rooms);
+  const handleOverlayClick = () => {
+    setIsNextRoomVisible(false);
+  };
+
+  console.log(priceFormData.selectedRooms);
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Header */}
-      <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
-        <h1 className="text-gray-500">Wybierz pokoje:</h1>
-      </header>
+    <div className="relative flex flex-col gap-2">
+      {isNextRoomVisible && (
+        <div
+          className="fixed top-0 bottom-0 left-0 right-0  bg-black bg-opacity-0 z-0"
+          onClick={handleOverlayClick}
+        />
+      )}
 
-      {/* Checkbox with label */}
-      <div className="flex flex-col mb-4 gap-3">
-        <label className="flex items-center gap-2 text-xs">
-          <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            disabled={selectedRooms.length === 0}
-          />
-          Zaznacz pokoje o tej samej pojemności
-        </label>
-        <div className="flex gap-1 ml-3">
-          {selectedRooms.map((room) => (
-            <button
-              className="flex gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded"
-              onClick={() => handleRemoveRoom(room.id)}
-            >
-              {room.name}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="15px"
-                viewBox="0 -960 960 960"
-                width="15px"
-                fill="#fff"
+      <div className="relative">
+        <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
+          <h1 className="text-gray-500">Wybierz pokoje:</h1>
+        </header>
+        <div className="flex flex-col mb-4 gap-3 relative">
+          <label className="flex items-center gap-2 text-xs">
+            <input
+              type="checkbox"
+              onChange={handleCheckboxChange}
+              disabled={
+                priceFormData.selectedRooms.length === 0 || isNextRoomVisible
+              }
+              className="accent-green-600"
+            />
+            Zaznacz pokoje o tej samej pojemności
+          </label>
+          {isNextRoomVisible && <NextRoom id="id" />}
+
+          <div className="flex gap-1 ml-3">
+            {priceFormData.selectedRooms.map((room) => (
+              <button
+                key={room.id}
+                className="flex gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded h-[23px]"
+                onClick={() => handleRemoveRoom(room.id)}
               >
-                <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-              </svg>
-            </button>
-          ))}
+                {room.name}
+                <i className="text-sm">cancel</i>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Add room option */}
-      <div className="flex flex-col">
-        <span className=" flex items-center gap-1 text-[#00a541] text-sm font-medium cursor-pointer border-b-2 border-gray-200">
-          <i className="text-xl">add</i>{' '}
-          <p className="text-xs">Dodaj kolejny pokój</p>
-        </span>
+        <div className="flex flex-col">
+          <span
+            onClick={() => setIsNextRoomVisible(true)}
+            className="flex items-center gap-1 text-[#00a541] text-sm font-medium cursor-pointer border-b-2 border-gray-200"
+          >
+            <i className="text-xl">add</i>
+            <p className="text-xs">Dodaj kolejny pokój</p>
+          </span>
+        </div>
       </div>
     </div>
   );
