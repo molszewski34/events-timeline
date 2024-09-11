@@ -68,7 +68,7 @@ const SetPriceDatePickerSection = () => {
       <button
         type="button"
         onClick={addDatePicker}
-        className="flex items-center gap-1 text-[#00a541] text-xs text-left  rounded font-medium cursor-pointer"
+        className="flex  items-center gap-1 text-[#00a541] text-xs text-left  rounded font-medium cursor-pointer w-fit"
       >
         <i className="text-xl">add</i>
         <p className="text-xs">Dodaj kolejny termin</p>
