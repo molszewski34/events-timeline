@@ -9,18 +9,26 @@ const SetPartialPrice = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
 
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
-
   const { priceFormData, setPriceFormData } = useSetPriceContext();
-  const numOfPersons = priceFormData.selectedRooms[0].num_of_persons || 0; // Sprawdzamy, czy wartość istnieje
 
-  console.log(numOfPersons);
+  const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
+
+  useEffect(() => {
+    if (priceFormData.selectedRooms.length > 0) {
+      const maxPersons = priceFormData.selectedRooms.reduce(
+        (max, room) => Math.max(max, room.num_of_persons || 0),
+        0
+      );
+      setMaxNumOfPersons(maxPersons);
+    }
+  }, [priceFormData.selectedRooms]);
 
   return (
     <>
-      {Array.from({ length: numOfPersons }).map((_, index) => (
+      {Array.from({ length: maxNumOfPersons }).map((_, index) => (
         <PriceSection
           key={index}
-          title={`Osoba dorosła (${index + 1})`}
+          title={`Osoba dorosła (x${index + 1})`}
           prices={[]}
         />
       ))}
