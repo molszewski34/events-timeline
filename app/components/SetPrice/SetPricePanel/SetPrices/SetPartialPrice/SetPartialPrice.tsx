@@ -13,6 +13,8 @@ const SetPartialPrice = ({ id }: { id: string }) => {
 
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
 
+  const [priceSections, setPriceSections] = useState<JSX.Element[]>([]);
+
   useEffect(() => {
     if (priceFormData.selectedRooms.length > 0) {
       const maxPersons = priceFormData.selectedRooms.reduce(
@@ -23,17 +25,23 @@ const SetPartialPrice = ({ id }: { id: string }) => {
     }
   }, [priceFormData.selectedRooms]);
 
-  return (
-    <>
-      {Array.from({ length: maxNumOfPersons }).map((_, index) => (
+  useEffect(() => {
+    if (maxNumOfPersons > 0) {
+      const sections = Array.from({ length: maxNumOfPersons }, (_, index) => (
         <PriceSection
           key={index}
           title={`Osoba dorosła (x${index + 1})`}
           prices={[]}
         />
-      ))}
-    </>
-  );
+      ));
+
+      const sortedSections = sections.reverse();
+
+      setPriceSections(sortedSections);
+    }
+  }, [maxNumOfPersons]);
+
+  return <>{priceSections}</>;
 };
 
 export default SetPartialPrice;
