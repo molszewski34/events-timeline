@@ -6,6 +6,7 @@ import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import SetPriceDatePickerSection from './SetPriceDatePickerSection/SetPriceDatePickerSection';
 import RoomSelector from '../SetRoom/SetRoom';
 import NextRoom from '../SetRoom/NextRoom/NextRoom';
+import SetPrices from './SetPrices/SetPrices';
 
 const SetPricePanel = () => {
   const { openSetPricePanel, setOpenSetPricePanel } = useSetPriceContext();
@@ -19,7 +20,7 @@ const SetPricePanel = () => {
         <SetPriceHeader />
         <SetPriceDatePickerSection />
         <RoomSelector id="id" />
-        {/* <NextRoom id="id" /> */}
+        <SetPrices />
       </div>
     </main>
   );
