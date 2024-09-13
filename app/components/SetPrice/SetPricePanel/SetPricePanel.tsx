@@ -14,9 +14,9 @@ const SetPricePanel = () => {
   return (
     <main
       style={{ display: openSetPricePanel ? 'flex' : 'none' }}
-      className="fixed w-[92vw] max-w-[80em]  justify-self-center top-[12.5vh] right-[4vw] left-[4vw]  bg-white z-[999] p-[1.27em] flex flex-col gap-4"
+      className="fixed w-[92vw] max-w-[80em]  justify-self-center top-[2vh] bottom-[2vh] right-[4vw] left-[4vw]  bg-white z-[999] p-[1.27em] flex flex-col gap-4 overflow-y-scroll"
     >
-      <div className="relative flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2  ">
         <SetPriceHeader />
         <SetPriceDatePickerSection />
         <RoomSelector id="id" />
