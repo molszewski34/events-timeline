@@ -10,6 +10,7 @@ interface Price {
 interface PriceSectionProps {
   title: string;
   prices: Price[];
+  readOnly: boolean;
 }
 
 const PriceSection: React.FC<PriceSectionProps> = ({
