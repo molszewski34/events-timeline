@@ -17,7 +17,7 @@ const SetPartialPrice = ({ id }: { id: string }) => {
   const { priceFormData, setPriceFormData } = useSetPriceContext();
 
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
-  const [priceSections, setPriceSections] = useState<JSX.Element[]>([]);
+  const [partialPrices, setPartialPrices] = useState([]);
 
   useEffect(() => {
     if (priceFormData?.selectedRooms?.length > 0) {
@@ -31,47 +31,22 @@ const SetPartialPrice = ({ id }: { id: string }) => {
 
   useEffect(() => {
     if (maxNumOfPersons > 0 && priceConfiguration) {
-      const sections = Array.from({ length: maxNumOfPersons }, (_, index) => (
-        <PriceSection
-          key={index}
-          title={`Osoba dorosła (x${index + 1})`}
-          readOnly={false}
-          prices={[
-            { label: 'Standard', price: 0, subLabel: '' },
-            ...(priceConfiguration?.weekend_price
-              ? [
-                  {
-                    label: 'Standard Weekend',
-                    price: 0,
-                  },
-                ]
-              : []),
-            ...(priceConfiguration?.stay_duration
-              ? [
-                  {
-                    label: 'Długi pobyt',
-                    price: 0,
-                    subLabel: `od ${priceConfiguration?.long_stay}`,
-                  },
-                ]
-              : []),
-            ...(priceConfiguration?.stay_duration
-              ? [
-                  {
-                    label: 'Krótki pobyt',
-                    price: 0,
-                    subLabel: `do ${priceConfiguration?.short_stay}`,
-                  },
-                ]
-              : []),
-          ]}
-        />
-      ));
+      const initialPrices = Array.from({ length: maxNumOfPersons }, () => ({
+        standard: 0,
+        standardWeekend: 0,
+        longStay: 0,
+        shortStay: 0,
+      })).reverse();
 
-      const sortedSections = sections.reverse();
-      setPriceSections(sortedSections);
+      setPartialPrices(initialPrices);
     }
   }, [maxNumOfPersons, priceConfiguration]);
+
+  const handleInputChange = (index, field, value) => {
+    const newData = [...partialPrices];
+    newData[index][field] = parseFloat(value) || 0;
+    setPartialPrices(newData);
+  };
 
   if (isLoadingPriceConfig) {
     return <div>Loading...</div>;
@@ -79,7 +54,54 @@ const SetPartialPrice = ({ id }: { id: string }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="">{priceSections}</div>
+      <div className="">
+        {partialPrices.map((price, index) => (
+          <PriceSection
+            key={index}
+            title={`Osoba dorosła (x${maxNumOfPersons - index})`}
+            readOnly={false}
+            prices={[
+              {
+                label: 'Standard',
+                price: price.standard,
+                field: 'standard',
+              },
+              ...(priceConfiguration?.weekend_price
+                ? [
+                    {
+                      label: 'Standard Weekend',
+                      price: price.standardWeekend,
+                      field: 'standardWeekend',
+                    },
+                  ]
+                : []),
+              ...(priceConfiguration?.stay_duration
+                ? [
+                    {
+                      label: 'Długi pobyt',
+                      price: price.longStay,
+                      field: 'longStay',
+                      subLabel: `od ${priceConfiguration?.long_stay}`,
+                    },
+                  ]
+                : []),
+              ...(priceConfiguration?.stay_duration
+                ? [
+                    {
+                      label: 'Krótki pobyt',
+                      price: price.shortStay,
+                      field: 'shortStay',
+                      subLabel: `do ${priceConfiguration?.short_stay}`,
+                    },
+                  ]
+                : []),
+            ]}
+            onInputChange={(field, value) =>
+              handleInputChange(index, field, value)
+            }
+          />
+        ))}
+      </div>
       <div className="">
         {priceConfiguration.child_price && (
           <>
@@ -124,6 +146,9 @@ const SetPartialPrice = ({ id }: { id: string }) => {
                           ]
                         : []),
                     ]}
+                    onInputChange={(field, value) =>
+                      handleInputChange(index, field, value)
+                    }
                   />
                 )
             )}
