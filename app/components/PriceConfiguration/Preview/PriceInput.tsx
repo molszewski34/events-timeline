@@ -4,7 +4,8 @@ interface PriceInputProps {
   label: string;
   price: number;
   subLabel?: number | string;
-  readOnly?: boolean; // New prop to control readOnly state
+  readOnly?: boolean;
+  onChange: (value: string) => void; // Dodano prop onChange
 }
 
 const PriceInput: React.FC<PriceInputProps> = ({
@@ -12,6 +13,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
   price,
   subLabel,
   readOnly = true,
+  onChange,
 }) => (
   <div className="flex flex-col gap-2">
     <div className="flex flex-col">
@@ -26,6 +28,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
         readOnly={readOnly}
         type="text"
         defaultValue={price.toFixed(2)}
+        onChange={(e) => onChange(e.target.value)} // Obsługuje zmianę
       />
     </div>
   </div>
