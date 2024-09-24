@@ -4,8 +4,8 @@ import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import PriceSection from '@/app/components/PriceConfiguration/Preview/PriceSection';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
-import { usePriceConfigurationContext } from '@/app/contexts/PriceConfiguration/PriceConfiguration';
 import { fetchPriceSettings } from '@/app/actions/fetchPriceSettings';
+import SetPricesForChildren from '../SetChildPrices/SetPricesForChildren';
 
 const SetPartialPrice = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
@@ -16,8 +16,9 @@ const SetPartialPrice = ({ id }: { id: string }) => {
 
   const { priceFormData, setPriceFormData } = useSetPriceContext();
 
+  console.log(priceFormData.partialPrices);
+
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
-  const [partialPrices, setPartialPrices] = useState([]);
 
   useEffect(() => {
     if (priceFormData?.selectedRooms?.length > 0) {
@@ -26,6 +27,12 @@ const SetPartialPrice = ({ id }: { id: string }) => {
         0
       );
       setMaxNumOfPersons(maxPersons);
+    } else {
+      setMaxNumOfPersons(0);
+      setPriceFormData((prevData) => ({
+        ...prevData,
+        partialPrices: [],
+      }));
     }
   }, [priceFormData.selectedRooms]);
 
@@ -38,14 +45,21 @@ const SetPartialPrice = ({ id }: { id: string }) => {
         shortStay: 0,
       })).reverse();
 
-      setPartialPrices(initialPrices);
+      setPriceFormData((prevData) => ({
+        ...prevData,
+        partialPrices: initialPrices,
+      }));
     }
   }, [maxNumOfPersons, priceConfiguration]);
 
   const handleInputChange = (index, field, value) => {
-    const newData = [...partialPrices];
+    const newData = [...priceFormData.partialPrices];
     newData[index][field] = parseFloat(value) || 0;
-    setPartialPrices(newData);
+
+    setPriceFormData((prevData) => ({
+      ...prevData,
+      partialPrices: newData,
+    }));
   };
 
   if (isLoadingPriceConfig) {
@@ -55,7 +69,7 @@ const SetPartialPrice = ({ id }: { id: string }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="">
-        {partialPrices.map((price, index) => (
+        {priceFormData.partialPrices.map((price, index) => (
           <PriceSection
             key={index}
             title={`Osoba dorosła (x${maxNumOfPersons - index})`}
@@ -102,59 +116,8 @@ const SetPartialPrice = ({ id }: { id: string }) => {
           />
         ))}
       </div>
-      <div className="">
-        {priceConfiguration.child_price && (
-          <>
-            {priceConfiguration.age_ranges.map(
-              (childAge: ChildAge) =>
-                childAge.minAge !== null &&
-                childAge.maxAge !== null && (
-                  <PriceSection
-                    key={`${childAge.minAge}-${childAge.maxAge}`}
-                    title={`Dziecko (${childAge.minAge}-${childAge.maxAge})`}
-                    readOnly={false}
-                    prices={[
-                      {
-                        label: 'Standard',
-                        price: 0,
-                        subLabel: '',
-                      },
-                      ...(priceConfiguration.weekend_price
-                        ? [
-                            {
-                              label: 'Standard Weekend',
-                              price: 0,
-                            },
-                          ]
-                        : []),
-                      ...(priceConfiguration.stay_duration
-                        ? [
-                            {
-                              label: 'Długi pobyt',
-                              price: 0,
-                              subLabel: `(od ${priceConfiguration.long_stay})`,
-                            },
-                          ]
-                        : []),
-                      ...(priceConfiguration.stay_duration
-                        ? [
-                            {
-                              label: 'Krótki pobyt',
-                              price: 0,
-                              subLabel: `(do ${priceConfiguration.short_stay})`,
-                            },
-                          ]
-                        : []),
-                    ]}
-                    onInputChange={(field, value) =>
-                      handleInputChange(index, field, value)
-                    }
-                  />
-                )
-            )}
-          </>
-        )}
-      </div>
+
+      <SetPricesForChildren />
     </div>
   );
 };
