@@ -3,5 +3,7 @@ export const initialSetPriceData = {
     selectedEndDate: new Date(),
     currentDateTimestamp: null,
     room: '',
-    selectedRooms: ([])
+    selectedRooms: ([]),
+    partialPrices: ([]),
+    partialPricesForChildrens: ([])
 }
