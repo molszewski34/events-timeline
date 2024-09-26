@@ -23,7 +23,6 @@ const SetPricePanel = () => {
         <SetPriceDatePickerSection />
         <RoomSelector id="id" />
         <SetPrices id="id" />
-        <RecalculatePrices />
         <Footer />
       </div>
     </main>
