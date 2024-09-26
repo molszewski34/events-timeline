@@ -6,6 +6,7 @@ import PriceSection from '@/app/components/PriceConfiguration/Preview/PriceSecti
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import { fetchPriceSettings } from '@/app/actions/fetchPriceSettings';
 import SetPricesForChildren from '../SetChildPrices/SetPricesForChildren';
+import RecalculatePrices from '../../RecalculatePrices/RecalculatePrices';
 
 const SetPartialPrice = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
@@ -15,8 +16,6 @@ const SetPartialPrice = ({ id }: { id: string }) => {
     useQuery(fetchPriceSettings(supabase));
 
   const { priceFormData, setPriceFormData } = useSetPriceContext();
-
-  console.log(priceFormData.partialPrices);
 
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
 
@@ -116,8 +115,8 @@ const SetPartialPrice = ({ id }: { id: string }) => {
           />
         ))}
       </div>
-
       <SetPricesForChildren />
+      <RecalculatePrices />
     </div>
   );
 };
