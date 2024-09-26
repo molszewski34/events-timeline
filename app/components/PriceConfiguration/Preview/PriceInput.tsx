@@ -27,7 +27,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
         className="text-xs border border-gray-300 py-2 px-1 text-right max-w-36"
         readOnly={readOnly}
         type="text"
-        defaultValue={price.toFixed(2)}
+        value={price.toFixed(2)}
         onChange={(e) => onChange(e.target.value)} // Obsługuje zmianę
       />
     </div>
