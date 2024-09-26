@@ -5,13 +5,13 @@ import useSupabaseBrowser from '@/utils/supabase-browser';
 import PriceSection from '@/app/components/PriceConfiguration/Preview/PriceSection';
 
 import { fetchPriceSettings } from '@/app/actions/fetchPriceSettings';
-
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 const SetPricesForChildren = () => {
   const supabase = useSupabaseBrowser();
   const { data: priceConfiguration, isLoading: isLoadingPriceConfig } =
     useQuery(fetchPriceSettings(supabase));
 
-  const [childPrices, setChildPrices] = useState([]);
+  const { priceFormData, setPriceFormData } = useSetPriceContext();
 
   useEffect(() => {
     if (priceConfiguration?.child_price && priceConfiguration?.age_ranges) {
@@ -21,15 +21,23 @@ const SetPricesForChildren = () => {
         longStay: 0,
         shortStay: 0,
       }));
-      setChildPrices(initialPrices);
+      setPriceFormData((prevData) => ({
+        ...prevData,
+        partialPricesForChildrens: initialPrices,
+      }));
     }
   }, [priceConfiguration]);
 
   const handleInputChange = (index, field, value) => {
-    const newPrices = [...childPrices];
+    const newPrices = [...priceFormData.partialPricesForChildrens];
     newPrices[index][field] = parseFloat(value) || 0;
-    setChildPrices(newPrices);
+
+    setPriceFormData((prevData) => ({
+      ...prevData,
+      partialPricesForChildrens: newPrices,
+    }));
   };
+
   return (
     <div className="">
       {priceConfiguration?.child_price &&
@@ -42,14 +50,18 @@ const SetPricesForChildren = () => {
               prices={[
                 {
                   label: 'Standard',
-                  price: childPrices[index]?.standard || 0,
+                  price:
+                    priceFormData.partialPricesForChildrens[index]?.standard ||
+                    0,
                   field: 'standard',
                 },
                 ...(priceConfiguration.weekend_price
                   ? [
                       {
                         label: 'Standard Weekend',
-                        price: childPrices[index]?.standardWeekend || 0,
+                        price:
+                          priceFormData.partialPricesForChildrens[index]
+                            ?.standardWeekend || 0,
                         field: 'standardWeekend',
                       },
                     ]
@@ -58,7 +70,9 @@ const SetPricesForChildren = () => {
                   ? [
                       {
                         label: 'Długi pobyt',
-                        price: childPrices[index]?.longStay || 0,
+                        price:
+                          priceFormData.partialPricesForChildrens[index]
+                            ?.longStay || 0,
                         field: 'longStay',
                         subLabel: `(od ${priceConfiguration.long_stay})`,
                       },
@@ -68,7 +82,9 @@ const SetPricesForChildren = () => {
                   ? [
                       {
                         label: 'Krótki pobyt',
-                        price: childPrices[index]?.shortStay || 0,
+                        price:
+                          priceFormData.partialPricesForChildrens[index]
+                            ?.shortStay || 0,
                         field: 'shortStay',
                         subLabel: `(do ${priceConfiguration.short_stay})`,
                       },
