@@ -56,8 +56,6 @@ const RoomSelector = ({ id }: { id: string }) => {
     setIsNextRoomVisible(false);
   };
 
-  console.log(priceFormData.selectedRooms);
-
   return (
     <div className="relative flex flex-col gap-2">
       {isNextRoomVisible && (
