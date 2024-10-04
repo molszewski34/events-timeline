@@ -1,14 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 
-const RecalculatePrices = () => {
-  const { priceFormData, setPriceFormData } = useSetPriceContext();
-  const [value, setValue] = useState(0);
-  const [calculationType, setCalculationType] = useState('amount');
+interface Price {
+  [key: string]: number;
+}
 
-  const updatePrices = (prices) => {
+interface PriceFormData {
+  partialPrices?: Price[];
+  partialPricesForChildrens?: Price[];
+}
+
+const RecalculatePrices: React.FC = () => {
+  const { priceFormData, setPriceFormData } = useSetPriceContext();
+  const [value, setValue] = useState<number>(0);
+  const [calculationType, setCalculationType] = useState<'amount' | 'percent'>(
+    'amount'
+  );
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
+  const areAllPricesZero = (prices: Price[]): boolean => {
+    return prices.every((price) =>
+      Object.values(price).every((amount) => amount === 0)
+    );
+  };
+
+  useEffect(() => {
+    const { partialPrices, partialPricesForChildrens } = priceFormData;
+
+    const allPartialPricesZero =
+      partialPrices && partialPrices.length > 0
+        ? areAllPricesZero(partialPrices)
+        : true;
+
+    const allPartialPricesForChildrenZero =
+      partialPricesForChildrens && partialPricesForChildrens.length > 0
+        ? areAllPricesZero(partialPricesForChildrens)
+        : true;
+
+    setIsDisabled(allPartialPricesZero && allPartialPricesForChildrenZero);
+  }, [priceFormData]);
+
+  const updatePrices = (prices: Price[]): Price[] => {
     return prices.map((price) => {
-      const updatedPrice = {};
+      const updatedPrice: Price = {};
       for (const [key, amount] of Object.entries(price)) {
         updatedPrice[key] =
           calculationType === 'amount'
@@ -19,7 +53,7 @@ const RecalculatePrices = () => {
     });
   };
 
-  const handleRecalculate = () => {
+  const handleRecalculate = (): void => {
     const { partialPrices, partialPricesForChildrens } = priceFormData;
 
     if (!partialPrices && !partialPricesForChildrens) {
@@ -33,7 +67,7 @@ const RecalculatePrices = () => {
       partialPricesForChildrens || []
     );
 
-    setPriceFormData((prevData) => ({
+    setPriceFormData((prevData: PriceFormData) => ({
       ...prevData,
       partialPrices: updatedPartialPrices,
       partialPricesForChildrens: updatedPartialPricesForChildrens,
@@ -48,7 +82,7 @@ const RecalculatePrices = () => {
       <div className="flex justify-between gap-2">
         <input
           className="text-xs border border-gray-300 py-2 px-1 flex-1 text-left rounded-sm"
-          type="number"
+          type="text"
           value={value}
           onChange={(e) => setValue(parseFloat(e.target.value))}
         />
@@ -62,8 +96,11 @@ const RecalculatePrices = () => {
         </select>
       </div>
       <button
-        className="bg-gray-200 text-xs text-gray-600 font-bold h-8"
+        className={` text-xs  font-bold h-8 ${
+          isDisabled ? 'bg-[#e1e1e1] text-gray-300' : 'bg-green-600 text-white'
+        }`}
         onClick={handleRecalculate}
+        disabled={isDisabled}
       >
         Przelicz
       </button>
