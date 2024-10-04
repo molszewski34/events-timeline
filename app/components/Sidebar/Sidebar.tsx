@@ -22,8 +22,6 @@ const Sidebar = ({ data }) => {
     { href: '/price/additional', text: 'Usługi dodatkowe' },
   ];
 
-  console.log(data);
-
   return (
     <>
       {openSidebar && (
