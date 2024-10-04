@@ -3,23 +3,23 @@ import React from 'react';
 interface SubmitButtonProps {
   text: string;
   onClick?: () => void;
-  isDisabled?: boolean;
+  disabled?: boolean;
   icon?: string;
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   text,
   onClick,
-  isDisabled = false,
+  disabled = false,
   icon,
 }) => {
   return (
     <button
-      className={`flex gap-1 text-center text-white text-sm font-bold bg-green-600 hover:bg-green-700  rounded-sm justify-center items-center w-full h-8 ${
-        isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+      className={`flex gap-1 text-center text-white text-sm font-bold bg-green-600 hover:bg-green-700 rounded-sm justify-center items-center w-full h-8 ${
+        disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       onClick={onClick}
-      disabled={isDisabled}
+      disabled={disabled}
     >
       <i className="">{icon}</i>
       {text}
