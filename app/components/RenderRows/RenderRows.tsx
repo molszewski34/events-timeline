@@ -32,6 +32,7 @@ import { pl } from 'date-fns/locale';
 import { usePathname } from 'next/navigation';
 import SetPriceBtn from '../SetPrice/SetPriceBtn/SetPriceBtn';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import Day from './Days/Days';
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
   const { data: reservations } = useQuery(fetchReservations(supabase, id));
@@ -158,47 +159,23 @@ export default function RenderRows({ id }: { id: string }) {
     [setSelectedButton]
   );
 
+  const days = useMemo(() => {
+    const totalDays = differenceInDays(endDate, startDate) + 1;
+    return Array.from({ length: totalDays }, (_, index) => (
+      <Day
+        key={index}
+        currentDate={currentDate}
+        startDate={startDate}
+        index={index}
+      />
+    ));
+  }, [startDate, endDate, currentDate]);
+
   const handleMouseLeave = useCallback(() => {
     setIsButtonVisible(false);
     setHoveredColumnIndex(null);
     setHoveredRowIndex(null);
   }, []);
-
-  const days = useMemo(() => {
-    const dayNames = ['PN', 'WT', 'ŚR', 'CZ', 'PT', 'SB', 'ND'];
-
-    const totalDays = differenceInDays(endDate, startDate) + 1;
-    return Array.from({ length: totalDays }, (_, index) => {
-      const currentDateIterator = addDays(startDate, index);
-      const dayOfWeek = currentDateIterator.getDay();
-      const customDayName = dayNames[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
-      const dayNumber = format(currentDateIterator, 'd', { locale: pl });
-      const isWeekendDay = isWeekend(currentDateIterator);
-      const isCurrentDate = isSameDay(currentDateIterator, currentDate);
-
-      return (
-        <div
-          key={currentDateIterator.toString()}
-          className={`w-[44px] h-[37px] flex flex-col text-xs text-center justify-center border-collapse bg-white font-bold py-1
-            ${index === 0 ? 'border-l-4 border-l-green-600' : 'border-l'}  
-            ${isCurrentDate ? 'text-green-600' : ''} ${
-            isWeekendDay
-              ? 'bg-gray-300 border-gray-200 border-x font-bold'
-              : 'border-gray-200'
-          }`}
-        >
-          <div
-            className={`text-[10px] leading-none ${
-              isCurrentDate ? 'text-green-600' : 'text-gray-500'
-            }`}
-          >
-            {customDayName}
-          </div>
-          <div className="text-[12px] leading-none">{dayNumber}</div>
-        </div>
-      );
-    });
-  }, [startDate, endDate, currentDate]);
 
   const rows = useMemo(() => {
     return rooms?.map((room, roomIndex) => {
