@@ -1,6 +1,6 @@
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
-const Button = () => {
+const AddReservationBtn = () => {
   const { openAddReservationPanel, setOpenAddReservationPanel } =
     useAddReservationContext();
   const { overlay, setOverlay } = useCalendarContext();
@@ -17,4 +17,4 @@ const Button = () => {
   );
 };
 
-export default Button;
+export default AddReservationBtn;

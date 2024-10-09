@@ -21,6 +21,7 @@ import { fetchRooms } from '@/app/actions/fetchRoom';
 import DeleteRoomConfirmation from '@/app/components/Rooms/AddRoomPanel/DeleteConfirmation/DeleteConfirmation';
 import SearchBar from '@/app/components/Navigation/SearchBar/SearchBar';
 import OverlaySearchBar from '@/app/components/Navigation/SearchBar/OverlaySearchBar/OverlaySearchBar';
+import SetPricePanel from '@/app/components/SetPrice/SetPricePanel/SetPricePanel';
 
 export default async function Calendar({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
@@ -45,15 +46,11 @@ export default async function Calendar({ params }: { params: { id: string } }) {
             <RenderRows id={params.id} />
           </div>
         </div>
+        <SetPricePanel />
         <Footer />
-        <AddReservationPanel />
-        <AddRoomPanel />
+
         <Overlay />
         <OverlayDelete />
-        <DeleteConfirmation />
-        <DeleteRoomConfirmation id={params.id} />
-        <SearchBar />
-        <OverlaySearchBar />
       </div>
     </HydrationBoundary>
   );

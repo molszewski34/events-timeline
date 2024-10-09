@@ -16,6 +16,7 @@ import NavMobile from './components/Navigation/mobile/NavMobile';
 import AuthButton from './components/Navigation/AuthButton/AuthButton';
 import { getPriceSettings } from './components/PriceConfiguration/utils/getPriceSettings';
 import { cn } from '@/app/lib/utils';
+import { SetPriceWrapper } from './contexts/SetPrice/SetPriceProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -43,17 +44,20 @@ export default async function RootLayout({
           )}
         >
           <PriceConfigurationWrapper>
-            <CalendarWrapper>
-              <SidebarWrapper>
-                <NavMobile>
-                  <AuthButton />
-                </NavMobile>
-                <Sidebar data={data} />
-                <AddRoomWrapper>
-                  <AddReservationWrapper>{children}</AddReservationWrapper>
-                </AddRoomWrapper>
-              </SidebarWrapper>
-            </CalendarWrapper>
+            <SetPriceWrapper>
+              <CalendarWrapper>
+                <SidebarWrapper>
+                  <NavMobile>
+                    <AuthButton />
+                  </NavMobile>
+                  <Sidebar data={data} />
+
+                  <AddRoomWrapper>
+                    <AddReservationWrapper>{children}</AddReservationWrapper>
+                  </AddRoomWrapper>
+                </SidebarWrapper>
+              </CalendarWrapper>
+            </SetPriceWrapper>
           </PriceConfigurationWrapper>
         </body>
         <ReactQueryDevtools

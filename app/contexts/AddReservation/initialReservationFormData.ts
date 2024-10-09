@@ -36,4 +36,5 @@ export const initialReservationFormData = {
     passCode: '',
     registration: 'Brak',
     boarding: '',
+    currentDateTimestamp: null
   }

@@ -8,14 +8,23 @@ import handleCountDaysBetweenDates from './utils/handleCountDaysBetweenDates';
 
 const CustomDatePicker: React.FC = () => {
   const {
-    selectedStartDate,
     setSelectedStartDate,
-    selectedEndDate,
     setSelectedEndDate,
     setDaysBetween,
     formData,
     setFormData,
   } = useAddReservationContext();
+
+  useEffect(() => {
+    if (formData.currentDateTimestamp) {
+      const date = new Date(formData.currentDateTimestamp);
+      setFormData((prevData: any) => ({
+        ...prevData,
+        selectedStartDate: date,
+        selectedEndDate: date,
+      }));
+    }
+  }, [formData.currentDateTimestamp, setFormData]);
 
   useEffect(() => {
     const days = handleCountDaysBetweenDates(
