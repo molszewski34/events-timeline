@@ -1,4 +1,5 @@
-import React, { useMemo, useCallback } from 'react';
+'use client';
+import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import {
   addDays,
   differenceInDays,
@@ -11,7 +12,14 @@ import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import { usePathname } from 'next/navigation';
 import { Reservation, Room } from '../types';
-
+import { useQuery } from '@tanstack/react-query';
+import { fetchReservations } from '@/app/actions/fetchReservations';
+import { fetchRooms } from '@/app/actions/fetchRoom';
+import useSupabaseBrowser from '@/utils/supabase-browser';
+import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
+import { useSwipeable } from 'react-swipeable';
+import AddReservationBtn from '../../Reservations/AddReservation/Button/AddReservationBtn';
+import SetPriceBtn from '../../SetPrice/SetPriceBtn/SetPriceBtn';
 interface RoomRowsProps {
   rooms: Room[];
   reservations: Reservation[];
@@ -29,30 +37,71 @@ interface RoomRowsProps {
   MemoizedButton: React.MemoExoticComponent<React.FC>;
 }
 
-const Reservations: React.FC<RoomRowsProps> = ({
-  rooms,
-  reservations,
-  startDate,
-  endDate,
-  currentDate,
-  isButtonVisible,
-  handleButtonClick,
-  handleMouseEnter,
-  handleMouseLeave,
-  hoveredColumnIndex,
-  hoveredRowIndex,
-  setHoveredColumnIndex,
-  setHoveredRowIndex,
-  MemoizedButton,
-}) => {
-  const { setIsEditing, setOverlay } = useCalendarContext();
-  const { selectedButton, setOpenAddReservationPanel } =
-    useAddReservationContext();
+const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
+  //Providers
+  const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
+
+  const { setFetchedRooms } = useAddRoomContext();
+  const {
+    setFormData,
+    setSelectedButton,
+    selectedButton,
+    setOpenAddReservationPanel,
+  } = useAddReservationContext();
+  const { setPriceFormData } = useSetPriceContext();
+
+  //States
+  const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
+    null
+  );
+  const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
 
   const pathname = usePathname();
 
+  const MemoizedButton = React.memo(
+    pathname === '/calendar' ? AddReservationBtn : SetPriceBtn
+  );
+
+  useEffect(() => {
+    if (rooms) {
+      setFetchedRooms(rooms);
+    }
+  }, [rooms, setFetchedRooms]);
+
+  const handleMouseEnter = useCallback(
+    (room: Room, timestamp: number) => {
+      setSelectedButton({ room, timestamp });
+      setIsButtonVisible(true);
+      setFormData((prevData: FormData) => ({
+        ...prevData,
+        currentDateTimestamp: timestamp,
+      }));
+      setPriceFormData((prevData: FormData) => ({
+        ...prevData,
+        currentDateTimestamp: timestamp,
+        room: room,
+      }));
+    },
+    [setSelectedButton, setFormData, setPriceFormData]
+  );
+
+  const handleButtonClick = useCallback(
+    (room: Room, timestamp: number) => {
+      setSelectedButton({ room, timestamp });
+    },
+    [setSelectedButton]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setIsButtonVisible(false);
+    setHoveredColumnIndex(null);
+    setHoveredRowIndex(null);
+  }, []);
+
+  // Memoized rows
   const rows = useMemo(() => {
-    return rooms?.map((room, roomIndex) => {
+    return rooms.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
       const roomReservations = reservations?.filter(
         (res) => res.room_id === room.id
@@ -146,13 +195,27 @@ const Reservations: React.FC<RoomRowsProps> = ({
     hoveredRowIndex,
     handleMouseEnter,
     handleMouseLeave,
-    setIsEditing,
-    setOpenAddReservationPanel,
-    setOverlay,
-    pathname,
+    isButtonVisible,
+    MemoizedButton,
   ]);
 
-  return <div className="bg-white ">{rows}</div>;
+  return (
+    <>
+      {hoveredColumnIndex !== null && (
+        <div
+          className="absolute bg-black opacity-10 pointer-events-none"
+          style={{
+            width: '44px',
+            height: `${(rooms?.length + 1) * 44}px`,
+            top: '37px',
+            left: `${hoveredColumnIndex * 44}px`,
+            zIndex: 10,
+          }}
+        />
+      )}
+      {pathname === '/calendar' && <>{rows}</>}
+    </>
+  );
 };
 
 export default Reservations;
