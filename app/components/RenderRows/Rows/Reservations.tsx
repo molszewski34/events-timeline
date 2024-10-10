@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useCallback, useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   addDays,
   differenceInDays,
@@ -9,17 +9,12 @@ import {
 } from 'date-fns';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
-import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import { usePathname } from 'next/navigation';
 import { Reservation, Room } from '../types';
-import { useQuery } from '@tanstack/react-query';
-import { fetchReservations } from '@/app/actions/fetchReservations';
-import { fetchRooms } from '@/app/actions/fetchRoom';
-import useSupabaseBrowser from '@/utils/supabase-browser';
-import { useAddRoomContext } from '@/app/contexts/AddRoom/AddRoomProvider';
-import { useSwipeable } from 'react-swipeable';
 import AddReservationBtn from '../../Reservations/AddReservation/Button/AddReservationBtn';
 import SetPriceBtn from '../../SetPrice/SetPriceBtn/SetPriceBtn';
+import useMouseEnterHandler from './hooks/useMouseEnterHandler';
+import useHandleButtonClick from './hooks/useHandleButtonClick';
 interface RoomRowsProps {
   rooms: Room[];
   reservations: Reservation[];
@@ -41,21 +36,8 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
   //Providers
   const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
 
-  const { setFetchedRooms } = useAddRoomContext();
-  const {
-    setFormData,
-    setSelectedButton,
-    selectedButton,
-    setOpenAddReservationPanel,
-  } = useAddReservationContext();
-  const { setPriceFormData } = useSetPriceContext();
-
-  //States
-  const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
-    null
-  );
-  const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
-  const [isButtonVisible, setIsButtonVisible] = useState(false);
+  const { selectedButton, setOpenAddReservationPanel } =
+    useAddReservationContext();
 
   const pathname = usePathname();
 
@@ -63,43 +45,20 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
     pathname === '/calendar' ? AddReservationBtn : SetPriceBtn
   );
 
-  useEffect(() => {
-    if (rooms) {
-      setFetchedRooms(rooms);
-    }
-  }, [rooms, setFetchedRooms]);
+  //Hooks
 
-  const handleMouseEnter = useCallback(
-    (room: Room, timestamp: number) => {
-      setSelectedButton({ room, timestamp });
-      setIsButtonVisible(true);
-      setFormData((prevData: FormData) => ({
-        ...prevData,
-        currentDateTimestamp: timestamp,
-      }));
-      setPriceFormData((prevData: FormData) => ({
-        ...prevData,
-        currentDateTimestamp: timestamp,
-        room: room,
-      }));
-    },
-    [setSelectedButton, setFormData, setPriceFormData]
-  );
+  const {
+    isButtonVisible,
+    handleMouseEnter,
+    handleMouseLeave,
+    hoveredColumnIndex,
+    setHoveredColumnIndex,
+    hoveredRowIndex,
+    setHoveredRowIndex,
+  } = useMouseEnterHandler();
 
-  const handleButtonClick = useCallback(
-    (room: Room, timestamp: number) => {
-      setSelectedButton({ room, timestamp });
-    },
-    [setSelectedButton]
-  );
+  const { handleButtonClick } = useHandleButtonClick();
 
-  const handleMouseLeave = useCallback(() => {
-    setIsButtonVisible(false);
-    setHoveredColumnIndex(null);
-    setHoveredRowIndex(null);
-  }, []);
-
-  // Memoized rows
   const rows = useMemo(() => {
     return rooms.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
@@ -213,7 +172,8 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
           }}
         />
       )}
-      {pathname === '/calendar' && <>{rows}</>}
+      {/* {pathname === '/calendar' && <>{rows}</>} */}
+      <>{rows}</>
     </>
   );
 };
