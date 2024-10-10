@@ -23,9 +23,7 @@ export function CalendarWrapper({
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [daysToShow, setDaysToShow] = useState(14);
   const [maxWeeksToShow, setMaxWeeksToShow] = useState(2);
-  const [startDate, setStartDate] = useState<Date>(
-    startOfWeek(startOfMonth(currentDate), { locale: pl })
-  );
+  const [startDate, setStartDate] = useState<Date>(currentDate);
   const [endDate, setEndDate] = useState<Date>(
     addDays(startOfWeek(endOfMonth(currentDate), { locale: pl }), daysToShow)
   );
