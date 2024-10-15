@@ -25,6 +25,7 @@ const {
     null
   );
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
+  
 
   const handleMouseEnter = useCallback(
     (room: Room, timestamp: number) => {
@@ -42,7 +43,7 @@ const {
         room: room,
       }));
     },
-    []
+    [setSelectedButton, setFormData, setPriceFormData]
   );
 
   const handleMouseLeave = useCallback(() => {
