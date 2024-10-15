@@ -15,7 +15,7 @@ function useHandleButtonClick() {
           setSelectedButton({ room, timestamp });
           setPriceFormData((prevData: FormData) => ({
             ...prevData,
-            room: room, timestamp
+            room: room
           }));
         
         },
