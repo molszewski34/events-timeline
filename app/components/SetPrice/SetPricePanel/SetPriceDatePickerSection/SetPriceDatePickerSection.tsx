@@ -5,9 +5,11 @@ import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 const SetPriceDatePickerSection = () => {
   const { priceFormData, setPriceFormData } = useSetPriceContext();
   const [datePickers, setDatePickers] = useState([
-    { id: Date.now(), isDefault: true },
+    { id: Date.now(), isDefault: true, startDate: null, endDate: null },
   ]);
   const [disabledRanges, setDisabledRanges] = useState([]);
+
+  console.log('datePickers', datePickers);
 
   const updateDisabledRanges = (pickers) => {
     const ranges = pickers
@@ -20,7 +22,10 @@ const SetPriceDatePickerSection = () => {
   };
 
   const addDatePicker = () => {
-    const newPickers = [...datePickers, { id: Date.now(), isDefault: false }];
+    const newPickers = [
+      ...datePickers,
+      { id: Date.now(), isDefault: false, startDate: null, endDate: null },
+    ];
     setDatePickers(newPickers);
     updateDisabledRanges(newPickers);
   };
@@ -40,6 +45,7 @@ const SetPriceDatePickerSection = () => {
     setDatePickers(newPickers);
     updateDisabledRanges(newPickers);
 
+    // Update the global priceFormData with the selected dates if needed
     setPriceFormData((prevData) => ({
       ...prevData,
       selectedStartDate: newStartDate,
@@ -52,11 +58,11 @@ const SetPriceDatePickerSection = () => {
       <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
         <h1 className="text-gray-500">Wybierz Termin</h1>
       </header>
-      {datePickers.map(({ id, isDefault }) => (
+      {datePickers.map(({ id, isDefault, startDate, endDate }) => (
         <SetPriceDatePicker
           key={id}
-          startDate={priceFormData.selectedStartDate}
-          endDate={priceFormData.selectedEndDate}
+          startDate={startDate}
+          endDate={endDate}
           onDateChange={(newStartDate, newEndDate) =>
             handleDateChange(id, newStartDate, newEndDate)
           }
