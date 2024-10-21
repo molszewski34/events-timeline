@@ -32,13 +32,11 @@ interface RoomRowsProps {
   MemoizedButton: React.MemoExoticComponent<React.FC>;
 }
 
-const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
+const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
   //Providers
   const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
-
   const { selectedButton, setOpenAddReservationPanel } =
     useAddReservationContext();
-
   const pathname = usePathname();
 
   const MemoizedButton = React.memo(
@@ -46,7 +44,6 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
   );
 
   //Hooks
-
   const {
     isButtonVisible,
     handleMouseEnter,
@@ -63,11 +60,9 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
     return rooms.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
 
-      const roomReservations = reservations?.filter(
-        (res) => res.room_id === room.id
+      const roomPrice = prices?.find((price) =>
+        price.selected_rooms.some((selectedRoom) => selectedRoom.id === room.id)
       );
-
-      console.log('roomReservations', roomReservations);
 
       const roomDays = Array.from({ length: totalDays }, (_, index) => {
         const currentDateIterator = addDays(startDate, index);
@@ -75,13 +70,20 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
         const isCurrentDay = isToday(currentDateIterator);
         const currentDateTimestamp = currentDateIterator.getTime();
 
-        let reservation = roomReservations?.find((res) =>
-          isSameDay(new Date(res.selected_start_date), currentDateIterator)
+        const isWithinDateRange = roomPrice?.dates.some(
+          (date) =>
+            isSameDay(new Date(date.startDate), currentDateIterator) ||
+            isSameDay(new Date(date.endDate), currentDateIterator)
         );
-        const duration = reservation
+
+        const matchingDates = roomPrice?.dates.find((date) =>
+          isSameDay(new Date(date.startDate), currentDateIterator)
+        );
+
+        const duration = matchingDates
           ? differenceInDays(
-              new Date(reservation.selected_end_date),
-              new Date(reservation.selected_start_date)
+              new Date(matchingDates.endDate),
+              new Date(matchingDates.startDate)
             ) + 1
           : 1;
 
@@ -101,33 +103,21 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
             onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
             onMouseLeave={handleMouseLeave}
           >
+            {isWithinDateRange && (
+              <div
+                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 text-gray-700 text-sm font-semibold z-[40] border border-slate-50"
+                style={{
+                  width: `${duration * 50}px`,
+                }}
+              >
+                Test
+              </div>
+            )}
             {isButtonVisible &&
               selectedButton?.room?.id === room.id &&
               selectedButton.timestamp === currentDateTimestamp && (
                 <MemoizedButton />
               )}
-
-            {reservation && (
-              <button
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 text-gray-700 text-sm font-semibold z-[40] border border-slate-50"
-                style={{
-                  width: `${duration * 50}px`,
-                  backgroundColor: reservation.selected_status?.color,
-                }}
-                onClick={() => {
-                  setIsEditing?.(true);
-                  setOpenAddReservationPanel(true);
-                  setOverlay(true);
-                }}
-              >
-                {duration < 3
-                  ? reservation.main_guest
-                      .match(/(\b\S)?/g)
-                      .join('')
-                      .toUpperCase()
-                  : reservation.main_guest || 'Brak Nazwy'}
-              </button>
-            )}
           </span>
         );
       });
@@ -148,7 +138,7 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
     });
   }, [
     rooms,
-    reservations,
+    prices,
     startDate,
     endDate,
     selectedButton,
@@ -175,10 +165,9 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
           }}
         />
       )}
-      {/* {pathname === '/calendar' && <>{rows}</>} */}
       <>{rows}</>
     </>
   );
 };
 
-export default Reservations;
+export default Prices;
