@@ -63,18 +63,13 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
       const roomPrice = prices?.find((price) =>
         price.selected_rooms.some((selectedRoom) => selectedRoom.id === room.id)
       );
+      const displayPrice = roomPrice?.partial_prices[0]?.longStay || 0;
 
       const roomDays = Array.from({ length: totalDays }, (_, index) => {
         const currentDateIterator = addDays(startDate, index);
         const isWeekendDay = isWeekend(currentDateIterator);
         const isCurrentDay = isToday(currentDateIterator);
         const currentDateTimestamp = currentDateIterator.getTime();
-
-        const isWithinDateRange = roomPrice?.dates.some(
-          (date) =>
-            isSameDay(new Date(date.startDate), currentDateIterator) ||
-            isSameDay(new Date(date.endDate), currentDateIterator)
-        );
 
         const matchingDates = roomPrice?.dates.find((date) =>
           isSameDay(new Date(date.startDate), currentDateIterator)
@@ -86,6 +81,8 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
               new Date(matchingDates.startDate)
             ) + 1
           : 1;
+
+        const isWithinDateRange = matchingDates !== undefined;
 
         return (
           <span
@@ -103,21 +100,26 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
             onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
             onMouseLeave={handleMouseLeave}
           >
-            {isWithinDateRange && (
-              <div
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 text-gray-700 text-sm font-semibold z-[40] border border-slate-50"
-                style={{
-                  width: `${duration * 50}px`,
-                }}
-              >
-                Test
-              </div>
-            )}
             {isButtonVisible &&
               selectedButton?.room?.id === room.id &&
               selectedButton.timestamp === currentDateTimestamp && (
                 <MemoizedButton />
               )}
+
+            {isWithinDateRange &&
+              duration > 0 &&
+              Array.from({ length: duration }).map((_, index) => (
+                <div
+                  key={index}
+                  className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0  text-gray-700 text-xs z-[40]"
+                  style={{
+                    width: '44px',
+                    left: `${index * 44}px`,
+                  }}
+                >
+                  {displayPrice}
+                </div>
+              ))}
           </span>
         );
       });
