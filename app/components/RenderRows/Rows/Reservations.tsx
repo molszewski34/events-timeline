@@ -95,7 +95,9 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
               setHoveredColumnIndex(index);
               setHoveredRowIndex(roomIndex);
             }}
-            onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
+            onTouchStart={() =>
+              handleButtonClick(room.id, currentDateTimestamp)
+            }
             onMouseLeave={handleMouseLeave}
           >
             {isButtonVisible &&
