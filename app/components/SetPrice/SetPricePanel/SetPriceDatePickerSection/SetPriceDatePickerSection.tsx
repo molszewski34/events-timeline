@@ -2,55 +2,89 @@ import React, { useState } from 'react';
 import SetPriceDatePicker from '../SetPriceDatePicker/SetPriceDatePicker';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 
-const SetPriceDatePickerSection = () => {
-  const { priceFormData, setPriceFormData } = useSetPriceContext();
-  const [datePickers, setDatePickers] = useState([
-    { id: Date.now(), isDefault: true, startDate: null, endDate: null },
-  ]);
-  const [disabledRanges, setDisabledRanges] = useState([]);
+interface DatePickerItem {
+  id: number;
+  isDefault: boolean;
+  startDate: Date;
+  endDate: Date;
+}
 
-  console.log('datePickers', datePickers);
+interface FormData {
+  dates: DatePickerItem[];
+}
 
-  const updateDisabledRanges = (pickers) => {
+const SetPriceDatePickerSection: React.FC = () => {
+  const { priceFormData, setPriceFormData } = useSetPriceContext() as {
+    priceFormData: FormData;
+    setPriceFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  };
+
+  const [disabledRanges, setDisabledRanges] = useState<
+    { start: Date; end: Date }[]
+  >([]);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
+
+  const updateDisabledRanges = (pickers: DatePickerItem[]) => {
     const ranges = pickers
-      .filter(({ startDate, endDate }) => startDate && endDate)
-      .map(({ startDate, endDate }) => ({
-        start: startDate,
-        end: endDate,
+      .filter((picker: DatePickerItem) => picker.startDate && picker.endDate)
+      .map((picker: DatePickerItem) => ({
+        start: picker.startDate as Date,
+        end: picker.endDate as Date,
       }));
     setDisabledRanges(ranges);
   };
 
   const addDatePicker = () => {
-    const newPickers = [
-      ...datePickers,
-      { id: Date.now(), isDefault: false, startDate: null, endDate: null },
+    const newPickers: DatePickerItem[] = [
+      ...priceFormData.dates,
+      {
+        id: Date.now(),
+        isDefault: false,
+        startDate: new Date(),
+        endDate: new Date(),
+      },
     ];
-    setDatePickers(newPickers);
+
+    setPriceFormData((prevData: FormData) => ({
+      ...prevData,
+      dates: newPickers,
+    }));
+
     updateDisabledRanges(newPickers);
   };
 
-  const removeDatePicker = (id) => {
-    const newPickers = datePickers.filter((picker) => picker.id !== id);
-    setDatePickers(newPickers);
+  const removeDatePicker = (id: number) => {
+    const newPickers = priceFormData.dates.filter(
+      (picker: DatePickerItem) => picker.id !== id
+    );
+    setPriceFormData((prevData: FormData) => ({
+      ...prevData,
+      dates: newPickers,
+    }));
     updateDisabledRanges(newPickers);
   };
 
-  const handleDateChange = (id, newStartDate, newEndDate) => {
-    const newPickers = datePickers.map((picker) =>
+  const handleDateChange = (
+    id: number,
+    newStartDate: Date | null,
+    newEndDate: Date | null
+  ) => {
+    const startDate = newStartDate ?? new Date();
+    const endDate = newEndDate ?? new Date();
+
+    const newPickers = priceFormData.dates.map((picker: DatePickerItem) =>
       picker.id === id
-        ? { ...picker, startDate: newStartDate, endDate: newEndDate }
+        ? { ...picker, startDate: startDate, endDate: endDate }
         : picker
     );
-    setDatePickers(newPickers);
-    updateDisabledRanges(newPickers);
-
-    // Update the global priceFormData with the selected dates if needed
-    setPriceFormData((prevData) => ({
+    setPriceFormData((prevData: FormData) => ({
       ...prevData,
-      selectedStartDate: newStartDate,
-      selectedEndDate: newEndDate,
+      dates: newPickers,
     }));
+    updateDisabledRanges(newPickers);
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
   };
 
   return (
@@ -58,7 +92,7 @@ const SetPriceDatePickerSection = () => {
       <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
         <h1 className="text-gray-500">Wybierz Termin</h1>
       </header>
-      {datePickers.map(({ id, isDefault, startDate, endDate }) => (
+      {priceFormData.dates.map(({ id, isDefault, startDate, endDate }) => (
         <SetPriceDatePicker
           key={id}
           startDate={startDate}
@@ -74,7 +108,7 @@ const SetPriceDatePickerSection = () => {
       <button
         type="button"
         onClick={addDatePicker}
-        className="flex  items-center gap-1 text-[#00a541] text-xs text-left  rounded font-medium cursor-pointer w-fit"
+        className="flex items-center gap-1 text-[#00a541] text-xs text-left rounded font-medium cursor-pointer w-fit"
       >
         <i className="text-xl">add</i>
         <p className="text-xs">Dodaj kolejny termin</p>
