@@ -1,26 +1,31 @@
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import React from 'react';
-import useUpdateDisabledRanges from './useUpdateDisabledRanges';
+interface DatePicker {
+  id: number;
+  isDefault: boolean;
+  startDate: Date | null;
+  endDate: Date | null;
+}
 
+interface PriceFormData {
+  dates: DatePicker[];
+}
 function useHandleAddDatePicker() {
   const { priceFormData, setPriceFormData } = useSetPriceContext() as {
-    priceFormData: FormData;
-    setPriceFormData: React.Dispatch<React.SetStateAction<FormData>>;
+    priceFormData: PriceFormData;
+    setPriceFormData: React.Dispatch<React.SetStateAction<PriceFormData>>;
   };
 
-  const { updateDisabledRanges } = useUpdateDisabledRanges();
   const handleAddDatePicker = () => {
-    const newPickers: DatePickerItem[] = [
+    const newPickers = [
       ...priceFormData.dates,
       { id: Date.now(), isDefault: false, startDate: null, endDate: null },
     ];
 
-    setPriceFormData((prevData: FormData) => ({
+    setPriceFormData((prevData: PriceFormData) => ({
       ...prevData,
       dates: newPickers,
     }));
-
-    updateDisabledRanges(newPickers);
   };
 
   return { handleAddDatePicker };
