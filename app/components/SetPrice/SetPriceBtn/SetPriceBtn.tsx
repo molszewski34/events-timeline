@@ -4,7 +4,7 @@ import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 const SetPriceBtn = () => {
   const { openSetPricePanel, setOpenSetPricePanel } = useSetPriceContext();
   const { setOverlay } = useCalendarContext();
-  console.log(openSetPricePanel);
+
   return (
     <div
       onClick={() => {
