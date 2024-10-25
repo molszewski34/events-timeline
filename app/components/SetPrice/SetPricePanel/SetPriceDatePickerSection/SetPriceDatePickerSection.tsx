@@ -18,15 +18,13 @@ interface FormData {
 
 const SetPriceDatePickerSection: React.FC = () => {
   const { priceFormData, setPriceFormData } = useSetPriceContext();
-
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
   const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
 
-  const { updateDisabledRanges, disabledRanges } = useUpdateDisabledRanges();
-
+  const { disabledRanges, setDisabledRanges } = useUpdateDisabledRanges();
   const { handleAddDatePicker } = useHandleAddDatePicker();
-
   const { removeDatePicker } = useRemoveDatePicker();
+
   const handleDateChange = (
     id: number,
     newStartDate: Date,
@@ -37,11 +35,17 @@ const SetPriceDatePickerSection: React.FC = () => {
         ? { ...picker, startDate: newStartDate, endDate: newEndDate }
         : picker
     );
+
+    const updatedRanges = newPickers.map(({ startDate, endDate }) => ({
+      start: startDate,
+      end: endDate,
+    }));
+
     setPriceFormData((prevData: FormData) => ({
       ...prevData,
       dates: newPickers,
     }));
-    updateDisabledRanges(newPickers);
+    setDisabledRanges([...disabledRanges, ...updatedRanges]);
     setSelectedStartDate(newStartDate);
     setSelectedEndDate(newEndDate);
   };
@@ -51,19 +55,21 @@ const SetPriceDatePickerSection: React.FC = () => {
       <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
         <h1 className="text-gray-500">Wybierz Termin</h1>
       </header>
-      {priceFormData.dates.map(({ id, isDefault, startDate, endDate }) => (
-        <SetPriceDatePicker
-          key={id}
-          startDate={startDate}
-          endDate={endDate}
-          onDateChange={(newStartDate, newEndDate) =>
-            handleDateChange(id, newStartDate, newEndDate)
-          }
-          onRemove={() => removeDatePicker(id)}
-          isDefault={isDefault}
-          disabledRanges={disabledRanges}
-        />
-      ))}
+      {priceFormData.dates.map(
+        ({ id, isDefault, startDate, endDate }: DatePickerItem) => (
+          <SetPriceDatePicker
+            key={id}
+            startDate={startDate}
+            endDate={endDate}
+            onDateChange={(newStartDate, newEndDate) =>
+              handleDateChange(id, newStartDate, newEndDate)
+            }
+            onRemove={() => removeDatePicker(id)}
+            isDefault={isDefault}
+            disabledRanges={disabledRanges}
+          />
+        )
+      )}
       <button
         type="button"
         onClick={handleAddDatePicker}
