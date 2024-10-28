@@ -32,13 +32,11 @@ interface RoomRowsProps {
   MemoizedButton: React.MemoExoticComponent<React.FC>;
 }
 
-const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
+const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
   //Providers
   const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
-
   const { selectedButton, setOpenAddReservationPanel } =
     useAddReservationContext();
-
   const pathname = usePathname();
 
   const MemoizedButton = React.memo(
@@ -46,7 +44,6 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
   );
 
   //Hooks
-
   const {
     isButtonVisible,
     handleMouseEnter,
@@ -62,9 +59,11 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
   const rows = useMemo(() => {
     return rooms.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
-      const roomReservations = reservations?.filter(
-        (res) => res.room_id === room.id
+
+      const roomPrice = prices?.find((price) =>
+        price.selected_rooms.some((selectedRoom) => selectedRoom.id === room.id)
       );
+      const displayPrice = roomPrice?.partial_prices[0]?.longStay || 0;
 
       const roomDays = Array.from({ length: totalDays }, (_, index) => {
         const currentDateIterator = addDays(startDate, index);
@@ -72,15 +71,18 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
         const isCurrentDay = isToday(currentDateIterator);
         const currentDateTimestamp = currentDateIterator.getTime();
 
-        let reservation = roomReservations?.find((res) =>
-          isSameDay(new Date(res.selected_start_date), currentDateIterator)
+        const matchingDates = roomPrice?.dates.find((date) =>
+          isSameDay(new Date(date.startDate), currentDateIterator)
         );
-        const duration = reservation
+
+        const duration = matchingDates
           ? differenceInDays(
-              new Date(reservation.selected_end_date),
-              new Date(reservation.selected_start_date)
+              new Date(matchingDates.endDate),
+              new Date(matchingDates.startDate)
             ) + 1
           : 1;
+
+        const isWithinDateRange = matchingDates !== undefined;
 
         return (
           <span
@@ -95,9 +97,7 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
               setHoveredColumnIndex(index);
               setHoveredRowIndex(roomIndex);
             }}
-            onTouchStart={() =>
-              handleButtonClick(room.id, currentDateTimestamp)
-            }
+            onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
             onMouseLeave={handleMouseLeave}
           >
             {isButtonVisible &&
@@ -106,27 +106,20 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
                 <MemoizedButton />
               )}
 
-            {reservation && (
-              <button
-                className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0 bg-red-300 text-gray-700 text-sm font-semibold z-[40] border border-slate-50"
-                style={{
-                  width: `${duration * 50}px`,
-                  backgroundColor: reservation.selected_status?.color,
-                }}
-                onClick={() => {
-                  setIsEditing?.(true);
-                  setOpenAddReservationPanel(true);
-                  setOverlay(true);
-                }}
-              >
-                {duration < 3
-                  ? reservation.main_guest
-                      .match(/(\b\S)?/g)
-                      .join('')
-                      .toUpperCase()
-                  : reservation.main_guest || 'Brak Nazwy'}
-              </button>
-            )}
+            {isWithinDateRange &&
+              duration > 0 &&
+              Array.from({ length: duration }).map((_, index) => (
+                <div
+                  key={index}
+                  className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0  text-gray-700 text-xs z-[40]"
+                  style={{
+                    width: '44px',
+                    left: `${index * 44}px`,
+                  }}
+                >
+                  {displayPrice}
+                </div>
+              ))}
           </span>
         );
       });
@@ -147,7 +140,7 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
     });
   }, [
     rooms,
-    reservations,
+    prices,
     startDate,
     endDate,
     selectedButton,
@@ -174,10 +167,9 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
           }}
         />
       )}
-      {/* {pathname === '/calendar' && <>{rows}</>} */}
       <>{rows}</>
     </>
   );
 };
 
-export default Reservations;
+export default Prices;

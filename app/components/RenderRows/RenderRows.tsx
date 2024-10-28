@@ -15,7 +15,8 @@ import { fetchRooms } from '@/app/actions/fetchRoom';
 import Days from './Days/Days';
 import useHandlers from './Rows/hooks/useHandlers';
 import useHandlerResize from './Rows/hooks/useHandlerResize';
-
+import Prices from './Rows/Prices';
+import { usePathname } from 'next/navigation';
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();
 
@@ -28,6 +29,10 @@ export default function RenderRows({ id }: { id: string }) {
   const { handlers } = useHandlers();
   const { handleResize } = useHandlerResize();
 
+  const pathname = usePathname();
+
+  const isCalendar = pathname === '/calendar';
+
   useEffect(() => {
     handleResize();
   }, [handleResize]);
@@ -39,7 +44,11 @@ export default function RenderRows({ id }: { id: string }) {
         <div className="flex border-collapse">
           <Days currentDate={currentDate} startDate={startDate} />
         </div>
-        <Reservations id={id} reservations={reservations} rooms={rooms} />
+        {isCalendar ? (
+          <Reservations id={id} reservations={reservations} rooms={rooms} />
+        ) : (
+          <Prices id={id} rooms={rooms} prices={prices} />
+        )}
       </div>
     </div>
   );

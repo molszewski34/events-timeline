@@ -1,78 +1,14 @@
-import React, { useState } from 'react';
-import SetPriceDatePicker from '../SetPriceDatePicker/SetPriceDatePicker';
-import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+import React from 'react';
 
-const SetPriceDatePickerSection = () => {
-  const { priceFormData, setPriceFormData } = useSetPriceContext();
-  const [datePickers, setDatePickers] = useState([
-    { id: Date.now(), isDefault: true },
-  ]);
-  const [disabledRanges, setDisabledRanges] = useState([]);
-
-  const updateDisabledRanges = (pickers) => {
-    const ranges = pickers
-      .filter(({ startDate, endDate }) => startDate && endDate)
-      .map(({ startDate, endDate }) => ({
-        start: startDate,
-        end: endDate,
-      }));
-    setDisabledRanges(ranges);
-  };
-
-  const addDatePicker = () => {
-    const newPickers = [...datePickers, { id: Date.now(), isDefault: false }];
-    setDatePickers(newPickers);
-    updateDisabledRanges(newPickers);
-  };
-
-  const removeDatePicker = (id) => {
-    const newPickers = datePickers.filter((picker) => picker.id !== id);
-    setDatePickers(newPickers);
-    updateDisabledRanges(newPickers);
-  };
-
-  const handleDateChange = (id, newStartDate, newEndDate) => {
-    const newPickers = datePickers.map((picker) =>
-      picker.id === id
-        ? { ...picker, startDate: newStartDate, endDate: newEndDate }
-        : picker
-    );
-    setDatePickers(newPickers);
-    updateDisabledRanges(newPickers);
-
-    setPriceFormData((prevData) => ({
-      ...prevData,
-      selectedStartDate: newStartDate,
-      selectedEndDate: newEndDate,
-    }));
-  };
-
+import Header from './ui/Header';
+import RenderPrices from './RenderPrices';
+import Button from './ui/Button';
+const SetPriceDatePickerSection: React.FC = () => {
   return (
     <div className="flex flex-col gap-3">
-      <header className="border-b-2 border-gray-200 pb-2 font-semibold text-gray-400 text-[13px]">
-        <h1 className="text-gray-500">Wybierz Termin</h1>
-      </header>
-      {datePickers.map(({ id, isDefault }) => (
-        <SetPriceDatePicker
-          key={id}
-          startDate={priceFormData.selectedStartDate}
-          endDate={priceFormData.selectedEndDate}
-          onDateChange={(newStartDate, newEndDate) =>
-            handleDateChange(id, newStartDate, newEndDate)
-          }
-          onRemove={() => removeDatePicker(id)}
-          isDefault={isDefault}
-          disabledRanges={disabledRanges}
-        />
-      ))}
-      <button
-        type="button"
-        onClick={addDatePicker}
-        className="flex  items-center gap-1 text-[#00a541] text-xs text-left  rounded font-medium cursor-pointer w-fit"
-      >
-        <i className="text-xl">add</i>
-        <p className="text-xs">Dodaj kolejny termin</p>
-      </button>
+      <Header />
+      <RenderPrices />
+      <Button />
     </div>
   );
 };

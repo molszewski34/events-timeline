@@ -2,7 +2,21 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const SetPriceDatePicker = ({
+interface SetPriceDatePickerProps {
+  startDate: Date;
+  endDate: Date;
+  onDateChange: (startDate: Date | null, endDate: Date | null) => void;
+  onRemove: () => void;
+  isDefault: boolean;
+  disabledRanges: DisabledRange[];
+}
+
+interface DisabledRange {
+  start: Date;
+  end: Date;
+}
+
+const SetPriceDatePicker: React.FC<SetPriceDatePickerProps> = ({
   startDate,
   endDate,
   onDateChange,
@@ -10,11 +24,11 @@ const SetPriceDatePicker = ({
   isDefault,
   disabledRanges,
 }) => {
-  const handleStartDateChange = (date) => {
+  const handleStartDateChange = (date: Date) => {
     onDateChange(date, endDate);
   };
 
-  const handleEndDateChange = (date) => {
+  const handleEndDateChange = (date: Date) => {
     onDateChange(startDate, date);
   };
 
@@ -53,7 +67,7 @@ const SetPriceDatePicker = ({
           <DatePicker
             className={'w-full border border-gray-200 p-2 text-xs pr-10'}
             dateFormat="yyyy-MM-dd h:mm"
-            selected={endDate || null} // Use the endDate from context or null if not set
+            selected={endDate || null}
             onChange={handleEndDateChange}
             showTimeInput
             timeInputLabel="Czas:"

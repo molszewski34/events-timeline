@@ -1,6 +1,3 @@
-export function fetchPrices(client, id: string) {
-    return client
-      .from('prices')
-      .select(`*`)
-    
-  }
+export function fetchPrices(client: any) {
+  return client.from('prices').select(`*`);
+}

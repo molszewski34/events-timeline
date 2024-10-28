@@ -23,7 +23,7 @@ import SearchBar from '@/app/components/Navigation/SearchBar/SearchBar';
 import OverlaySearchBar from '@/app/components/Navigation/SearchBar/OverlaySearchBar/OverlaySearchBar';
 import SetPricePanel from '@/app/components/SetPrice/SetPricePanel/SetPricePanel';
 
-export default async function Calendar({ params }: { params: { id: string } }) {
+export default async function Set({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
   const cookieStore = cookies();
   const supabase = useSupabaseServer(cookieStore);
@@ -46,7 +46,7 @@ export default async function Calendar({ params }: { params: { id: string } }) {
             <RenderRows id={params.id} />
           </div>
         </div>
-        <SetPricePanel />
+        <SetPricePanel id={params.id} />
         <Footer />
 
         <Overlay />
