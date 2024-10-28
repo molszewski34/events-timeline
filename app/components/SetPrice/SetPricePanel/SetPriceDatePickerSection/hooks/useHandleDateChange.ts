@@ -1,16 +1,5 @@
 import { useCallback } from 'react';
 
-interface DatePickerItem {
-  id: number;
-  isDefault: boolean;
-  startDate: Date | null;
-  endDate: Date | null;
-}
-
-interface FormData {
-  dates: DatePickerItem[];
-}
-
 interface UseHandleDateChangeProps {
   priceFormData: FormData;
   setPriceFormData: React.Dispatch<React.SetStateAction<FormData>>;
