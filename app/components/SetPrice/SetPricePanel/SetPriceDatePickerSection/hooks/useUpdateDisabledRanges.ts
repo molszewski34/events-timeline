@@ -19,7 +19,7 @@ function useUpdateDisabledRanges() {
   >([]);
 
   useEffect(() => {
-    const hasOverlap = prices.some((price: any) =>
+    const hasOverlap = prices?.some((price: any) =>
       price.selected_rooms.some((room: { id: string }) =>
         priceFormData.selectedRooms.some(
           (selectedRoom: any) => selectedRoom.id === room.id
