@@ -5,13 +5,11 @@ import SetPriceHeader from './SetPriceHeader/SetPriceHeader';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import SetPriceDatePickerSection from './SetPriceDatePickerSection/SetPriceDatePickerSection';
 import RoomSelector from '../SetRoom/SetRoom';
-import NextRoom from '../SetRoom/NextRoom/NextRoom';
 import SetPrices from './SetPrices/SetPrices';
 import Footer from './Footer/Footer';
-import RecalculatePrices from './RecalculatePrices/RecalculatePrices';
 
 const SetPricePanel = () => {
-  const { openSetPricePanel, setOpenSetPricePanel } = useSetPriceContext();
+  const { openSetPricePanel } = useSetPriceContext();
 
   return (
     <main
