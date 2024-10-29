@@ -3,6 +3,7 @@ import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
+import useFetchPrices from '../../../hooks/useFetchPrices';
 
 interface DatePickerItem {
   startDate: Date;
@@ -20,16 +21,9 @@ interface Price {
 }
 
 function useUpdateDisabledRanges() {
-  const supabase = useSupabaseBrowser();
   const { priceFormData } = useSetPriceContext();
 
-  const { data: pricesResponse } = useQuery({
-    queryKey: ['fetchPrices', priceFormData.selectedRooms],
-    queryFn: () => fetchPrices(supabase),
-    enabled: Boolean(priceFormData.selectedRooms?.length),
-  });
-
-  const prices = pricesResponse?.data;
+  const prices = useFetchPrices(priceFormData.selectedRooms);
   const [disabledRanges, setDisabledRanges] = useState<
     { start: Date; end: Date }[]
   >([]);
