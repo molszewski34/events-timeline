@@ -7,6 +7,7 @@ export const SetPrice = createContext<any>(undefined);
 export function SetPriceWrapper({ children }: { children: React.ReactNode }) {
   const [openSetPricePanel, setOpenSetPricePanel] = useState(false);
   const [priceFormData, setPriceFormData] = useState(initialSetPriceData);
+  const [isEditingPrice, setisEditingPrice] = useState(false);
 
   return (
     <SetPrice.Provider
@@ -15,6 +16,8 @@ export function SetPriceWrapper({ children }: { children: React.ReactNode }) {
         setOpenSetPricePanel,
         priceFormData,
         setPriceFormData,
+        isEditingPrice,
+        setisEditingPrice,
       }}
     >
       {children}
