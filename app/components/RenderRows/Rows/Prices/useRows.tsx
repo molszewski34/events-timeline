@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import useMouseEnterHandler from '../hooks/useMouseEnterHandler';
 import {
   addDays,
@@ -11,6 +11,8 @@ import useHandleButtonClick from '../hooks/useHandleButtonClick';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
 import useMemoizedButton from '../../../../hooks/MemoizedButton/useMemoiżedButton';
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
+
 function useRows({ rooms, prices }) {
   const {
     isButtonVisible,
@@ -28,7 +30,10 @@ function useRows({ rooms, prices }) {
 
   const { selectedButton } = useAddReservationContext();
 
-  const { endDate, startDate } = useCalendarContext();
+  const { endDate, startDate, setOverlay } = useCalendarContext();
+
+  const { setOpenSetPricePanel, setisEditingPrice, isEditingPrice } =
+    useSetPriceContext();
 
   const rows = useMemo(() => {
     return rooms.map((room, roomIndex) => {
@@ -76,23 +81,27 @@ function useRows({ rooms, prices }) {
           >
             {isButtonVisible &&
               selectedButton?.room?.id === room.id &&
-              selectedButton.timestamp === currentDateTimestamp && (
-                <MemoizedButton />
-              )}
+              selectedButton.timestamp === currentDateTimestamp &&
+              !isWithinDateRange && <MemoizedButton />}
 
             {isWithinDateRange &&
               duration > 0 &&
               Array.from({ length: duration }).map((_, index) => (
-                <div
+                <button
                   key={index}
                   className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0  text-gray-700 text-xs z-[40]"
                   style={{
                     width: '44px',
                     left: `${index * 44}px`,
                   }}
+                  onClick={() => {
+                    setisEditingPrice(true),
+                      setOpenSetPricePanel(true),
+                      setOverlay(true);
+                  }}
                 >
                   {displayPrice}
-                </div>
+                </button>
               ))}
           </span>
         );
