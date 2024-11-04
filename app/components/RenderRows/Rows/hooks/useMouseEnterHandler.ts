@@ -1,10 +1,9 @@
-import { useState, useCallback } from "react";
-import { useAddReservationContext } from "@/app/contexts/AddReservation/AddReservationProvider";
+import { useState, useCallback } from 'react';
+import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 
 interface Room {
   id: number;
   name: string;
-  
 }
 
 interface FormData {
@@ -13,19 +12,16 @@ interface FormData {
 }
 
 function useMouseHandlers() {
-
-const {
-    setFormData,
-    setSelectedButton,
-  } = useAddReservationContext();
+  const { setFormData, setSelectedButton } = useAddReservationContext();
 
   const [isButtonVisible, setIsButtonVisible] = useState(false);
-  const [priceFormData, setPriceFormData] = useState<FormData>({ currentDateTimestamp: 0 });
+  const [priceFormData, setPriceFormData] = useState<FormData>({
+    currentDateTimestamp: 0,
+  });
   const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
     null
   );
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
-  
 
   const handleMouseEnter = useCallback(
     (room: Room, timestamp: number) => {
@@ -35,6 +31,8 @@ const {
       setFormData((prevData: FormData) => ({
         ...prevData,
         currentDateTimestamp: timestamp,
+        selectedRoom: room,
+        selectedRoomId: room.id,
       }));
 
       setPriceFormData((prevData: FormData) => ({
@@ -57,10 +55,10 @@ const {
     priceFormData,
     handleMouseEnter,
     handleMouseLeave,
-    hoveredColumnIndex, 
+    hoveredColumnIndex,
     setHoveredColumnIndex,
-    hoveredRowIndex, 
-    setHoveredRowIndex
+    hoveredRowIndex,
+    setHoveredRowIndex,
   };
 }
 

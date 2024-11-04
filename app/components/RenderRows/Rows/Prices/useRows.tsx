@@ -1,5 +1,5 @@
-'use client';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import useMouseEnterHandler from '../hooks/useMouseEnterHandler';
 import {
   addDays,
   differenceInDays,
@@ -7,43 +7,13 @@ import {
   isToday,
   isWeekend,
 } from 'date-fns';
+import useHandleButtonClick from '../hooks/useHandleButtonClick';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
-import { usePathname } from 'next/navigation';
-import { Reservation, Room } from '../types';
-import AddReservationBtn from '../../Reservations/AddReservation/Button/AddReservationBtn';
-import SetPriceBtn from '../../SetPrice/SetPriceBtn/SetPriceBtn';
-import useMouseEnterHandler from './hooks/useMouseEnterHandler';
-import useHandleButtonClick from './hooks/useHandleButtonClick';
-interface RoomRowsProps {
-  rooms: Room[];
-  reservations: Reservation[];
-  startDate: Date;
-  endDate: Date;
-  currentDate: Date;
-  isButtonVisible: boolean;
-  handleButtonClick: (room: Room, timestamp: number) => void;
-  handleMouseEnter: (room: Room, timestamp: number) => void;
-  handleMouseLeave: () => void;
-  hoveredColumnIndex: number | null;
-  hoveredRowIndex: number | null;
-  setHoveredColumnIndex: (index: number | null) => void;
-  setHoveredRowIndex: (index: number | null) => void;
-  MemoizedButton: React.MemoExoticComponent<React.FC>;
-}
+import useMemoizedButton from '../../../../hooks/MemoizedButton/useMemoiżedButton';
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 
-const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
-  //Providers
-  const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
-  const { selectedButton, setOpenAddReservationPanel } =
-    useAddReservationContext();
-  const pathname = usePathname();
-
-  const MemoizedButton = React.memo(
-    pathname === '/calendar' ? AddReservationBtn : SetPriceBtn
-  );
-
-  //Hooks
+function useRows({ rooms, prices }) {
   const {
     isButtonVisible,
     handleMouseEnter,
@@ -54,7 +24,16 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
     setHoveredRowIndex,
   } = useMouseEnterHandler();
 
+  const MemoizedButton = useMemoizedButton();
+
   const { handleButtonClick } = useHandleButtonClick();
+
+  const { selectedButton } = useAddReservationContext();
+
+  const { endDate, startDate, setOverlay } = useCalendarContext();
+
+  const { setOpenSetPricePanel, setisEditingPrice, isEditingPrice } =
+    useSetPriceContext();
 
   const rows = useMemo(() => {
     return rooms.map((room, roomIndex) => {
@@ -87,9 +66,9 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
         return (
           <span
             key={`${room.id}-${currentDateIterator.toString()}`}
-            className={`flex flex-col flex-wrap relative w-[44px] h-[48px] 
-              ${index === 0 ? 'border-l border-t' : 'border-t border-l'} 
-              border-gray-200 ${isWeekendDay ? 'bg-[#ebedef]' : ''} ${
+            className={`flex flex-col flex-wrap relative w-[44px] h-[48px]
+                  ${index === 0 ? 'border-l border-t' : 'border-t border-l'}
+                  border-gray-200 ${isWeekendDay ? 'bg-[#ebedef]' : ''} ${
               isCurrentDay ? 'bg-[#d9f2e3]' : ''
             }`}
             onMouseEnter={() => {
@@ -102,23 +81,27 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
           >
             {isButtonVisible &&
               selectedButton?.room?.id === room.id &&
-              selectedButton.timestamp === currentDateTimestamp && (
-                <MemoizedButton />
-              )}
+              selectedButton.timestamp === currentDateTimestamp &&
+              !isWithinDateRange && <MemoizedButton />}
 
             {isWithinDateRange &&
               duration > 0 &&
               Array.from({ length: duration }).map((_, index) => (
-                <div
+                <button
                   key={index}
                   className="absolute flex justify-center items-center top-0 bottom-0 left-0 right-0  text-gray-700 text-xs z-[40]"
                   style={{
                     width: '44px',
                     left: `${index * 44}px`,
                   }}
+                  onClick={() => {
+                    setisEditingPrice(true),
+                      setOpenSetPricePanel(true),
+                      setOverlay(true);
+                  }}
                 >
                   {displayPrice}
-                </div>
+                </button>
               ))}
           </span>
         );
@@ -152,24 +135,7 @@ const Prices: React.FC<RoomRowsProps> = ({ rooms, prices }) => {
     isButtonVisible,
     MemoizedButton,
   ]);
+  return { rows, hoveredColumnIndex };
+}
 
-  return (
-    <>
-      {hoveredColumnIndex !== null && (
-        <div
-          className="absolute bg-black opacity-10 pointer-events-none"
-          style={{
-            width: '44px',
-            height: `${(rooms?.length + 1) * 44}px`,
-            top: '37px',
-            left: `${hoveredColumnIndex * 44}px`,
-            zIndex: 10,
-          }}
-        />
-      )}
-      <>{rows}</>
-    </>
-  );
-};
-
-export default Prices;
+export default useRows;

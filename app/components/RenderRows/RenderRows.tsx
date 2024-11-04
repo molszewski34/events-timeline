@@ -15,7 +15,7 @@ import { fetchRooms } from '@/app/actions/fetchRoom';
 import Days from './Days/Days';
 import useHandlers from './Rows/hooks/useHandlers';
 import useHandlerResize from './Rows/hooks/useHandlerResize';
-import Prices from './Rows/Prices';
+import Prices from './Rows/Prices/Prices';
 import { usePathname } from 'next/navigation';
 export default function RenderRows({ id }: { id: string }) {
   const supabase = useSupabaseBrowser();

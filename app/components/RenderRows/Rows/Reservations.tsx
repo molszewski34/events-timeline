@@ -9,12 +9,10 @@ import {
 } from 'date-fns';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
 import { useCalendarContext } from '@/app/contexts/Calendar/CalendarProvider';
-import { usePathname } from 'next/navigation';
 import { Reservation, Room } from '../types';
-import AddReservationBtn from '../../Reservations/AddReservation/Button/AddReservationBtn';
-import SetPriceBtn from '../../SetPrice/SetPriceBtn/SetPriceBtn';
 import useMouseEnterHandler from './hooks/useMouseEnterHandler';
 import useHandleButtonClick from './hooks/useHandleButtonClick';
+import useMemoizedButton from '@/app/hooks/MemoizedButton/useMemoiżedButton';
 interface RoomRowsProps {
   rooms: Room[];
   reservations: Reservation[];
@@ -35,18 +33,12 @@ interface RoomRowsProps {
 const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
   //Providers
   const { setIsEditing, setOverlay, endDate, startDate } = useCalendarContext();
-
   const { selectedButton, setOpenAddReservationPanel } =
     useAddReservationContext();
 
-  const pathname = usePathname();
-
-  const MemoizedButton = React.memo(
-    pathname === '/calendar' ? AddReservationBtn : SetPriceBtn
-  );
+  const MemoizedButton = useMemoizedButton();
 
   //Hooks
-
   const {
     isButtonVisible,
     handleMouseEnter,
@@ -95,9 +87,7 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
               setHoveredColumnIndex(index);
               setHoveredRowIndex(roomIndex);
             }}
-            onTouchStart={() =>
-              handleButtonClick(room.id, currentDateTimestamp)
-            }
+            onTouchStart={() => handleButtonClick(room, currentDateTimestamp)}
             onMouseLeave={handleMouseLeave}
           >
             {isButtonVisible &&
@@ -114,7 +104,7 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
                   backgroundColor: reservation.selected_status?.color,
                 }}
                 onClick={() => {
-                  setIsEditing?.(true);
+                  setIsEditing(true);
                   setOpenAddReservationPanel(true);
                   setOverlay(true);
                 }}
@@ -174,7 +164,6 @@ const Reservations: React.FC<RoomRowsProps> = ({ rooms, reservations }) => {
           }}
         />
       )}
-      {/* {pathname === '/calendar' && <>{rows}</>} */}
       <>{rows}</>
     </>
   );
