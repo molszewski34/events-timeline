@@ -9,34 +9,35 @@ interface Room {
 interface PriceFormData {
   room: Room;
   selectedRooms: Room[];
-  id: string
+  id: string;
 }
 
 function useHandleCheckboxChange(rooms: Room[]) {
-  const { priceFormData, setPriceFormData } = useSetPriceContext();
+  const { setPriceFormData, selectedRooms, setSelectedRooms, room } =
+    useSetPriceContext();
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (priceFormData.selectedRooms.length === 0) return;
+    if (selectedRooms.length === 0) return;
 
     if (e.target.checked) {
       const sameCapacityRooms =
         rooms?.filter(
           (room) =>
-            room.num_of_persons === priceFormData.room.num_of_persons &&
-            !priceFormData.selectedRooms.some(
+            room.num_of_persons === room.num_of_persons &&
+            !selectedRooms.some(
               (selectedRoom: PriceFormData) => selectedRoom.id === room.id
             )
         ) || [];
 
+      setSelectedRooms([...selectedRooms, ...sameCapacityRooms]);
+
+      const sameCapacityRoomIds = sameCapacityRooms.map((room) => room.id);
       setPriceFormData((prev: PriceFormData) => ({
         ...prev,
-        selectedRooms: [...prev.selectedRooms, ...sameCapacityRooms],
+        selectedRoomsIds: [...sameCapacityRoomIds],
       }));
     } else {
-      setPriceFormData((prev: PriceFormData) => ({
-        ...prev,
-        selectedRooms: [priceFormData.room], 
-      }));
+      setSelectedRooms([room]);
     }
   };
 
