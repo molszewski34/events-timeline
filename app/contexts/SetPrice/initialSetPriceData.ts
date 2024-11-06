@@ -1,7 +1,5 @@
 export const initialSetPriceData = {
-  currentDateTimestamp: null,
-  room: '',
-  selectedRooms: [],
+  selectedRoomsIds: [],
   partialPrices: [],
   partialPricesForChildrens: [],
   dates: [
