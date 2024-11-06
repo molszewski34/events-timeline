@@ -15,13 +15,14 @@ const SetPartialPrice = ({ id }: { id: string }) => {
   const { data: priceConfiguration, isLoading: isLoadingPriceConfig } =
     useQuery(fetchPriceSettings(supabase));
 
-  const { priceFormData, setPriceFormData } = useSetPriceContext();
+  const { priceFormData, setPriceFormData, selectedRooms } =
+    useSetPriceContext();
 
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
 
   useEffect(() => {
     if (priceFormData?.selectedRooms?.length > 0) {
-      const maxPersons = priceFormData.selectedRooms.reduce(
+      const maxPersons = selectedRooms.reduce(
         (max, room) => Math.max(max, room.num_of_persons || 0),
         0
       );
@@ -33,7 +34,7 @@ const SetPartialPrice = ({ id }: { id: string }) => {
         partialPrices: [],
       }));
     }
-  }, [priceFormData.selectedRooms]);
+  }, [selectedRooms]);
 
   useEffect(() => {
     if (maxNumOfPersons > 0 && priceConfiguration) {

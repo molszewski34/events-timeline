@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAddReservationContext } from '@/app/contexts/AddReservation/AddReservationProvider';
+import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 
 interface Room {
   id: number;
@@ -13,6 +14,9 @@ interface FormData {
 
 function useMouseHandlers() {
   const { setFormData, setSelectedButton } = useAddReservationContext();
+
+  const { currentDateTimestamp, setCurrentDateTimestamp, setRoom } =
+    useSetPriceContext();
 
   const [isButtonVisible, setIsButtonVisible] = useState(false);
   const [priceFormData, setPriceFormData] = useState<FormData>({
@@ -35,13 +39,10 @@ function useMouseHandlers() {
         selectedRoomId: room.id,
       }));
 
-      setPriceFormData((prevData: FormData) => ({
-        ...prevData,
-        currentDateTimestamp: timestamp,
-        room: room,
-      }));
+      setCurrentDateTimestamp(timestamp);
+      setRoom(room);
     },
-    [setSelectedButton, setFormData, setPriceFormData]
+    [setSelectedButton, setFormData, currentDateTimestamp]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -52,7 +53,7 @@ function useMouseHandlers() {
 
   return {
     isButtonVisible: true,
-    priceFormData,
+    currentDateTimestamp,
     handleMouseEnter,
     handleMouseLeave,
     hoveredColumnIndex,

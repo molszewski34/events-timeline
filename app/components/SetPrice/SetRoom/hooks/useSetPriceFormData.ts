@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
 
 interface PriceFormData {
-  room: string;        
-  selectedRooms: string[];   
+  room: string;
+  selectedRooms: string[];
 }
 function useSetPriceFormData() {
-    const {priceFormData, setPriceFormData} = useSetPriceContext()
-    useEffect(() => {
-        setPriceFormData((prev: PriceFormData) => ({
-          ...prev,
-          selectedRooms: [priceFormData.room],
-        }));
-      }, [priceFormData.room, setPriceFormData]);
+  const { priceFormData, setPriceFormData, setSelectedRooms, room } =
+    useSetPriceContext();
+  useEffect(() => {
+    setSelectedRooms([room]);
+    setPriceFormData((prev: PriceFormData) => ({
+      ...prev,
+      selectedRoomsIds: [room.id],
+    }));
+  }, [room]);
 }
 
-export default useSetPriceFormData
+export default useSetPriceFormData;
