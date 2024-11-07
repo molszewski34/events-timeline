@@ -13,7 +13,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ rooms, isNextRoomVisible }) => {
-  const { selectedRooms } = useSetPriceContext();
+  const { priceFormData, selectedRooms } = useSetPriceContext();
 
   const { handleCheckboxChange } = useHandleCheckboxChange(rooms);
   const { handleRemoveRoom } = useHandleRemoveRoom();
