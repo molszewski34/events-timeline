@@ -13,7 +13,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ rooms, isNextRoomVisible }) => {
-  const { priceFormData } = useSetPriceContext();
+  const { priceFormData, selectedRooms } = useSetPriceContext();
 
   const { handleCheckboxChange } = useHandleCheckboxChange(rooms);
   const { handleRemoveRoom } = useHandleRemoveRoom();
@@ -23,20 +23,18 @@ const Modal: React.FC<ModalProps> = ({ rooms, isNextRoomVisible }) => {
         <input
           type="checkbox"
           onChange={handleCheckboxChange}
-          disabled={
-            priceFormData.selectedRooms.length === 0 || isNextRoomVisible
-          }
+          disabled={selectedRooms.length === 0 || isNextRoomVisible}
           className="accent-green-600"
         />
         Zaznacz pokoje o tej samej pojemności
       </label>
       {isNextRoomVisible && <NextRoom id="id" />}
 
-      <div className="flex gap-1 ml-3">
-        {priceFormData.selectedRooms.map((room: ModalProps) => (
+      <div className="flex flex-wrap gap-1 ml-3">
+        {selectedRooms.map((room: ModalProps) => (
           <button
             key={room.id}
-            className="flex gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded h-[23px]"
+            className="flex flex-nowrap gap-2 items-center justify-between text-xs text-white bg-[#00a541] py-1 px-2 rounded h-[23px]"
             onClick={() => handleRemoveRoom(room.id)}
           >
             {room.name}

@@ -21,9 +21,9 @@ interface Price {
 }
 
 function useUpdateDisabledRanges() {
-  const { priceFormData } = useSetPriceContext();
+  const { selectedRooms } = useSetPriceContext();
 
-  const prices = useFetchPrices(priceFormData.selectedRooms);
+  const prices = useFetchPrices(selectedRooms);
   const [disabledRanges, setDisabledRanges] = useState<
     { start: Date; end: Date }[]
   >([]);
@@ -32,9 +32,7 @@ function useUpdateDisabledRanges() {
     const ranges =
       prices?.flatMap((price: Price) =>
         price.selected_rooms.some((room) =>
-          priceFormData.selectedRooms.some(
-            (selectedRoom: any) => selectedRoom.id === room.id
-          )
+          selectedRooms.some((selectedRoom: any) => selectedRoom.id === room.id)
         )
           ? price.dates
               .filter((date) => date.startDate && date.endDate)
@@ -46,7 +44,7 @@ function useUpdateDisabledRanges() {
       ) || [];
 
     setDisabledRanges(ranges);
-  }, [priceFormData.selectedRooms, prices]);
+  }, [selectedRooms, prices]);
 
   const updateDisabledRanges = (pickers: DatePickerItem[]) => {
     const ranges = pickers

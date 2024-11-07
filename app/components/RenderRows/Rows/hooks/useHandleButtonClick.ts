@@ -5,7 +5,7 @@ import { Room } from '../../types';
 
 function useHandleButtonClick() {
   const { setSelectedButton, setFormData } = useAddReservationContext();
-  const { setPriceFormData } = useSetPriceContext();
+  const { setRoom } = useSetPriceContext();
 
   const handleButtonClick = useCallback(
     (room: Room, timestamp: number) => {
@@ -16,10 +16,7 @@ function useHandleButtonClick() {
         selectedRoom: room,
         selectedRoomId: room.id,
       }));
-      setPriceFormData((prevData: FormData) => ({
-        ...prevData,
-        room: room,
-      }));
+      setRoom(room);
     },
     [setSelectedButton]
   );
