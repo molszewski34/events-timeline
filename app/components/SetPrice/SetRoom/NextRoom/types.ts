@@ -1,7 +1,7 @@
 export interface Room {
-  id?: string;
+  id: string;
   name: string;
-  selectedRoomsIds?: string[];
+  selectedRoomsIds: string[];
   type_icon?: string;
   num_of_persons?: number;
 }

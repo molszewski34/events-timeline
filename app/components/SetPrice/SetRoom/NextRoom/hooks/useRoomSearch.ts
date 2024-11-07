@@ -4,12 +4,13 @@ interface Room {
   name: string;
 }
 
-export function useRoomSearch(rooms: Room[] | null | undefined) {
+export const useRoomSearch = (rooms: Room[] | undefined) => {
   const [searchTerm, setSearchTerm] = React.useState('');
+
   const filteredRooms =
     rooms?.filter((room) =>
       room.name?.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   return { searchTerm, setSearchTerm, filteredRooms };
-}
+};

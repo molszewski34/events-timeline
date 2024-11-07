@@ -4,17 +4,16 @@ import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { fetchRooms } from '@/app/actions/fetchRoom';
 import useSupabaseBrowser from '@/utils/supabase-browser';
 import { useRoomSearch } from './hooks/useRoomSearch';
-import { useRoomSelection } from './hooks/useRoomSelection';
+
 import SelectedRooms from './ui/SelectedRooms';
 import SearchBar from './ui/SearchBar';
 import RoomList from './ui/RoomList';
-import { Room } from './types';
+import { useRoomSelection } from './hooks/useRoomSelection';
 
 const NextRoom = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
   const { data: rooms } = useQuery(fetchRooms(supabase, id));
   const { searchTerm, setSearchTerm, filteredRooms } = useRoomSearch(rooms);
-
   const { selectedRooms, handleRoomSelect } = useRoomSelection();
 
   return (
@@ -26,6 +25,7 @@ const NextRoom = ({ id }: { id: string }) => {
       <div className="flex mt-2 border rounded border-gray-300 gap-2 py-1 px-2">
         <SelectedRooms
           selectedRooms={selectedRooms}
+          rooms={rooms}
           onRoomSelect={handleRoomSelect}
         />
         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />

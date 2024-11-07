@@ -1,9 +1,15 @@
 import React from 'react';
-import { Room } from '../types';
 
 interface RoomListProps {
   rooms: Room[];
   onRoomSelect: (room: Room) => void;
+}
+
+interface Room {
+  id: string;
+  name: string;
+  type_icon: string;
+  num_of_persons: number;
 }
 
 const RoomList: React.FC<RoomListProps> = ({ rooms, onRoomSelect }) => (

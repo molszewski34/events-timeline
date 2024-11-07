@@ -7,13 +7,13 @@ export const useRoomSelection = () => {
 
   const handleRoomSelect = (selectedRoom: Room) => {
     const isRoomSelected = selectedRooms.some(
-      (room: Room) => room.id === selectedRoom.id
+      (roomId: string) => roomId === selectedRoom.id
     );
 
     setSelectedRooms(
       isRoomSelected
-        ? selectedRooms.filter((room: Room) => room.id !== selectedRoom.id)
-        : [...selectedRooms, selectedRoom]
+        ? selectedRooms.filter((roomId: string) => roomId !== selectedRoom.id)
+        : [...selectedRooms, selectedRoom.id]
     );
 
     setPriceFormData((prev: Room) => ({
