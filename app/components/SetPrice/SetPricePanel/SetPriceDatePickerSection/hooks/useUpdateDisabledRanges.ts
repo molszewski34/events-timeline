@@ -1,8 +1,5 @@
-import { fetchPrices } from '@/app/actions/fetchPrices';
 import { useSetPriceContext } from '@/app/contexts/SetPrice/SetPriceProvider';
-import useSupabaseBrowser from '@/utils/supabase-browser';
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useFetchPrices from '../../../hooks/useFetchPrices';
 
 interface DatePickerItem {
@@ -16,8 +13,8 @@ interface PriceDate {
 }
 
 interface Price {
-  selected_rooms: { id: string }[];
-  dates: PriceDate[];
+  selected_rooms_ids: { id: string }[];
+  dates: PriceDate;
 }
 
 function useUpdateDisabledRanges() {
@@ -30,18 +27,16 @@ function useUpdateDisabledRanges() {
 
   useEffect(() => {
     const ranges =
-      prices?.flatMap((price: Price) =>
-        price.selected_rooms.some((room) =>
-          selectedRooms.some((selectedRoom: any) => selectedRoom.id === room.id)
+      prices
+        ?.filter((price: Price) =>
+          selectedRooms.some(
+            (selectedRoom: any) => selectedRoom.id === price.selected_rooms_ids
+          )
         )
-          ? price.dates
-              .filter((date) => date.startDate && date.endDate)
-              .map((date) => ({
-                start: new Date(date.startDate),
-                end: new Date(date.endDate),
-              }))
-          : []
-      ) || [];
+        .map((price: Price) => ({
+          start: new Date(price.dates.startDate),
+          end: new Date(price.dates.endDate),
+        })) || [];
 
     setDisabledRanges(ranges);
   }, [selectedRooms, prices]);
