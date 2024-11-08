@@ -11,17 +11,16 @@ import RecalculatePrices from '../../RecalculatePrices/RecalculatePrices';
 const SetPartialPrice = ({ id }: { id: string }) => {
   const supabase = useSupabaseBrowser();
 
-  const { data: rooms } = useQuery(fetchRooms(supabase, id));
-  const { data: priceConfiguration, isLoading: isLoadingPriceConfig } =
-    useQuery(fetchPriceSettings(supabase));
-
   const { priceFormData, setPriceFormData, selectedRooms } =
     useSetPriceContext();
+
+  const { data: priceConfiguration, isLoading: isLoadingPriceConfig } =
+    useQuery(fetchPriceSettings(supabase));
 
   const [maxNumOfPersons, setMaxNumOfPersons] = useState(0);
 
   useEffect(() => {
-    if (priceFormData?.selectedRooms?.length > 0) {
+    if (selectedRooms?.length > 0) {
       const maxPersons = selectedRooms.reduce(
         (max, room) => Math.max(max, room.num_of_persons || 0),
         0
