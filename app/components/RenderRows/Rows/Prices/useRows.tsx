@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import useMouseEnterHandler from '../hooks/useMouseEnterHandler';
 import {
   addDays,
@@ -32,16 +32,16 @@ function useRows({ rooms, prices }) {
 
   const { endDate, startDate, setOverlay } = useCalendarContext();
 
-  const { setOpenSetPricePanel, setisEditingPrice, isEditingPrice } =
-    useSetPriceContext();
+  const { setOpenSetPricePanel, setisEditingPrice } = useSetPriceContext();
 
   const rows = useMemo(() => {
     return rooms.map((room, roomIndex) => {
       const totalDays = differenceInDays(endDate, startDate) + 1;
 
       const roomPrice = prices?.find((price) =>
-        price.selected_rooms.some((selectedRoom) => selectedRoom.id === room.id)
+        price.selected_rooms_ids.includes(room.id)
       );
+
       const displayPrice = roomPrice?.partial_prices[0]?.longStay || 0;
 
       const roomDays = Array.from({ length: totalDays }, (_, index) => {
