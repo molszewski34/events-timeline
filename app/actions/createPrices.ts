@@ -1,11 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-
-//Function returns rooms id from rooms selected in SetRoom component
-function extractRoomIds(rooms: any) {
-  return rooms.map((room: any) => ({ id: room.id }));
-}
+import { Room } from '../data/types';
 
 export async function createPrice(priceFormData: any) {
   const supabase = createClient();
@@ -25,34 +21,22 @@ export async function createPrice(priceFormData: any) {
     return { success: false, error: 'User not logged in' };
   }
 
-  const {
-    currentDateTimestamp,
-    room,
-    selectedRooms,
-    partialPrices,
-    partialPricesForChildrens,
-    dates,
-  } = priceFormData;
+  const { selectedRoomsIds, partialPrices, partialPricesForChildrens, dates } =
+    priceFormData;
 
-  const timestampInSeconds = currentDateTimestamp / 1000;
+  const rowsToInsert = selectedRoomsIds.map((roomId: Room) => ({
+    selected_rooms_ids: roomId,
+    partial_prices: partialPrices,
+    partial_prices_for_childrens: partialPricesForChildrens,
+    dates: dates,
+  }));
 
-  const roomIds = extractRoomIds(selectedRooms);
-
-  const { error } = await supabase.from('prices').insert([
-    {
-      current_date_timestamp: new Date(timestampInSeconds * 1000).toISOString(),
-      room: room,
-      selected_rooms: roomIds,
-      partial_prices: partialPrices,
-      partial_prices_for_childrens: partialPricesForChildrens,
-      dates: dates,
-    },
-  ]);
+  const { data: insertedData, error } = await supabase
+    .from('prices')
+    .insert(rowsToInsert);
 
   if (error) {
-    console.error('Error adding price data:', error);
-    return { success: false, error };
+    throw new Error(error.message);
   }
-
-  return { success: true };
+  return insertedData;
 }
